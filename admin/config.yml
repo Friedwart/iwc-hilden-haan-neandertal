@@ -44,14 +44,20 @@ collections:
         label: "Orga-Einträge"
         name: "orga"
         fields:
-          - label: "Einträge"
-            name: "items"
+          - label: "Listen"
+            name: "lists"
             widget: "list"
             fields:
               - { label: "Titel", name: "title", widget: "string" }
               - { label: "Beschreibung", name: "description", widget: "text", required: false }
-              - { label: "Link zur Liste (Google Sheet/Form)", name: "link", widget: "string" }collections:
-              
+              - label: "Einträge"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Name",  name: "name",  widget: "string" }
+                  - { label: "Beitrag/Bestellung", name: "contribution", widget: "string", required: false }
+                  - { label: "Bestellung (optional)", name: "order", widget: "string", required: false }
+            
   - name: "meetings"
     label: "Clubmeetings"
     files:
