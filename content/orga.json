@@ -1,0 +1,20 @@
+{
+  "lists": [
+    {
+      "title": "Basar – Wer bringt was mit?",
+      "description": "Liste für Kuchen, Marmeladen, Dekoartikel usw.",
+      "items": [
+        { "name": "Susanne", "contribution": "Zitronenkuchen" },
+        { "name": "Eva", "contribution": "Provence-Marmelade" }
+      ]
+    },
+    {
+      "title": "Weinbestellung November",
+      "description": "Bestellübersicht für Weiß-, Rosé- und Rotwein.",
+      "items": [
+        { "name": "Uwe", "order": "2 Kisten Rosé" },
+        { "name": "Heike", "order": "1 Kiste Chardonnay" }
+      ]
+    }
+  ]
+}
