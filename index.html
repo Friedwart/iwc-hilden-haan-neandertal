@@ -54,21 +54,61 @@
 
 <main class="wrap">
   <div class="tabs">
-    <div class="tab active" data-tab="events">Veranstaltungen</div>
-    <div class="tab" data-tab="meetings">Clubmeetings</div>
-    <div class="tab" data-tab="activities">Aktivitäten</div>
-    <div class="tab" data-tab="orga">Orga-Listen</div>
-    <div class="tab" data-tab="chronicle">Clubchronik</div>
+    <div class="tab active" data-tab="agenda">Terminübersicht</div>
+    <div class="tab" data-tab="clubmeeting">Clubmeetings</div>
+    <div class="tab" data-tab="private-charity">Private Charity Aktionen</div>
+    <div class="tab" data-tab="club-charity">Club Charity Aktionen</div>
+    <div class="tab" data-tab="orga">Organisatorisches</div>
+    <div class="tab" data-tab="about">Über uns</div>
     <div class="tab" data-tab="downloads">Downloads</div>
   </div>
 
-  <section id="view-events" class="grid" style="margin-top:12px"><div id="eventList" class="grid"></div></section>
-  <section id="view-meetings" class="hidden" style="margin-top:12px"><div id="meetingList" class="grid"></div></section>
-  <section id="view-activities" class="hidden" style="margin-top:12px"><div id="activityList" class="grid"></div></section>
-  <section id="view-orga" class="hidden" style="margin-top:12px"><div id="orgaList" class="grid"></div></section>
-  <section id="view-chronicle" class="hidden" style="margin-top:12px"><div id="chronicleList" class="grid"></div></section>
-  <section id="view-downloads" class="hidden" style="margin-top:12px"><div id="downloadList" class="grid2"></div></section>
+  <!-- Terminübersicht -->
+  <section id="view-agenda" class="grid" style="margin-top:12px">
+    <div class="row" style="gap:8px;flex-wrap:wrap">
+      <button class="tab chip active" data-filter="all">Alle</button>
+      <button class="tab chip" data-filter="clubmeeting">Clubmeetings</button>
+      <button class="tab chip" data-filter="private-charity">Private Charity</button>
+      <button class="tab chip" data-filter="club-charity">Club Charity</button>
+      <button class="tab chip" data-filter="orga">Organisatorisches</button>
+    </div>
+    <div id="agendaList" class="grid" style="margin-top:12px"></div>
+    <div id="pastWrap" class="grid" style="margin-top:12px"></div>
+  </section>
+
+  <!-- Kategorien -->
+  <section id="view-clubmeeting" class="hidden"><div id="clubmeetingList" class="grid"></div></section>
+  <section id="view-private-charity" class="hidden"><div id="privateList" class="grid"></div></section>
+  <section id="view-club-charity" class="hidden"><div id="clubList" class="grid"></div></section>
+
+  <!-- Orga -->
+  <section id="view-orga" class="hidden" style="margin-top:12px">
+    <div id="orgaList" class="grid"></div>
+  </section>
+
+  <section id="view-about" class="hidden" style="margin-top:12px">
+    <div class="card"><div class="bd">
+      <h3>Über uns</h3>
+      <p>Inner Wheel Club Hilden–Haan–Neandertal · Kontakt: innerwheelhhn@gmail.com</p>
+    </div></div>
+  </section>
+
+  <section id="view-downloads" class="hidden" style="margin-top:12px">
+    <div id="downloadList" class="grid2"></div>
+  </section>
 </main>
+
+<!-- Detail-Modal -->
+<div id="modal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;z-index:50">
+  <div class="card" style="max-width:640px;width:calc(100% - 32px)">
+    <div class="hd"><div style="font-weight:600" id="mTitle">Titel</div><button id="mClose" class="tab">Schließen</button></div>
+    <div class="bd">
+      <div id="mMeta" class="muted" style="margin-bottom:8px"></div>
+      <p id="mDesc" class="muted"></p>
+      <div id="mActions"></div>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="wrap row" style="justify-content:space-between">
@@ -78,12 +118,130 @@
 </footer>
 
 <script>
-const $$=(s,r=document)=>Array.from(r.querySelectorAll(s)); const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const $ =(s,r=document)=>r.querySelector(s);
 $("#year").textContent=new Date().getFullYear();
-$$(".tab[data-tab]").forEach(t=>t.addEventListener("click",()=>{$$(".tab[data-tab]").forEach(x=>x.classList.remove("active")); t.classList.add("active"); $$("main section").forEach(s=>s.classList.add("hidden")); $("#view-"+t.getAttribute("data-tab")).classList.remove("hidden");}));
+
+// Tabs
+$$(".tab[data-tab]").forEach(t=>t.addEventListener("click",()=>{
+  $$(".tab[data-tab]").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  $$("main section").forEach(s=>s.classList.add("hidden"));
+  $("#view-"+t.getAttribute("data-tab")).classList.remove("hidden");
+}));
+
+// Modal helpers
+const modal   = $("#modal");
+const mTitle  = $("#mTitle");
+const mMeta   = $("#mMeta");
+const mDesc   = $("#mDesc");
+const mActs   = $("#mActions");
+$("#mClose").onclick=()=>modal.classList.add("hidden");
+
+// Fetch helpers
 async function getJSON(p,f){try{const r=await fetch(p,{cache:"no-store"});if(!r.ok)throw 0;return await r.json()}catch(e){return f}}
-function cardFor(item, kind){return `<div class="card"><div class="hd"><div><div style="font-weight:600">${item.title||""}</div><div class="muted" style="font-size:12px"><span class="badge">${item.club||kind}</span> · ${(item.datetime||"").replace("T"," ")} · ${item.location||""}</div></div><div class="muted" style="font-size:12px;text-align:right">Kapazität<br><span style="font-weight:600">${item.capacity||"–"}</span></div></div><div class="bd"><p class="muted" style="margin-top:0">${item.description||""}</p></div></div>`}
-async function renderAll(){const ev=await getJSON("content/events.json",{"items":[]}); const mt=await getJSON("content/meetings.json",{"items":[]}); const ac=await getJSON("content/activities.json",{"items":[]}); const org=await getJSON("content/orga.json",{"tab":"Basar","Basar":[]}); const ch=await getJSON("content/chronicle.json",{"items":[]}); const dl=await getJSON("content/downloads.json",{"items":[]}); $("#eventList").innerHTML=(ev.items||[]).map(e=>cardFor(e,"Event")).join(""); $("#meetingList").innerHTML=(mt.items||[]).map(e=>cardFor(e,"Meeting")).join(""); $("#activityList").innerHTML=(ac.items||[]).map(e=>cardFor(e,"Aktivität")).join(""); const chr=$("#chronicleList"); chr.innerHTML=""; (ch.items||[]).sort((a,b)=>b.year-a.year).forEach(c=>{const d=document.createElement("div"); d.className="card"; d.innerHTML=`<div class="bd"><div class="muted" style="font-size:12px">${c.year}</div><div style="font-weight:600">${c.title}</div><p class="muted">${c.text||""}</p></div>`; chr.appendChild(d)}); const dlH=$("#downloadList"); dlH.innerHTML=""; (dl.items||[]).forEach(d=>{const c=document.createElement("div"); c.className="card"; c.innerHTML=`<div class="bd"><div style="font-weight:600">${d.title}</div><a class="link" href="${d.href||"#"}">Herunterladen</a></div>`; dlH.appendChild(c)}); }
-renderAll();
+
+// Render cards
+function eventCard(e){
+  const badge = ({
+    "clubmeeting":"Clubmeeting",
+    "private-charity":"Private Charity",
+    "club-charity":"Club Charity",
+    "orga":"Organisatorisches"
+  })[e.category] || "Termin";
+  const dt = e.start?.replace("T"," ") || "";
+  return `
+    <div class="card event" data-category="${e.category}">
+      <div class="hd">
+        <div>
+          <div style="font-weight:600">${e.title||""}</div>
+          <div class="muted" style="font-size:12px">
+            <span class="badge">${badge}</span> · ${dt}${e.location?(" · "+e.location):""}
+          </div>
+        </div>
+        <button class="tab" data-open='${encodeURIComponent(JSON.stringify(e))}'>Details</button>
+      </div>
+      <div class="bd">
+        <p class="muted" style="margin-top:0">${(e.description||"").slice(0,160)}${(e.description||"").length>160?"…":""}</p>
+        ${e.rsvp_link ? `<a class="link" href="${e.rsvp_link}" target="_blank" rel="noopener">Jetzt anmelden</a>` : ``}
+      </div>
+    </div>`;
+}
+
+function orgaCard(list){
+  const items = (list.items||[]).map(it=>{
+    const txt = it.contribution || it.order || "";
+    return `<li>${it.name||""}${txt?": "+txt:""}</li>`;
+  }).join("");
+  return `
+    <div class="card">
+      <div class="bd">
+        <div style="font-weight:600">${list.title||""}</div>
+        <p class="muted">${list.description||""}</p>
+        ${items?`<ul style="margin:0 0 8px 16px">${items}</ul>`:""}
+      </div>
+    </div>`;
+}
+
+// Render pipeline
+async function render(){
+  const ev = await getJSON("content/events.json", {"items":[]});
+  const org= await getJSON("content/orga.json",   {"lists":[]});
+  const dl = await getJSON("content/downloads.json",{"items":[]});
+
+  // Sortiere Events: Zukünftig zuerst (aufsteigend), Vergangenes separat
+  const now = new Date();
+  const upcoming = (ev.items||[]).filter(e=>new Date(e.start)>=now)
+    .sort((a,b)=>new Date(a.start)-new Date(b.start));
+  const past = (ev.items||[]).filter(e=>new Date(e.start)<now)
+    .sort((a,b)=>new Date(b.start)-new Date(a.start));
+
+  // Startseite (Agenda)
+  $("#agendaList").innerHTML = upcoming.map(eventCard).join("") || "<div class='muted'>Keine kommenden Termine.</div>";
+  $("#pastWrap").innerHTML   = past.length ? `<div class="muted" style="margin-top:8px">Vergangene Termine</div>${past.map(eventCard).join("")}` : "";
+
+  // Kategorie-Ansichten
+  $("#clubmeetingList").innerHTML = upcoming.filter(e=>e.category==="clubmeeting").map(eventCard).join("") || "<div class='muted'>Keine Clubmeetings.</div>";
+  $("#privateList").innerHTML     = upcoming.filter(e=>e.category==="private-charity").map(eventCard).join("") || "<div class='muted'>Keine Private-Charity-Termine.</div>";
+  $("#clubList").innerHTML        = upcoming.filter(e=>e.category==="club-charity").map(eventCard).join("") || "<div class='muted'>Keine Club-Charity-Termine.</div>";
+
+  // Orga
+  $("#orgaList").innerHTML = (org.lists||[]).map(orgaCard).join("") || "<div class='muted'>Keine Orga-Einträge.</div>";
+
+  // Downloads (falls genutzt)
+  const dlH = $("#downloadList");
+  if (dlH) {
+    dlH.innerHTML = (dl.items||[]).map(d=>`
+      <div class="card"><div class="bd">
+        <div style="font-weight:600">${d.title}</div>
+        <a class="link" href="${d.href||"#"}" target="_blank" rel="noopener">Herunterladen</a>
+      </div></div>
+    `).join("");
+  }
+
+  // Filter auf der Agenda
+  $$(".chip[data-filter]").forEach(b=>b.onclick=()=>{
+    $$(".chip[data-filter]").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    const f=b.getAttribute("data-filter");
+    $$("#agendaList .event").forEach(card=>{
+      const cat=card.getAttribute("data-category");
+      card.style.display = (f==="all"||f===cat) ? "" : "none";
+    });
+  });
+
+  // Detail-Modal Öffnen
+  $$("[data-open]").forEach(btn=>{
+    btn.onclick=()=>{
+      const e = JSON.parse(decodeURIComponent(btn.getAttribute("data-open")));
+      mTitle.textContent = e.title || "";
+      mMeta.textContent  = `${(e.start||"").replace("T"," ")}${e.location?(" · "+e.location):""}`;
+      mDesc.textContent  = e.description || "";
+      mActs.innerHTML    = e.rsvp_link ? `<a class="tab" href="${e.rsvp_link}" target="_blank" rel="noopener">Jetzt anmelden</a>` : `<span class="muted">Für diesen Termin ist keine Anmeldung erforderlich.</span>`;
+      modal.classList.remove("hidden");
+    };
+  });
+}
+
+render();
 </script>
-</body></html>
