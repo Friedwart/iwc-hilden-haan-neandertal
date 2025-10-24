@@ -1,22 +1,10 @@
 {
   "items": [
     {
-      "id": "evt1",
-      "title": "Soirée Musicale",
-      "club": "CC",
-      "datetime": "2025-11-16T17:00:00",
-      "location": "Köln, Am Römerturm 3",
-      "description": "Kammermusikabend mit Abendessen.",
-      "capacity": 40
-    },
-    {
-      "id": "evt2",
-      "title": "Ladiestalk",
-      "club": "CCL",
-      "datetime": "2025-11-18T18:00:00",
-      "location": "Clubhaus Richartzstr. 8",
-      "description": "Austausch & Impulsvortrag.",
-      "capacity": 30
+      "title": "Weihnachtsmarkt Roncalli",
+      "datetime": "2025-12-18T18:00:00",
+      "location": "Rheinuferpromenade, 40213 Düsseldorf",
+      "description": "Der romantische Weihnachtsmarkt Roncalli ist auf jeden Fall einen Besuch wert. Wir freuen uns auf rege Teilnahme - gerne mit Partnern/ Gästen und vielleicht eine gemeinsame Fahrt auf dem Riesenrad. Ein schöner Ausklang des Jahres. 😊"
     }
   ]
 }
