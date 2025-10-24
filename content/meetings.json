@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "id": "mtg1",
+      "title": "Monatsmeeting",
+      "club": "IWC HHN",
+      "datetime": "2025-11-20T19:00:00",
+      "location": "Haan",
+      "description": "Reguläres Meeting",
+      "capacity": 50
+    }
+  ]
+}

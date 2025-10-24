@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inner Wheel Club Hilden–Haan–Neandertal – Mitglieder-App</title>
+  <meta name="description" content="Veranstaltungen, Meetings, Orga-Listen, Clubchronik, Downloads.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{ --blue:#005CB8; --yellow:#FFDB00; --muted:#6b7280; --border:#e5e7eb; --bg:#f7f8fb; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;background:linear-gradient(#fff,var(--bg))}
+    header{position:sticky;top:0;background:#ffffffcc;backdrop-filter:blur(8px);border-bottom:4px solid var(--yellow);z-index:10}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .brand{display:flex;align-items:center;gap:16px}
+    .brand img{width:56px;height:56px;object-fit:contain}
+    .brand h1{margin:0;font-size:22px;color:var(--blue);line-height:1.2}
+    .subtitle{margin:0;color:var(--muted);font-size:12px}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .spacer{flex:1}
+    .tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:8px 0 0}
+    .tab{border:1px solid var(--border);padding:8px 10px;border-radius:999px;text-align:center;cursor:pointer;background:#fff}
+    .tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+    .grid{display:grid;gap:12px}
+    .grid2{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+    .card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden}
+    .card .hd{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .card .bd{padding:14px}
+    .badge{display:inline-block;background:var(--yellow);color:#111827;border:1px solid #eab308;border-radius:999px;padding:2px 8px;font-size:12px}
+    .muted{color:#6b7280}
+    .hidden{display:none}
+    footer{border-top:4px solid var(--blue);margin-top:20px;background:#fff}
+    a.link{color:var(--blue);text-decoration:underline}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap row">
+    <div class="brand">
+      <img src="assets/logo.png" alt="Inner Wheel Logo">
+      <div>
+        <h1>Inner Wheel Club Hilden–Haan–Neandertal</h1>
+        <p class="subtitle">www.hilden-haan-neandertal.innerwheel.de</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="row">
+      <a class="link" href="/admin">Admin</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="tabs">
+    <div class="tab active" data-tab="events">Veranstaltungen</div>
+    <div class="tab" data-tab="meetings">Clubmeetings</div>
+    <div class="tab" data-tab="activities">Aktivitäten</div>
+    <div class="tab" data-tab="orga">Orga-Listen</div>
+    <div class="tab" data-tab="chronicle">Clubchronik</div>
+    <div class="tab" data-tab="downloads">Downloads</div>
+  </div>
+
+  <section id="view-events" class="grid" style="margin-top:12px"><div id="eventList" class="grid"></div></section>
+  <section id="view-meetings" class="hidden" style="margin-top:12px"><div id="meetingList" class="grid"></div></section>
+  <section id="view-activities" class="hidden" style="margin-top:12px"><div id="activityList" class="grid"></div></section>
+  <section id="view-orga" class="hidden" style="margin-top:12px"><div id="orgaList" class="grid"></div></section>
+  <section id="view-chronicle" class="hidden" style="margin-top:12px"><div id="chronicleList" class="grid"></div></section>
+  <section id="view-downloads" class="hidden" style="margin-top:12px"><div id="downloadList" class="grid2"></div></section>
+</main>
+
+<footer>
+  <div class="wrap row" style="justify-content:space-between">
+    <div>© <span id="year"></span> Inner Wheel Club Hilden–Haan–Neandertal</div>
+    <div class="row" style="gap:12px"><a href="/admin" class="muted">Admin</a></div>
+  </div>
+</footer>
+
+<script>
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s)); const $=(s,r=document)=>r.querySelector(s);
+$("#year").textContent=new Date().getFullYear();
+$$(".tab[data-tab]").forEach(t=>t.addEventListener("click",()=>{$$(".tab[data-tab]").forEach(x=>x.classList.remove("active")); t.classList.add("active"); $$("main section").forEach(s=>s.classList.add("hidden")); $("#view-"+t.getAttribute("data-tab")).classList.remove("hidden");}));
+async function getJSON(p,f){try{const r=await fetch(p,{cache:"no-store"});if(!r.ok)throw 0;return await r.json()}catch(e){return f}}
+function cardFor(item, kind){return `<div class="card"><div class="hd"><div><div style="font-weight:600">${item.title||""}</div><div class="muted" style="font-size:12px"><span class="badge">${item.club||kind}</span> · ${(item.datetime||"").replace("T"," ")} · ${item.location||""}</div></div><div class="muted" style="font-size:12px;text-align:right">Kapazität<br><span style="font-weight:600">${item.capacity||"–"}</span></div></div><div class="bd"><p class="muted" style="margin-top:0">${item.description||""}</p></div></div>`}
+async function renderAll(){const ev=await getJSON("content/events.json",{"items":[]}); const mt=await getJSON("content/meetings.json",{"items":[]}); const ac=await getJSON("content/activities.json",{"items":[]}); const org=await getJSON("content/orga.json",{"tab":"Basar","Basar":[]}); const ch=await getJSON("content/chronicle.json",{"items":[]}); const dl=await getJSON("content/downloads.json",{"items":[]}); $("#eventList").innerHTML=(ev.items||[]).map(e=>cardFor(e,"Event")).join(""); $("#meetingList").innerHTML=(mt.items||[]).map(e=>cardFor(e,"Meeting")).join(""); $("#activityList").innerHTML=(ac.items||[]).map(e=>cardFor(e,"Aktivität")).join(""); const chr=$("#chronicleList"); chr.innerHTML=""; (ch.items||[]).sort((a,b)=>b.year-a.year).forEach(c=>{const d=document.createElement("div"); d.className="card"; d.innerHTML=`<div class="bd"><div class="muted" style="font-size:12px">${c.year}</div><div style="font-weight:600">${c.title}</div><p class="muted">${c.text||""}</p></div>`; chr.appendChild(d)}); const dlH=$("#downloadList"); dlH.innerHTML=""; (dl.items||[]).forEach(d=>{const c=document.createElement("div"); c.className="card"; c.innerHTML=`<div class="bd"><div style="font-weight:600">${d.title}</div><a class="link" href="${d.href||"#"}">Herunterladen</a></div>`; dlH.appendChild(c)}); }
+renderAll();
+</script>
+</body></html>

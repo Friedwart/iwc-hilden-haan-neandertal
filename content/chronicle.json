@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "id": "c1",
+      "year": 2023,
+      "title": "Benefizkonzert",
+      "text": "Erlös für lokale Projekte."
+    },
+    {
+      "id": "c2",
+      "year": 2024,
+      "title": "Spendenlauf",
+      "text": "Gemeinsame Aktion mit Rotary."
+    }
+  ]
+}

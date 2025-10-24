@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "id": "evt1",
+      "title": "Soirée Musicale",
+      "club": "CC",
+      "datetime": "2025-11-16T17:00:00",
+      "location": "Köln, Am Römerturm 3",
+      "description": "Kammermusikabend mit Abendessen.",
+      "capacity": 40
+    },
+    {
+      "id": "evt2",
+      "title": "Ladiestalk",
+      "club": "CCL",
+      "datetime": "2025-11-18T18:00:00",
+      "location": "Clubhaus Richartzstr. 8",
+      "description": "Austausch & Impulsvortrag.",
+      "capacity": 30
+    }
+  ]
+}
