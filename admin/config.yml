@@ -20,13 +20,38 @@ collections:
             widget: "list"
             collapsed: true
             fields:
-              - {label: "Titel", name: "title", widget: "string"}
-              - {label: "Club", name: "club", widget: "string", required: false}
-              - {label: "Datum/Zeit (ISO)", name: "datetime", widget: "datetime", time_format: "HH:mm", format: "YYYY-MM-DDTHH:mm:00"}
-              - {label: "Ort", name: "location", widget: "string", required: false}
-              - {label: "Beschreibung", name: "description", widget: "text", required: false}
-              - {label: "Kapazität", name: "capacity", widget: "number", required: false, min: 0}
+              - { label: "Titel", name: "title", widget: "string" }
+              - label: "Kategorie"
+                name: "category"
+                widget: "select"
+                options:
+                  - { label: "Clubmeeting", value: "clubmeeting" }
+                  - { label: "Private Charity", value: "private-charity" }
+                  - { label: "Club Charity", value: "club-charity" }
+                  - { label: "Organisatorisches", value: "orga" }
+              - { label: "Start (Datum/Zeit)", name: "start", widget: "datetime", time_format: "HH:mm", format: "YYYY-MM-DDTHH:mm:00" }
+              - { label: "Ende (optional)", name: "end", widget: "datetime", required: false, time_format: "HH:mm", format: "YYYY-MM-DDTHH:mm:00" }
+              - { label: "Ort", name: "location", widget: "string", required: false }
+              - { label: "Beschreibung", name: "description", widget: "text", required: false }
+              - { label: "Anmelde-Link (extern)", name: "rsvp_link", widget: "string", required: false }
+              - { label: "Kapazität (optional)", name: "capacity", widget: "number", required: false, min: 0 }
+              - { label: "Bild (optional)", name: "cover_image", widget: "image", required: false }
 
+  - name: "orga"
+    label: "Organisatorisches"
+    files:
+      - file: "content/orga.json"
+        label: "Orga-Einträge"
+        name: "orga"
+        fields:
+          - label: "Einträge"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Beschreibung", name: "description", widget: "text", required: false }
+              - { label: "Link zur Liste (Google Sheet/Form)", name: "link", widget: "string" }collections:
+              
   - name: "meetings"
     label: "Clubmeetings"
     files:
