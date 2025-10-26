@@ -22,24 +22,16 @@
       box-shadow: 0 6px 24px rgba(0,0,0,.08);
       width: min(420px, 92vw);
     }
-    h1 {
-      font-size: 20px;
-      margin: 0 0 4px;
-    }
-    p {
-      color: #555;
-      margin: 0 0 18px;
-    }
-    label {
-      font-weight: 600;
-      font-size: 14px;
-    }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    p  { color:#555; margin: 0 0 18px; }
+    label { font-weight: 600; font-size: 14px; }
     input {
       width: 100%;
       padding: 12px 14px;
       margin: 8px 0 14px;
       border: 1px solid #d9dbe3;
       border-radius: 10px;
+      font-size: 16px;
     }
     button {
       width: 100%;
@@ -50,72 +42,71 @@
       color: #fff;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background .2s;
     }
-    button:hover {
-      background: #166fc2;
-    }
-    .note {
-      font-size: 13px;
-      color: #666;
-      margin-top: 10px;
-    }
-    .ok {
-      color: #0a7a36;
-    }
-    .err {
-      color: #b00020;
-    }
+    button:hover { background:#166fc2; }
+    .note { font-size: 13px; color:#666; margin-top:10px; }
+    .ok   { color:#0a7a36; }
+    .err  { color:#b00020; }
     .link {
-      display: block;
-      text-align: center;
-      margin-top: 12px;
-      color: #4b32b8;
-      text-decoration: none;
-      font-weight: 500;
+      display:block;
+      text-align:center;
+      margin-top:12px;
+      color:#4b32b8;
+      text-decoration:none;
+      font-weight:500;
     }
-    .link:hover {
-      text-decoration: underline;
-    }
+    .link:hover { text-decoration: underline; }
   </style>
+
+  <!-- Supabase JS (UMD, stellt window.supabase bereit) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
   <div class="card">
     <h1>Mitglieder-Login</h1>
     <p>Gib deine E-Mail ein. Wir senden dir einen sicheren Login-Link.</p>
 
     <label for="email">E-Mail</label>
-    <input id="email" type="email" placeholder="name@beispiel.de" required />
-
+    <input id="email" type="email" placeholder="name@beispiel.de" autocomplete="email" required />
     <button id="send">Login-Link senden</button>
-    <div id="msg" class="note"></div>
+    <div id="msg" class="note" role="status" aria-live="polite"></div>
 
     <a class="link" href="/">← Zurück zur Startseite</a>
   </div>
 
   <script>
-    // ✅ Deine Supabase-Verbindungsdaten:
+    // Deine Supabase-Verbindungsdaten
     const SUPABASE_URL = "https://itosmlnylqedxatxmelf.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
 
-    // Supabase initialisieren
-    const supabase = supabasejs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    if (!window.supabase || !window.supabase.createClient) {
+      alert("Supabase SDK konnte nicht geladen werden.");
+    }
 
-    // DOM-Elemente abrufen
-    const btn = document.getElementById('send');
+    // Supabase initialisieren (UMD: window.supabase)
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    // DOM-Elemente
+    const btn  = document.getElementById('send');
     const email = document.getElementById('email');
-    const msg = document.getElementById('msg');
+    const msg  = document.getElementById('msg');
 
-    // Button-Handler
     btn.addEventListener('click', async () => {
+      const value = (email.value || "").trim();
+
+      if (!value || !/^\S+@\S+\.\S+$/.test(value)) {
+        msg.textContent = "Bitte eine gültige E-Mail eingeben.";
+        msg.className = "note err";
+        return;
+      }
+
       msg.textContent = "Sende Link…";
       msg.className = "note";
 
       try {
         const { error } = await supabase.auth.signInWithOtp({
-          email: email.value.trim(),
+          email: value,
           options: {
             emailRedirectTo: window.location.origin + "/"
           }
@@ -126,7 +117,6 @@
         msg.textContent = "✔️ E-Mail gesendet. Prüfe dein Postfach.";
         msg.className = "note ok";
       } catch (e) {
-        console.error(e);
         msg.textContent = "❌ " + (e?.message || "Fehler beim Senden.");
         msg.className = "note err";
       }
