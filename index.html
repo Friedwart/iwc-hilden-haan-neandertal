@@ -1,247 +1,119 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inner Wheel Club Hilden–Haan–Neandertal – Mitglieder-App</title>
-  <meta name="description" content="Veranstaltungen, Meetings, Orga-Listen, Clubchronik, Downloads.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inner Wheel Club Hilden–Haan–Neandertal</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
   <style>
-    :root{ --blue:#005CB8; --yellow:#FFDB00; --muted:#6b7280; --border:#e5e7eb; --bg:#f7f8fb; }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;background:linear-gradient(#fff,var(--bg))}
-    header{position:sticky;top:0;background:#ffffffcc;backdrop-filter:blur(8px);border-bottom:4px solid var(--yellow);z-index:10}
-    .wrap{max-width:1100px;margin:0 auto;padding:16px}
-    .brand{display:flex;align-items:center;gap:16px}
-    .brand img{width:56px;height:56px;object-fit:contain}
-    .brand h1{margin:0;font-size:22px;color:var(--blue);line-height:1.2}
-    .subtitle{margin:0;color:var(--muted);font-size:12px}
-    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .spacer{flex:1}
-    .tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:8px 0 0}
-    .tab{border:1px solid var(--border);padding:8px 10px;border-radius:999px;text-align:center;cursor:pointer;background:#fff}
-    .tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-    .grid{display:grid;gap:12px}
-    .grid2{display:grid;gap:12px;grid-template-columns:1fr 1fr}
-    .card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden}
-    .card .hd{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-    .card .bd{padding:14px}
-    .badge{display:inline-block;background:var(--yellow);color:#111827;border:1px solid #eab308;border-radius:999px;padding:2px 8px;font-size:12px}
-    .muted{color:#6b7280}
-    .hidden{display:none}
-    footer{border-top:4px solid var(--blue);margin-top:20px;background:#fff}
-    a.link{color:var(--blue);text-decoration:underline}
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background: #f7f7fb;
+      color: #333;
+    }
+
+    header {
+      background: #fff;
+      padding: 12px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header img {
+      height: 48px;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.06);
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-top: 0;
+    }
+
+    .event {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+
+    .event:last-child {
+      border-bottom: none;
+    }
+
+    .event-title {
+      font-weight: 600;
+      color: #1e88e5;
+    }
+
+    footer {
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+      margin-top: 60px;
+      padding: 20px;
+    }
+
+    /* 🧩 FIX: blockierendes Overlay entfernen */
+    #fides-overlay,
+    .fides-overlay,
+    .fides-modal,
+    .fides-backdrop {
+      display: none !important;
+      pointer-events: none !important;
+    }
+
+    body.fides-overlay-modal-link-show {
+      overflow: auto !important;
+    }
   </style>
 </head>
+
 <body>
-<header>
-  <div class="wrap row">
-    <div class="brand">
-      <img src="assets/logo.png" alt="Inner Wheel Logo">
-      <div>
-        <h1>Inner Wheel Club Hilden–Haan–Neandertal</h1>
-        <p class="subtitle">www.hilden-haan-neandertal.innerwheel.de</p>
-      </div>
+  <header>
+    <img src="assets/logo.png" alt="Inner Wheel Logo" />
+    <div>
+      <a href="login.html" style="text-decoration:none; color:#1e88e5; font-weight:600;">Admin</a>
     </div>
-    <div class="spacer"></div>
-    <div class="row">
-      <a class="link" href="/admin">Admin</a>
+  </header>
+
+  <main>
+    <h1>Termine & Veranstaltungen</h1>
+
+    <div class="event">
+      <div class="event-title">Weihnachtsmarkt Roncalli</div>
+      <div>05.12.2025 · Köln Roncalliplatz</div>
+      <p>Gemeinsamer Besuch, Glühweinstand, Spendenaktion.</p>
     </div>
-  </div>
-</header>
 
-<main class="wrap">
-  <div class="tabs">
-    <div class="tab active" data-tab="agenda">Terminübersicht</div>
-    <div class="tab" data-tab="clubmeeting">Clubmeetings</div>
-    <div class="tab" data-tab="private-charity">Private Charity Aktionen</div>
-    <div class="tab" data-tab="club-charity">Club Charity Aktionen</div>
-    <div class="tab" data-tab="orga">Organisatorisches</div>
-    <div class="tab" data-tab="about">Über uns</div>
-    <div class="tab" data-tab="downloads">Downloads</div>
-  </div>
-
-  <!-- Terminübersicht -->
-  <section id="view-agenda" class="grid" style="margin-top:12px">
-    <div class="row" style="gap:8px;flex-wrap:wrap">
-      <button class="tab chip active" data-filter="all">Alle</button>
-      <button class="tab chip" data-filter="clubmeeting">Clubmeetings</button>
-      <button class="tab chip" data-filter="private-charity">Private Charity</button>
-      <button class="tab chip" data-filter="club-charity">Club Charity</button>
-      <button class="tab chip" data-filter="orga">Organisatorisches</button>
+    <div class="event">
+      <div class="event-title">Monatsmeeting Dezember</div>
+      <div>10.12.2025 · Clubraum Haan</div>
+      <p>Jahresrückblick und Planung.</p>
     </div>
-    <div id="agendaList" class="grid" style="margin-top:12px"></div>
-    <div id="pastWrap" class="grid" style="margin-top:12px"></div>
-  </section>
 
-  <!-- Kategorien -->
-  <section id="view-clubmeeting" class="hidden"><div id="clubmeetingList" class="grid"></div></section>
-  <section id="view-private-charity" class="hidden"><div id="privateList" class="grid"></div></section>
-  <section id="view-club-charity" class="hidden"><div id="clubList" class="grid"></div></section>
-
-  <!-- Orga -->
-  <section id="view-orga" class="hidden" style="margin-top:12px">
-    <div id="orgaList" class="grid"></div>
-  </section>
-
-  <section id="view-about" class="hidden" style="margin-top:12px">
-    <div class="card"><div class="bd">
-      <h3>Über uns</h3>
-      <p>Inner Wheel Club Hilden–Haan–Neandertal · Kontakt: innerwheelhhn@gmail.com</p>
-    </div></div>
-  </section>
-
-  <section id="view-downloads" class="hidden" style="margin-top:12px">
-    <div id="downloadList" class="grid2"></div>
-  </section>
-</main>
-
-<!-- Detail-Modal -->
-<div id="modal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;z-index:50">
-  <div class="card" style="max-width:640px;width:calc(100% - 32px)">
-    <div class="hd"><div style="font-weight:600" id="mTitle">Titel</div><button id="mClose" class="tab">Schließen</button></div>
-    <div class="bd">
-      <div id="mMeta" class="muted" style="margin-bottom:8px"></div>
-      <p id="mDesc" class="muted"></p>
-      <div id="mActions"></div>
+    <div class="event">
+      <div class="event-title">Private Charity Dinner</div>
+      <div>Januar 2026 · Haan</div>
+      <p>Benefizabend zugunsten des Frauenhauses Hilden.</p>
     </div>
-  </div>
-</div>
 
-<footer>
-  <div class="wrap row" style="justify-content:space-between">
-    <div>© <span id="year"></span> Inner Wheel Club Hilden–Haan–Neandertal</div>
-    <div class="row" style="gap:12px"><a href="/admin" class="muted">Admin</a></div>
-  </div>
-</footer>
+    <a href="downloads.html" style="display:block;margin-top:30px;color:#4b32b8;font-weight:500;text-decoration:none;">→ Zum Downloadbereich</a>
+  </main>
 
-<script>
-const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
-const $ =(s,r=document)=>r.querySelector(s);
-$("#year").textContent=new Date().getFullYear();
-
-// Tabs
-$$(".tab[data-tab]").forEach(t=>t.addEventListener("click",()=>{
-  $$(".tab[data-tab]").forEach(x=>x.classList.remove("active"));
-  t.classList.add("active");
-  $$("main section").forEach(s=>s.classList.add("hidden"));
-  $("#view-"+t.getAttribute("data-tab")).classList.remove("hidden");
-}));
-
-// Modal helpers
-const modal   = $("#modal");
-const mTitle  = $("#mTitle");
-const mMeta   = $("#mMeta");
-const mDesc   = $("#mDesc");
-const mActs   = $("#mActions");
-$("#mClose").onclick=()=>modal.classList.add("hidden");
-
-// Fetch helpers
-async function getJSON(p,f){try{const r=await fetch(p,{cache:"no-store"});if(!r.ok)throw 0;return await r.json()}catch(e){return f}}
-
-// Render cards
-function eventCard(e){
-  const badge = ({
-    "clubmeeting":"Clubmeeting",
-    "private-charity":"Private Charity",
-    "club-charity":"Club Charity",
-    "orga":"Organisatorisches"
-  })[e.category] || "Termin";
-  const dt = e.start?.replace("T"," ") || "";
-  return `
-    <div class="card event" data-category="${e.category}">
-      <div class="hd">
-        <div>
-          <div style="font-weight:600">${e.title||""}</div>
-          <div class="muted" style="font-size:12px">
-            <span class="badge">${badge}</span> · ${dt}${e.location?(" · "+e.location):""}
-          </div>
-        </div>
-        <button class="tab" data-open='${encodeURIComponent(JSON.stringify(e))}'>Details</button>
-      </div>
-      <div class="bd">
-        <p class="muted" style="margin-top:0">${(e.description||"").slice(0,160)}${(e.description||"").length>160?"…":""}</p>
-        ${e.rsvp_link ? `<a class="link" href="${e.rsvp_link}" target="_blank" rel="noopener">Jetzt anmelden</a>` : ``}
-      </div>
-    </div>`;
-}
-
-function orgaCard(list){
-  const items = (list.items||[]).map(it=>{
-    const txt = it.contribution || it.order || "";
-    return `<li>${it.name||""}${txt?": "+txt:""}</li>`;
-  }).join("");
-  return `
-    <div class="card">
-      <div class="bd">
-        <div style="font-weight:600">${list.title||""}</div>
-        <p class="muted">${list.description||""}</p>
-        ${items?`<ul style="margin:0 0 8px 16px">${items}</ul>`:""}
-      </div>
-    </div>`;
-}
-
-// Render pipeline
-async function render(){
-  const ev = await getJSON("content/events.json", {"items":[]});
-  const org= await getJSON("content/orga.json",   {"lists":[]});
-  const dl = await getJSON("content/downloads.json",{"items":[]});
-
-  // Sortiere Events: Zukünftig zuerst (aufsteigend), Vergangenes separat
-  const now = new Date();
-  const upcoming = (ev.items||[]).filter(e=>new Date(e.start)>=now)
-    .sort((a,b)=>new Date(a.start)-new Date(b.start));
-  const past = (ev.items||[]).filter(e=>new Date(e.start)<now)
-    .sort((a,b)=>new Date(b.start)-new Date(a.start));
-
-  // Startseite (Agenda)
-  $("#agendaList").innerHTML = upcoming.map(eventCard).join("") || "<div class='muted'>Keine kommenden Termine.</div>";
-  $("#pastWrap").innerHTML   = past.length ? `<div class="muted" style="margin-top:8px">Vergangene Termine</div>${past.map(eventCard).join("")}` : "";
-
-  // Kategorie-Ansichten
-  $("#clubmeetingList").innerHTML = upcoming.filter(e=>e.category==="clubmeeting").map(eventCard).join("") || "<div class='muted'>Keine Clubmeetings.</div>";
-  $("#privateList").innerHTML     = upcoming.filter(e=>e.category==="private-charity").map(eventCard).join("") || "<div class='muted'>Keine Private-Charity-Termine.</div>";
-  $("#clubList").innerHTML        = upcoming.filter(e=>e.category==="club-charity").map(eventCard).join("") || "<div class='muted'>Keine Club-Charity-Termine.</div>";
-
-  // Orga
-  $("#orgaList").innerHTML = (org.lists||[]).map(orgaCard).join("") || "<div class='muted'>Keine Orga-Einträge.</div>";
-
-  // Downloads (falls genutzt)
-  const dlH = $("#downloadList");
-  if (dlH) {
-    dlH.innerHTML = (dl.items||[]).map(d=>`
-      <div class="card"><div class="bd">
-        <div style="font-weight:600">${d.title}</div>
-        <a class="link" href="${d.href||"#"}" target="_blank" rel="noopener">Herunterladen</a>
-      </div></div>
-    `).join("");
-  }
-
-  // Filter auf der Agenda
-  $$(".chip[data-filter]").forEach(b=>b.onclick=()=>{
-    $$(".chip[data-filter]").forEach(x=>x.classList.remove("active"));
-    b.classList.add("active");
-    const f=b.getAttribute("data-filter");
-    $$("#agendaList .event").forEach(card=>{
-      const cat=card.getAttribute("data-category");
-      card.style.display = (f==="all"||f===cat) ? "" : "none";
-    });
-  });
-
-  // Detail-Modal Öffnen
-  $$("[data-open]").forEach(btn=>{
-    btn.onclick=()=>{
-      const e = JSON.parse(decodeURIComponent(btn.getAttribute("data-open")));
-      mTitle.textContent = e.title || "";
-      mMeta.textContent  = `${(e.start||"").replace("T"," ")}${e.location?(" · "+e.location):""}`;
-      mDesc.textContent  = e.description || "";
-      mActs.innerHTML    = e.rsvp_link ? `<a class="tab" href="${e.rsvp_link}" target="_blank" rel="noopener">Jetzt anmelden</a>` : `<span class="muted">Für diesen Termin ist keine Anmeldung erforderlich.</span>`;
-      modal.classList.remove("hidden");
-    };
-  });
-}
-
-render();
-</script>
+  <footer>
+    © 2025 Inner Wheel Club Hilden–Haan–Neandertal
+  </footer>
+</body>
+</html>
