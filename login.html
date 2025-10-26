@@ -9,57 +9,28 @@
   <style>
     body {
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      margin: 0;
-      display: grid;
-      place-items: center;
-      min-height: 100vh;
-      background: #f7f7fb;
+      margin: 0; display: grid; place-items: center; min-height: 100vh; background: #f7f7fb;
     }
-    .card {
-      background: #fff;
-      padding: 28px 24px;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,.08);
-      width: min(420px, 92vw);
-    }
-    h1 { font-size: 20px; margin: 0 0 4px; }
-    p  { color:#555; margin: 0 0 18px; }
-    label { font-weight: 600; font-size: 14px; }
+    .card { background:#fff; padding:28px 24px; border-radius:16px; box-shadow:0 6px 24px rgba(0,0,0,.08); width:min(420px,92vw); }
+    h1 { font-size:20px; margin:0 0 4px; }
+    p  { color:#555; margin:0 0 18px; }
+    label { font-weight:600; font-size:14px; }
     input {
-      width: 100%;
-      padding: 12px 14px;
-      margin: 8px 0 14px;
-      border: 1px solid #d9dbe3;
-      border-radius: 10px;
-      font-size: 16px;
+      width:100%; padding:12px 14px; margin:8px 0 14px; border:1px solid #d9dbe3; border-radius:10px; font-size:16px;
     }
     button {
-      width: 100%;
-      padding: 12px 14px;
-      border: 0;
-      border-radius: 10px;
-      background: #1e88e5;
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .2s;
+      width:100%; padding:12px 14px; border:0; border-radius:10px; background:#1e88e5; color:#fff; font-weight:600;
+      cursor:pointer; transition:background .2s;
     }
     button:hover { background:#166fc2; }
-    .note { font-size: 13px; color:#666; margin-top:10px; }
-    .ok   { color:#0a7a36; }
-    .err  { color:#b00020; }
-    .link {
-      display:block;
-      text-align:center;
-      margin-top:12px;
-      color:#4b32b8;
-      text-decoration:none;
-      font-weight:500;
-    }
+    .note { font-size:13px; color:#666; margin-top:10px; }
+    .ok { color:#0a7a36; }
+    .err { color:#b00020; }
+    .link { display:block; text-align:center; margin-top:12px; color:#4b32b8; text-decoration:none; font-weight:500; }
     .link:hover { text-decoration: underline; }
   </style>
 
-  <!-- Supabase JS (UMD, stellt window.supabase bereit) -->
+  <!-- Supabase JS (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -76,7 +47,7 @@
   </div>
 
   <script>
-    // Deine Supabase-Verbindungsdaten
+    // Supabase-Konfig
     const SUPABASE_URL = "https://itosmlnylqedxatxmelf.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
 
@@ -84,10 +55,8 @@
       alert("Supabase SDK konnte nicht geladen werden.");
     }
 
-    // Supabase initialisieren (UMD: window.supabase)
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    // DOM-Elemente
     const btn  = document.getElementById('send');
     const email = document.getElementById('email');
     const msg  = document.getElementById('msg');
@@ -108,7 +77,8 @@
         const { error } = await supabase.auth.signInWithOtp({
           email: value,
           options: {
-            emailRedirectTo: window.location.origin + "/"
+            // WICHTIG: nach dem Klick im E-Mail-Link hierher zurückkehren
+            emailRedirectTo: window.location.origin + "/auth-callback.html"
           }
         });
 
