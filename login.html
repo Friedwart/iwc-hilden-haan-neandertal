@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mitglieder-Login | Inner Wheel</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+         margin:0;display:grid;place-items:center;min-height:100vh;background:#f7f7fb}
+    .card{background:#fff;padding:28px 24px;border-radius:16px;
+          box-shadow:0 6px 24px rgba(0,0,0,.08);width:min(420px,92vw)}
+    h1{font-size:20px;margin:0 0 4px}
+    p{color:#555;margin:0 0 18px}
+    label{font-weight:600;font-size:14px}
+    input{width:100%;padding:12px 14px;margin:8px 0 14px;border:1px solid #d9dbe3;border-radius:10px}
+    button{width:100%;padding:12px 14px;border:0;border-radius:10px;background:#1e88e5;color:#fff;font-weight:600;cursor:pointer}
+    .note{font-size:13px;color:#666;margin-top:10px}
+    .ok{color:#0a7a36}.err{color:#b00020}
+    .link{display:block;text-align:center;margin-top:12px}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="card">
+    <h1>Mitglieder-Login</h1>
+    <p>Gib deine E-Mail ein. Wir senden dir einen sicheren Login-Link.</p>
+
+    <label for="email">E-Mail</label>
+    <input id="email" type="email" placeholder="name@beispiel.de" required />
+    <button id="send">Login-Link senden</button>
+    <div id="msg" class="note"></div>
+
+    <a class="link" href="/">← Zurück zur Startseite</a>
+  </div>
+
+  <script>
+    // ⬇️ Ersetze diese beiden Werte:
+    const SUPABASE_URL = "https://ITOSMLNYLQEDXATXMELF.supabase.co";   // deine URL
+    const SUPABASE_ANON_KEY = "eyJhbGciOi...";                          // dein anon key
+
+    const supabase = supabasejs.createClient(https://itosmlnylqedxatxmelf.supabase.co , eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0b3NtbG55bHFlZHhhdHhtZWxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0ODM2NDQsImV4cCI6MjA3NzA1OTY0NH0.QL5OVUgvfP04ujz0KoSKRqVDbzA7tCtqkbKUz1p0cBQ);
+
+    const btn = document.getElementById('send');
+    const email = document.getElementById('email');
+    const msg = document.getElementById('msg');
+
+    btn.addEventListener('click', async () => {
+      msg.textContent = "Sende Link…";
+      msg.className = "note";
+      try {
+        const { error } = await supabase.auth.signInWithOtp({
+          email: email.value.trim(),
+          options: {
+            emailRedirectTo: window.location.origin + "/"
+          }
+        });
+        if (error) throw error;
+        msg.textContent = "✔️ E-Mail gesendet. Prüfe dein Postfach.";
+        msg.className = "note ok";
+      } catch (e) {
+        msg.textContent = "❌ " + (e?.message || "Fehler beim Senden.");
+        msg.className = "note err";
+      }
+    });
+  </script>
+</body>
+</html>
