@@ -4,10 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mitglieder-Login | Inner Wheel</title>
-
   <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-
   <style>
     :root { color-scheme: light; }
     body {
@@ -26,13 +24,12 @@
       box-shadow: 0 6px 24px rgba(0,0,0,.08);
     }
     h1 { margin: 0 0 6px; font-size: 20px; }
-    p  { margin: 0 0 18px; color: #555; }
-    label { display:block; font-size:14px; font-weight:600; }
+    p { color: #555; margin: 0 0 18px; }
+    label { font-weight: 600; font-size: 14px; }
     input {
       width: 100%;
-      margin-top: 8px;
-      margin-bottom: 14px;
       padding: 12px 14px;
+      margin: 8px 0 14px;
       border: 1px solid #d9dbe3;
       border-radius: 10px;
       font-size: 16px;
@@ -46,18 +43,24 @@
       color: #fff;
       font-weight: 600;
       cursor: pointer;
-      transition: background .2s, opacity .2s;
+      transition: background .2s;
     }
     button:hover { background:#166fc2; }
-    button[disabled] { opacity:.6; cursor: not-allowed; }
     .note { font-size: 13px; color:#666; margin-top:10px; }
-    .ok   { color:#0a7a36; }
-    .err  { color:#b00020; }
-    .link { display:block;margin-top:12px;text-align:center;color:#4b32b8;text-decoration:none;font-weight:500;}
+    .ok { color:#0a7a36; }
+    .err { color:#b00020; }
+    .link {
+      display:block;
+      text-align:center;
+      margin-top:12px;
+      color:#4b32b8;
+      text-decoration:none;
+      font-weight:500;
+    }
     .link:hover { text-decoration: underline; }
   </style>
 
-  <!-- Supabase UMD (stellt window.supabase bereit) -->
+  <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -67,7 +70,6 @@
 
     <label for="email">E-Mail</label>
     <input id="email" type="email" placeholder="name@beispiel.de" autocomplete="email" required />
-
     <button id="send">Login-Link senden</button>
     <div id="msg" class="note" role="status" aria-live="polite"></div>
 
@@ -75,58 +77,46 @@
   </div>
 
   <script>
-    // --- Projekt-Daten (bekannt & unkritisch) ---
+    // Supabase-Verbindungsdaten
     const SUPABASE_URL = "https://itosmlnylqedxatxmelf.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
 
-    if (!window.supabase || !window.supabase.createClient) {
-      alert("Supabase SDK konnte nicht geladen werden.");
-    }
-
-    // Supabase Client initialisieren
+    // Supabase initialisieren
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    // UI-Elemente
-    const emailEl = document.getElementById("email");
-    const btnEl   = document.getElementById("send");
-    const msgEl   = document.getElementById("msg");
+    // DOM-Elemente
+    const btn = document.getElementById('send');
+    const email = document.getElementById('email');
+    const msg = document.getElementById('msg');
 
-    // Zielseite für Magic-Link: /auth-callback.html
-    const redirectTo = `${window.location.origin}/auth-callback.html`;
+    btn.addEventListener('click', async () => {
+      const value = (email.value || "").trim();
 
-    function setMsg(text, cls = "note") {
-      msgEl.textContent = text;
-      msgEl.className = cls + " note";
-    }
-
-    btnEl.addEventListener("click", async () => {
-      const email = (emailEl.value || "").trim();
-
-      // simple Validierung
-      if (!/^\S+@\S+\.\S+$/.test(email)) {
-        setMsg("Bitte eine gültige E-Mail eingeben.", "err");
-        emailEl.focus();
+      if (!value || !/^\S+@\S+\.\S+$/.test(value)) {
+        msg.textContent = "Bitte eine gültige E-Mail eingeben.";
+        msg.className = "note err";
         return;
       }
 
-      try {
-        btnEl.disabled = true;
-        setMsg("Sende Link …");
+      msg.textContent = "Sende Link…";
+      msg.className = "note";
 
+      try {
         const { error } = await supabase.auth.signInWithOtp({
-          email,
+          email: value,
           options: {
-            emailRedirectTo: redirectTo
+            // Wichtig: exakte Redirect-URL aus Supabase
+            emailRedirectTo: "https://iwc-hilden-haan-neandertal.vercel.app/auth-callback.html"
           }
         });
 
         if (error) throw error;
 
-        setMsg("✔️ E-Mail gesendet. Prüfe dein Postfach.", "ok");
+        msg.textContent = "✔️ E-Mail gesendet. Prüfe dein Postfach.";
+        msg.className = "note ok";
       } catch (e) {
-        setMsg("❌ " + (e?.message || "Fehler beim Senden."), "err");
-      } finally {
-        btnEl.disabled = false;
+        msg.textContent = "❌ " + (e?.message || "Fehler beim Senden.");
+        msg.className = "note err";
       }
     });
   </script>
