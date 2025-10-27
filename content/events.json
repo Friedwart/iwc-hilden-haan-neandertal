@@ -1,6 +1,16 @@
 {
   "items": [
     {
+      "title": "Test Vergangener Termin",
+      "category": "organisatorisches",
+      "start": "2025-11-10T00:00:00",
+      "end": "",
+      "location": "Testort",
+      "description": "Dieser Termin ist vergangen",
+      "rsvp_link": "",
+      "capacity": 5
+    },
+    {
       "title": "Zweiter Test-Titel",
       "category": "private-charity",
       "start": "2026-05-06T00:00:00",
