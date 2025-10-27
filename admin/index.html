@@ -1,26 +1,31 @@
-<!-- Netlify Identity Widget einbinden -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-  // Nach Login Seite neu laden → landet im CMS
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on('init', (user) => {
-      if (!user) {
-        window.netlifyIdentity.on('login', () => document.location.reload());
-      }
-    });
-  }
-</script> 
 <!doctype html>
-<html><head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Admin – Inner Wheel</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>body{font-family:Inter,system-ui;padding:16px}</style>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="refresh" content="0; url=/login.html" />
+  <meta name="robots" content="noindex" />
+  <title>Weiterleitung zum Login …</title>
+  <style>
+    html,body{height:100%} body{
+      margin:0; display:grid; place-items:center; font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:#f7f7fb; color:#222;
+    }
+    .card{background:#fff; padding:24px 20px; border-radius:14px; box-shadow:0 6px 24px rgba(0,0,0,.08); width:min(560px,92vw)}
+    h1{font-size:20px; margin:0 0 6px}
+    p{margin:0}
+    a{color:#1e88e5; text-decoration:none} a:hover{text-decoration:underline}
+  </style>
+  <script>
+    // Fallback-Weiterleitung via JS (für Browser, die Meta-Refresh blocken)
+    window.location.replace("/login.html");
+  </script>
 </head>
 <body>
-  <h1>CMS – Inhalte bearbeiten</h1>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-</body></html>
+  <div class="card">
+    <h1>Weiterleitung zum Mitglieder-Login …</h1>
+    <p>Falls die Weiterleitung nicht automatisch startet, klicke hier:
+      <a href="/login.html">Zum Login</a>
+    </p>
+  </div>
+</body>
+</html>
