@@ -3,132 +3,215 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin | Inner Wheel</title>
+  <title>Admin – Termine bearbeiten</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    :root { color-scheme: light; }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: #f7f7fb;
-      color: #222;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-    }
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,.08);
-      padding: 24px 22px;
-      width: min(860px, 92vw);
-    }
-    h1 { margin: 0 0 8px; font-size: 24px; }
-    p  { margin: 0 0 14px; color:#555; }
-    .row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
-    .btn {
-      background: #1e88e5; color:#fff; border:0; border-radius:10px;
-      padding: 10px 14px; font-weight:600; text-decoration:none; cursor:pointer;
-    }
-    .btn:hover { background:#166fc2; }
-    .ghost { background:#e7eefb; color:#1e4fb1; }
-    .mt { margin-top: 18px; }
-    .note { font-size:13px; color:#666; margin-top: 10px; }
-    .err  { color:#b00020; }
-    .ok   { color:#0a7a36; }
-    .kpi {
-      background:#f4f6ff; border:1px solid #e7eafd; border-radius:12px;
-      padding:12px 14px; margin-top: 14px;
-    }
-    .kpi h3 { margin:0 0 6px; font-size:16px; }
-    .kpi code { background:#fff; border:1px solid #ececf3; border-radius:6px; padding:2px 6px; }
-    a.link { color:#1e4fb1; text-decoration:none; }
-    a.link:hover { text-decoration:underline; }
+    :root{color-scheme:light}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:#f7f7fb}
+    .wrap{max-width:980px;margin:24px auto;padding:0 16px}
+    .card{background:#fff;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.08);padding:24px}
+    h1{margin:0 0 12px}
+    .note{font-size:14px;color:#555}
+    .ok{color:#0a7a36}.err{color:#b00020}
+    .row{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;gap:12px;align-items:center}
+    .row + .row{margin-top:10px}
+    input,textarea,select{width:100%;padding:10px 12px;border:1px solid #d9dbe3;border-radius:10px;font-size:14px}
+    textarea{min-height:60px}
+    .toolbar{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+    button{padding:10px 14px;border:0;border-radius:10px;background:#1e88e5;color:#fff;font-weight:600;cursor:pointer}
+    button.secondary{background:#e9eef5;color:#1b2b4b}
+    button.danger{background:#c62828}
+    .pill{display:inline-block;background:#eef6ff;color:#1b4b91;border-radius:999px;padding:4px 10px;font-size:12px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .footer{margin-top:16px;font-size:13px;color:#666}
+    .hidden{display:none}
+    .grid-head{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;gap:12px;margin:12px 0 8px;font-weight:600;color:#364a63}
+    .hr{height:1px;background:#eef1f6;margin:16px 0}
+    .badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#eaf7ea;color:#0a7a36;font-size:12px}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <div class="card" id="card">
-    <h1>Adminbereich</h1>
-    <p id="welcome">Lade Benutzer …</p>
+  <div class="wrap">
+    <div class="card">
+      <div class="topbar">
+        <h1>Adminbereich</h1>
+        <div id="who"></div>
+      </div>
+      <div id="status" class="note">Prüfe Anmeldung…</div>
 
-    <div class="kpi">
-      <h3>Status</h3>
-      <div id="status">–</div>
+      <div id="editor" class="hidden">
+        <div class="hr"></div>
+        <div class="toolbar">
+          <button id="btnAdd">+ Termin hinzufügen</button>
+          <button id="btnExport">Änderungen exportieren (JSON)</button>
+          <button id="btnCopy" class="secondary">JSON in Zwischenablage</button>
+          <a id="downloadLink" class="pill hidden" download="events.json">events.json herunterladen</a>
+        </div>
+
+        <div class="grid-head">
+          <div>Titel</div>
+          <div>Datum (YYYY-MM-DD)</div>
+          <div>Ort</div>
+          <div>Kategorie</div>
+          <div>Aktionen</div>
+        </div>
+        <div id="rows"></div>
+
+        <div class="hr"></div>
+        <div class="footer">
+          <div class="badge">Hinweis</div>
+          &nbsp;Nach dem Export die heruntergeladene <code>events.json</code> in GitHub im Ordner
+          <code>/content</code> hochladen (bestehende Datei ersetzen &gt; Commit). Vercel deployed automatisch.
+        </div>
+      </div>
+
+      <div id="notAdmin" class="hidden">
+        <div class="hr"></div>
+        <p class="err">Kein Adminzugriff. Bitte mit einem Admin-Konto anmelden.</p>
+        <p><a class="pill" href="/login.html">→ Zum Login</a></p>
+      </div>
     </div>
-
-    <div class="row mt">
-      <a class="btn ghost" href="/">← Zurück zur Startseite</a>
-      <button class="btn" id="logout">Abmelden</button>
-    </div>
-
-    <div class="note" id="msg"></div>
   </div>
 
-  <script>
-    // Supabase initialisieren
-    const SUPABASE_URL = "https://itosmlnylqedxatxmelf.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<script>
+  // ——— Supabase Initialisierung ———
+  const SUPABASE_URL  = "https://itosmlnylqedxatxmelf.supabase.co";
+  const SUPABASE_KEY  = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const welcome = document.getElementById('welcome');
-    const statusEl = document.getElementById('status');
-    const msg = document.getElementById('msg');
-    const logoutBtn = document.getElementById('logout');
+  const el = (id) => document.getElementById(id);
+  const status  = el('status');
+  const editor  = el('editor');
+  const notAdmin = el('notAdmin');
+  const who = el('who');
+  const rows = el('rows');
 
-    // kleine Helper
-    function go(href){ window.location.href = href; }
-    function showStatus(html){ statusEl.innerHTML = html; }
+  let data = []; // aktuelle events.json im Speicher
 
-    async function guard() {
-      // 1) Session/User laden
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        msg.textContent = "Fehler: " + (error.message || "Authentifizierung fehlgeschlagen");
-        msg.className = "note err";
-        // zur Login-Seite (mit Rückkehr zum Admin)
-        setTimeout(() => go("/login.html"), 800);
-        return;
-      }
+  // Hilfen
+  function rowTemplate(item, idx){
+    return `
+      <div class="row" data-idx="${idx}">
+        <input value="${escapeHtml(item.title||'')}" placeholder="Titel" />
+        <input value="${escapeHtml(item.date||'')}" placeholder="YYYY-MM-DD" />
+        <input value="${escapeHtml(item.place||'')}" placeholder="Ort" />
+        <select>
+          ${["Clubmeeting","Private Charity","Club Charity","Organisatorisches"].map(c =>
+            `<option ${c===(item.category||"")?"selected":""}>${c}</option>`
+          ).join("")}
+        </select>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="secondary" data-act="more" title="Beschreibung bearbeiten">Text</button>
+          <button class="danger" data-act="del">Löschen</button>
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns:1fr" data-idx="${idx}">
+        <textarea placeholder="Beschreibung (optional)">${escapeHtml(item.text||"")}</textarea>
+      </div>
+    `;
+  }
+  function render(){
+    rows.innerHTML = data.map(rowTemplate).join("") || `<p class="note">Noch keine Einträge.</p>`;
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 
-      const user = data?.user;
-      if (!user) {
-        // nicht eingeloggt → erst einloggen
-        go("/login.html");
-        return;
-      }
+  // Daten aus /content/events.json laden
+  async function loadEvents(){
+    const res = await fetch('/content/events.json', {cache:'no-store'});
+    if(!res.ok){ throw new Error('Konnte /content/events.json nicht laden'); }
+    data = await res.json();
+    if(!Array.isArray(data)){ data = []; }
+    render();
+  }
 
-      const email = user.email || "(ohne E-Mail)";
-      // 2) Rolle prüfen (user_metadata oder raw_user_meta_data)
-      const role = user.user_metadata?.role || user.raw_user_meta_data?.role || null;
+  // Änderungen aus DOM zurück in data schreiben
+  function syncFromDom(){
+    const rowsDom = rows.querySelectorAll('.row');
+    const result = [];
+    for(let i=0;i<rowsDom.length;i+=2){
+      const top = rowsDom[i];
+      const bottom = rowsDom[i+1];
+      const [title,date,place,category] = top.querySelectorAll('input, select');
+      const text = bottom.querySelector('textarea');
+      result.push({
+        title: title.value.trim(),
+        date:  date.value.trim(),
+        place: place.value.trim(),
+        category: category.value.trim(),
+        text: text.value.trim()
+      });
+    }
+    data = result;
+  }
 
-      welcome.textContent = `Hallo ${email}!`;
-      showStatus(
-        `Angemeldet als <code>${email}</code><br>` +
-        `Rolle: <code>${role ?? "keine"}</code>`
-      );
+  // Export als Datei & Copy
+  function exportJson(){
+    syncFromDom();
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.getElementById('downloadLink');
+    a.href = url;
+    a.classList.remove('hidden');
+  }
+  async function copyJson(){
+    syncFromDom();
+    await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+    toast('JSON in die Zwischenablage kopiert.', 'ok');
+  }
+  function toast(msg, cls='note'){ status.textContent = msg; status.className = cls; }
 
-      if (role !== "admin") {
-        msg.textContent = "Zugriff verweigert: Du bist kein Admin.";
-        msg.className = "note err";
-        setTimeout(() => go("/"), 1200);
-        return;
-      }
+  // Events
+  rows.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    const act = btn.dataset.act;
+    const idx = +btn.closest('.row').dataset.idx;
+    if(act==='del'){
+      data.splice(idx,1);
+      render();
+    }
+    if(act==='more'){
+      // nichts extra – das Textfeld ist bereits sichtbar; Fokus setzen
+      const txt = rows.querySelectorAll('textarea')[idx];
+      if(txt) txt.focus();
+    }
+  });
+  document.getElementById('btnAdd').addEventListener('click', ()=>{
+    data.push({ title:'Neuer Termin', date:'2025-01-01', place:'', category:'Clubmeeting', text:'' });
+    render();
+  });
+  document.getElementById('btnExport').addEventListener('click', exportJson);
+  document.getElementById('btnCopy').addEventListener('click', copyJson);
 
-      // alles gut
-      msg.textContent = "✔️ Adminzugriff gewährt.";
-      msg.className = "note ok";
+  // Auth prüfen & Rolle auslesen
+  (async () => {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if(error || !user){
+      status.innerHTML = 'Nicht angemeldet.';
+      notAdmin.classList.remove('hidden');
+      return;
+    }
+    who.innerHTML = `<span class="pill">${user.email}</span>`;
+
+    const role = (user.user_metadata && user.user_metadata.role) || (user.app_metadata && user.app_metadata.role);
+    if(role !== 'admin'){
+      status.innerHTML = 'Angemeldet, aber keine Admin-Rechte.';
+      notAdmin.classList.remove('hidden');
+      return;
     }
 
-    logoutBtn.addEventListener("click", async () => {
-      msg.textContent = "Melde ab …";
-      msg.className = "note";
-      await supabase.auth.signOut();
-      go("/");
-    });
+    status.innerHTML = 'Angemeldet – <span class="ok">Adminzugriff gewährt.</span>';
+    editor.classList.remove('hidden');
 
-    guard();
-  </script>
+    try{
+      await loadEvents();
+    }catch(err){
+      status.textContent = 'Fehler: ' + err.message;
+      status.className = 'err';
+    }
+  })();
+</script>
 </body>
 </html>
