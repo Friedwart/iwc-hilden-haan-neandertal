@@ -1,14 +1,14 @@
 {
   "items": [
     {
-      "title": "Test-Titel",
+      "title": "Test-Event",
       "category": "clubmeeting",
-      "start": "2025-02-01T00:00:00",
+      "start": "2026-05-03T00:00:00",
       "end": "",
       "location": "Testort",
-      "description": "",
+      "description": "TEST-Beschreibung",
       "rsvp_link": "",
-      "capacity": 42
+      "capacity": 20
     },
     {
       "title": "Weihnachtsmarkt Roncalli",
