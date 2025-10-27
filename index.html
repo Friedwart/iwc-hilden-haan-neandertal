@@ -9,64 +9,41 @@
   <style>
     :root { color-scheme: light; }
     * { box-sizing: border-box; }
-    body {
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      margin: 0; background: #f6f7fb; color: #111;
-    }
-    header {
-      background: #fff; border-bottom: 1px solid #e8e9f0;
-      position: sticky; top: 0; z-index: 10;
-    }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 16px; }
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin:0; background:#f6f7fb; color:#111; }
+    header { background:#fff; border-bottom:1px solid #e8e9f0; position:sticky; top:0; z-index:10; }
+    .wrap { max-width:980px; margin:0 auto; padding:16px; }
     .brand { display:flex; align-items:center; gap:12px; font-weight:700; }
-    nav { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
-    .pill {
-      background:#e9f0ff; color:#174ea6; border-radius:999px; padding:8px 14px; font-weight:600;
-      display:inline-flex; align-items:center; gap:8px; text-decoration:none;
-    }
-    main .card {
-      background:#fff; border-radius:16px; box-shadow:0 6px 24px rgba(0,0,0,.06);
-      padding:22px; margin:20px 0;
-    }
-    h1 { margin: 0 0 12px; font-size: 24px; }
-    .controls { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin: 12px 0 6px; }
+    main .card { background:#fff; border-radius:16px; box-shadow:0 6px 24px rgba(0,0,0,.06); padding:22px; margin:20px 0; }
+    h1 { margin:0 0 12px; font-size:24px; }
+    .controls { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:12px 0 6px; }
     .switch { display:inline-flex; border:1px solid #e3e5ee; background:#f7f8fd; border-radius:999px; padding:4px; }
-    .switch button {
-      border:0; background:transparent; padding:8px 14px; border-radius:999px; font-weight:600; cursor:pointer;
-      color:#3b3f55;
-    }
+    .switch button { border:0; background:transparent; padding:8px 14px; border-radius:999px; font-weight:600; cursor:pointer; color:#3b3f55; }
     .switch button.active { background:#174ea6; color:#fff; }
     .filters { display:flex; gap:8px; flex-wrap:wrap; }
-    .chip {
-      border:1px solid #e3e5ee; background:#fff; color:#243; border-radius:999px; padding:6px 12px; font-weight:600;
-      cursor:pointer;
-    }
+    .chip { border:1px solid #e3e5ee; background:#fff; color:#243; border-radius:999px; padding:6px 12px; font-weight:600; cursor:pointer; }
     .chip.active { background:#174ea6; color:#fff; border-color:#174ea6; }
     .count { color:#666; font-size:14px; margin-left:auto; }
     .event { padding:16px 0; border-top:1px solid #eef0f4; }
-    .event:first-child { border-top: 0; }
+    .event:first-child { border-top:0; }
     .event a { color:#174ea6; text-decoration:none; font-weight:700; }
     .meta { color:#666; margin:4px 0 6px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
     .badge { background:#eef4ff; color:#174ea6; padding:4px 8px; border-radius:999px; font-weight:600; font-size:12px; }
     footer { color:#666; font-size:14px; text-align:center; padding:28px 0 36px; }
     .muted { color:#6b7280; }
+    .pill { background:#e9f0ff; color:#174ea6; border-radius:999px; padding:8px 14px; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
   </style>
 </head>
 <body>
   <header>
     <div class="wrap">
       <div class="brand">
-        <img src="/assets/logo.png" alt="" width="36" height="36" />
+        <img src="/assets/logo.png" alt="Logo Inner Wheel Club" width="36" height="36" />
         <div>Inner Wheel Club Hilden–Haan–Neandertal</div>
       </div>
-      <nav aria-label="Bereiche">
+      <nav aria-label="Bereiche" style="margin-top:10px; display:flex; gap:12px; flex-wrap:wrap;">
         <a class="pill" href="#">Termine</a>
-        <a class="pill" href="#clubmeetings">Clubmeetings</a>
-        <a class="pill" href="#private-charity">Private Charity</a>
-        <a class="pill" href="#club-charity">Club Charity</a>
-        <a class="pill" href="#orga">Organisatorisches</a>
-        <a class="pill" href="#downloads">Downloads</a>
-        <a class="pill" href="#about">Über uns</a>
+        <a class="pill" href="/downloads.html">Downloads</a>
+        <a class="pill" href="/about.html">Über uns</a>
         <a class="pill" href="/admin/index.html">Admin</a>
       </nav>
     </div>
@@ -76,99 +53,78 @@
     <div class="card">
       <h1>Termine &amp; Veranstaltungen</h1>
 
-      <!-- Filterleiste -->
       <div class="controls" role="region" aria-label="Filter">
         <div class="switch" role="tablist" aria-label="Zeitbereich">
-          <button id="btn-upcoming" role="tab" aria-selected="true" class="active">Kommende</button>
-          <button id="btn-past" role="tab" aria-selected="false">Vergangene</button>
+          <button id="btn-upcoming" type="button" role="tab" aria-selected="true" class="active">Kommende</button>
+          <button id="btn-past" type="button" role="tab" aria-selected="false">Vergangene</button>
         </div>
 
-        <div class="filters" role="toolbar" aria-label="Kategorien">
-          <button class="chip active" data-cat="all">Alle</button>
-          <button class="chip" data-cat="clubmeeting">Clubmeetings</button>
-          <button class="chip" data-cat="private-charity">Private Charity</button>
-          <button class="chip" data-cat="club-charity">Club Charity</button>
+        <div class="filters" role="toolbar" aria-label="Kategorien" id="filterBar">
+          <button class="chip active" type="button" data-cat="all">Alle</button>
+          <button class="chip" type="button" data-cat="clubmeeting">Clubmeetings</button>
+          <button class="chip" type="button" data-cat="private-charity">Private Charity</button>
+          <button class="chip" type="button" data-cat="club-charity">Club Charity</button>
         </div>
 
         <div class="count" id="count"></div>
       </div>
 
-      <!-- Ergebnisliste -->
       <div id="events" aria-live="polite" class="muted">Wird geladen…</div>
 
       <p style="margin-top:18px;"><a class="pill" href="/downloads.html">→ Zum Downloadbereich</a></p>
     </div>
   </main>
 
-  <footer>
-    © 2025 Inner Wheel Club Hilden–Haan–Neandertal
-  </footer>
+  <footer>© 2025 Inner Wheel Club Hilden–Haan–Neandertal</footer>
 
   <script>
-    // -------------------- Helper --------------------
-    const $ = sel => document.querySelector(sel);
-    const $all = sel => Array.from(document.querySelectorAll(sel));
+    const $  = (s) => document.querySelector(s);
+    const $$ = (s) => Array.from(document.querySelectorAll(s));
 
     const fmtDate = (iso) => {
       if (!iso) return "";
       const d = new Date(iso);
       return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
     };
-
     const catLabel = (v) => ({
-      "clubmeeting": "Clubmeeting",
-      "private-charity": "Private Charity",
-      "club-charity": "Club Charity"
+      "clubmeeting":"Clubmeeting",
+      "private-charity":"Private Charity",
+      "club-charity":"Club Charity"
     }[v] || "Termin");
 
-    // -------------------- State --------------------
     let allItems = [];
-    const state = {
-      view: "upcoming",   // "upcoming" | "past"
-      cat:  "all"         // "all" | "clubmeeting" | "private-charity" | "club-charity"
-    };
+    const state = { view:"upcoming", cat:"all" };
 
-    // URL-Parameter lesen (z. B. ?view=past&cat=clubmeeting)
     const params = new URLSearchParams(location.search);
-    if (["upcoming", "past"].includes(params.get("view"))) state.view = params.get("view");
+    if (["upcoming","past"].includes(params.get("view"))) state.view = params.get("view");
     if (["all","clubmeeting","private-charity","club-charity"].includes(params.get("cat"))) state.cat = params.get("cat");
 
-    // -------------------- Render --------------------
-    function render() {
+    function render(){
       const mount = $("#events");
-      const count = $("#count");
-
+      const cnt   = $("#count");
       const today = new Date(); today.setHours(0,0,0,0);
 
-      let items = (allItems || []).slice().filter(it => {
+      let items = (allItems||[]).filter(it=>{
         const when = new Date(it.start);
         if (isNaN(when)) return false;
         return state.view === "upcoming" ? when >= today : when < today;
       });
+      if (state.cat !== "all") items = items.filter(it => (it.category||"") === state.cat);
 
-      if (state.cat !== "all") {
-        items = items.filter(it => (it.category || "") === state.cat);
-      }
+      items.sort((a,b)=> new Date(a.start)-new Date(b.start));
+      if (state.view === "past") items.reverse();
 
-      // sortieren
-      items.sort((a,b) => new Date(a.start) - new Date(b.start));
-      if (state.view === "past") items.reverse(); // vergangene: neuestes zuerst
+      cnt.textContent = `${items.length} ${items.length===1?'Termin':'Termine'}`;
 
-      // Zähler
-      count.textContent = `${items.length} ${items.length === 1 ? "Termin" : "Termine"}`;
-
-      // Ausgabe
-      if (!items.length) {
+      if (!items.length){
         mount.classList.add("muted");
-        mount.innerHTML = state.view === "upcoming"
-          ? "Keine kommenden Termine in dieser Kategorie."
-          : "Keine vergangenen Termine in dieser Kategorie.";
+        mount.textContent = state.view==="upcoming" ? "Keine kommenden Termine in dieser Kategorie." : "Keine vergangenen Termine in dieser Kategorie.";
         return;
       }
       mount.classList.remove("muted");
-      mount.innerHTML = items.map(ev => `
+      mount.innerHTML = items.map(ev=>`
         <div class="event">
-          <a href="#" aria-label="${ev.title}">${ev.title}</a>
+          <a href="#">${ev.title}</a>
           <div class="meta">
             <span>${fmtDate(ev.start)}</span>
             <span>· ${ev.location || "Ort folgt"}</span>
@@ -178,64 +134,62 @@
         </div>
       `).join("");
 
-      // URL aktualisieren (ohne Neuladen)
       const u = new URL(location.href);
       u.searchParams.set("view", state.view);
       u.searchParams.set("cat", state.cat);
       history.replaceState(null, "", u.toString());
     }
 
-    // -------------------- Init --------------------
     (async () => {
-      // Buttons initial aktivieren
-      if (state.view === "past") {
+      if (state.view === "past"){
         $("#btn-upcoming").classList.remove("active");
-        $("#btn-upcoming").setAttribute("aria-selected", "false");
+        $("#btn-upcoming").setAttribute("aria-selected","false");
         $("#btn-past").classList.add("active");
-        $("#btn-past").setAttribute("aria-selected", "true");
+        $("#btn-past").setAttribute("aria-selected","true");
       }
-      $all(".chip").forEach(ch => {
-        ch.classList.toggle("active", ch.dataset.cat === state.cat);
-      });
+      $$(".chip").forEach(ch => ch.classList.toggle("active", ch.dataset.cat === state.cat));
 
-      // Daten laden (Cache-Busting)
       const url = `/content/events.json?v=${Date.now()}`;
-      try {
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      try{
+        const res = await fetch(url, { cache:"no-store" });
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         allItems = data.items || [];
         render();
-      } catch (err) {
-        console.error(err);
+      }catch(e){
+        console.error(e);
         $("#events").textContent = "Konnte Termine nicht laden.";
       }
     })();
 
-    // -------------------- Events --------------------
-    $("#btn-upcoming").addEventListener("click", () => {
+    // Zeitbereich
+    $("#btn-upcoming").addEventListener("click", (e)=>{
+      e.preventDefault();
       state.view = "upcoming";
       $("#btn-upcoming").classList.add("active");
-      $("#btn-upcoming").setAttribute("aria-selected", "true");
+      $("#btn-upcoming").setAttribute("aria-selected","true");
       $("#btn-past").classList.remove("active");
-      $("#btn-past").setAttribute("aria-selected", "false");
+      $("#btn-past").setAttribute("aria-selected","false");
       render();
     });
-    $("#btn-past").addEventListener("click", () => {
+    $("#btn-past").addEventListener("click", (e)=>{
+      e.preventDefault();
       state.view = "past";
       $("#btn-past").classList.add("active");
-      $("#btn-past").setAttribute("aria-selected", "true");
+      $("#btn-past").setAttribute("aria-selected","true");
       $("#btn-upcoming").classList.remove("active");
-      $("#btn-upcoming").setAttribute("aria-selected", "false");
+      $("#btn-upcoming").setAttribute("aria-selected","false");
       render();
     });
 
-    $all(".chip").forEach(chip => {
-      chip.addEventListener("click", () => {
-        state.cat = chip.dataset.cat;
-        $all(".chip").forEach(c => c.classList.toggle("active", c === chip));
-        render();
-      });
+    // Kategorien – Event Delegation
+    $("#filterBar").addEventListener("click", (e)=>{
+      const btn = e.target.closest(".chip");
+      if(!btn) return;
+      e.preventDefault();
+      state.cat = btn.dataset.cat;
+      $$(".chip").forEach(c => c.classList.toggle("active", c === btn));
+      render();
     });
   </script>
 </body>
