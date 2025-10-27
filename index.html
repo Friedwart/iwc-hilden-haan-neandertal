@@ -4,288 +4,246 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Inner Wheel Club Hilden–Haan–Neandertal</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root { color-scheme: light; }
-    * { box-sizing: border-box; }
     body {
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      margin:0;
-      background:#f6f7fb;
-      color:#111;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f6f7fb;
+      margin: 0;
+      color: #111;
     }
     header {
-      background:#fff;
-      border-bottom:1px solid #e8e9f0;
-      position:sticky;
-      top:0;
-      z-index:10;
+      background: #fff;
+      border-bottom: 1px solid #e8e9f0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
-    .wrap { max-width:980px; margin:0 auto; padding:16px; }
-    .brand { display:flex; align-items:center; gap:12px; font-weight:700; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 16px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 16px; }
+    nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    nav a {
+      text-decoration: none;
+      background: #e9f0ff;
+      color: #174ea6;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    nav a:hover, nav a.active {
+      background: #174ea6;
+      color: #fff;
+    }
     main .card {
-      background:#fff;
-      border-radius:16px;
-      box-shadow:0 6px 24px rgba(0,0,0,.06);
-      padding:22px;
-      margin:20px 0;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.06);
+      padding: 22px;
+      margin: 20px 0;
     }
-    h1 { margin:0 0 12px; font-size:24px; }
-    .controls {
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      align-items:center;
-      margin:12px 0 6px;
-    }
+    h1 { margin: 0 0 12px; font-size: 24px; }
     .switch {
-      display:inline-flex;
-      border:1px solid #e3e5ee;
-      background:#f7f8fd;
-      border-radius:999px;
-      padding:4px;
+      display: inline-flex;
+      border: 1px solid #e3e5ee;
+      border-radius: 999px;
+      padding: 4px;
+      background: #f7f8fd;
+      margin-bottom: 14px;
     }
     .switch button {
-      border:0;
-      background:transparent;
-      padding:8px 14px;
-      border-radius:999px;
-      font-weight:600;
-      cursor:pointer;
-      color:#3b3f55;
+      border: 0;
+      background: transparent;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #3b3f55;
     }
     .switch button.active {
-      background:#174ea6;
-      color:#fff;
+      background: #174ea6;
+      color: #fff;
     }
     .filters {
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
     }
     .chip {
-      border:1px solid #e3e5ee;
-      background:#fff;
-      color:#243;
-      border-radius:999px;
-      padding:6px 12px;
-      font-weight:600;
-      cursor:pointer;
+      border: 1px solid #e3e5ee;
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 600;
+      cursor: pointer;
     }
     .chip.active {
-      background:#174ea6;
-      color:#fff;
-      border-color:#174ea6;
+      background: #174ea6;
+      color: #fff;
     }
-    .count { color:#666; font-size:14px; margin-left:auto; }
+    .count { color: #666; font-size: 14px; margin-top: 4px; }
     .event {
-      padding:16px 0;
-      border-top:1px solid #eef0f4;
-      transition: opacity .3s ease, transform .3s ease;
+      padding: 16px 0;
+      border-top: 1px solid #eef0f4;
     }
-    .event:first-child { border-top:0; }
-    .event a { color:#174ea6; text-decoration:none; font-weight:700; }
+    .event:first-child { border-top: 0; }
+    .event a {
+      color: #174ea6;
+      text-decoration: none;
+      font-weight: 700;
+    }
     .meta {
-      color:#666;
-      margin:4px 0 6px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
+      color: #666;
+      margin: 4px 0 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
     .badge {
-      background:#eef4ff;
-      color:#174ea6;
-      padding:4px 8px;
-      border-radius:999px;
-      font-weight:600;
-      font-size:12px;
+      background: #eef4ff;
+      color: #174ea6;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 12px;
     }
     footer {
-      color:#666;
-      font-size:14px;
-      text-align:center;
-      padding:28px 0 36px;
+      color: #666;
+      font-size: 14px;
+      text-align: center;
+      padding: 28px 0 36px;
     }
-    .muted { color:#6b7280; }
+    .muted { color: #6b7280; }
     .pill {
-      background:#e9f0ff;
-      color:#174ea6;
-      border-radius:999px;
-      padding:8px 14px;
-      font-weight:600;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+      background: #e9f0ff;
+      color: #174ea6;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
-    /* Vergangene Termine */
-    .event.past { opacity:0.6; transform:scale(0.99); }
-    .event.past a { color:#555; font-style:italic; }
+    .event.past { opacity: 0.6; transform: scale(0.99); }
+    .event.past a { color: #555; font-style: italic; }
   </style>
 </head>
+
 <body>
   <header>
     <div class="wrap">
       <div class="brand">
-        <img src="/assets/logo.png" alt="Logo Inner Wheel Club" width="36" height="36" />
+        <img src="/assets/logo.png" alt="Logo Inner Wheel Club" width="36" height="36">
         <div>Inner Wheel Club Hilden–Haan–Neandertal</div>
       </div>
-      <nav style="margin-top:10px; display:flex; gap:12px; flex-wrap:wrap;">
-        <a class="pill" href="#">Termine</a>
-        <a class="pill" href="/downloads.html">Downloads</a>
-        <a class="pill" href="/about.html">Über uns</a>
-        <a class="pill" href="/admin/index.html">Admin</a>
+      <nav>
+        <a href="/index.html" class="active">Termine</a>
+        <a href="/about.html">Über uns</a>
+        <a href="/organisation.html">Organisation Charity</a>
+        <a href="/bestellungen.html">Bestellungen</a>
+        <a href="/downloads.html">Downloads</a>
+        <a href="/admin/index.html">Admin</a>
       </nav>
     </div>
   </header>
 
   <main class="wrap">
     <div class="card">
-      <h1>Termine &amp; Veranstaltungen</h1>
+      <h1>Termine & Veranstaltungen</h1>
 
-      <div class="controls" role="region" aria-label="Filter">
-        <div class="switch" role="tablist" aria-label="Zeitbereich">
-          <button id="btn-upcoming" type="button" role="tab" aria-selected="true" class="active">Kommende</button>
-          <button id="btn-past" type="button" role="tab" aria-selected="false">Vergangene</button>
-        </div>
-
-        <div class="filters" role="toolbar" aria-label="Kategorien" id="filterBar">
-          <button class="chip active" type="button" data-cat="all">Alle</button>
-          <button class="chip" type="button" data-cat="clubmeeting">Clubmeetings</button>
-          <button class="chip" type="button" data-cat="private-charity">Private Charity</button>
-          <button class="chip" type="button" data-cat="club-charity">Club Charity</button>
-        </div>
-
-        <div class="count" id="count"></div>
+      <div class="switch">
+        <button id="btn-upcoming" class="active">Kommende</button>
+        <button id="btn-past">Vergangene</button>
       </div>
 
-      <div id="events" aria-live="polite" class="muted">Wird geladen…</div>
+      <div class="filters" id="filterBar">
+        <button class="chip active" data-cat="all">Alle Kategorien</button>
+        <button class="chip" data-cat="clubmeeting">Clubmeetings</button>
+        <button class="chip" data-cat="private-charity">Private Charity</button>
+        <button class="chip" data-cat="club-charity">Club Charity</button>
+      </div>
 
-      <p style="margin-top:18px;"><a class="pill" href="/downloads.html">→ Zum Downloadbereich</a></p>
+      <div class="count" id="count"></div>
+      <div id="events" class="muted">Wird geladen…</div>
+
+      <p style="margin-top:18px;">
+        <a class="pill" href="/downloads.html">→ Zum Downloadbereich</a>
+      </p>
     </div>
   </main>
 
   <footer>© 2025 Inner Wheel Club Hilden–Haan–Neandertal</footer>
 
   <script>
-    const $  = s => document.querySelector(s);
+    const $ = s => document.querySelector(s);
     const $$ = s => Array.from(document.querySelectorAll(s));
-
-    const fmtDate = iso => {
-      if (!iso) return "";
-      const d = new Date(iso);
-      return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
-    };
+    const fmtDate = iso => new Date(iso).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
     const catLabel = v => ({
-      "clubmeeting":"Clubmeeting",
-      "private-charity":"Private Charity",
-      "club-charity":"Club Charity"
+      "clubmeeting": "Clubmeeting",
+      "private-charity": "Private Charity",
+      "club-charity": "Club Charity"
     }[v] || "Termin");
 
     let allItems = [];
-    const state = { view:"upcoming", cat:"all" };
+    const state = { view: "upcoming", cat: "all" };
 
-    const params = new URLSearchParams(location.search);
-    if (["upcoming","past"].includes(params.get("view"))) state.view = params.get("view");
-    if (["all","clubmeeting","private-charity","club-charity"].includes(params.get("cat"))) state.cat = params.get("cat");
-
-    function render(){
-      const mount = $("#events");
-      const cnt   = $("#count");
+    function render() {
       const today = new Date(); today.setHours(0,0,0,0);
-
-      let items = (allItems||[]).filter(it=>{
-        const when = new Date(it.start);
-        if (isNaN(when)) return false;
-        return state.view === "upcoming" ? when >= today : when < today;
+      let items = allItems.filter(it => {
+        const d = new Date(it.start);
+        return state.view === "upcoming" ? d >= today : d < today;
       });
-      if (state.cat !== "all") items = items.filter(it => (it.category||"") === state.cat);
-
-      items.sort((a,b)=> new Date(a.start)-new Date(b.start));
+      if (state.cat !== "all") items = items.filter(it => it.category === state.cat);
+      items.sort((a,b)=> new Date(a.start) - new Date(b.start));
       if (state.view === "past") items.reverse();
 
-      cnt.textContent = `${items.length} ${items.length===1?'Termin':'Termine'}`;
-
-      if (!items.length){
-        mount.classList.add("muted");
-        mount.textContent = state.view==="upcoming" ? "Keine kommenden Termine in dieser Kategorie." : "Keine vergangenen Termine in dieser Kategorie.";
-        return;
-      }
-      mount.classList.remove("muted");
-      mount.innerHTML = items.map(ev=>{
-        const when = new Date(ev.start);
-        const past = when < today;
+      $("#count").textContent = `${items.length} ${items.length === 1 ? "Termin" : "Termine"}`;
+      $("#events").innerHTML = items.map(ev=>{
+        const d = new Date(ev.start);
+        const past = d < today;
         return `
-        <div class="event ${past ? 'past' : ''}">
+        <div class="event ${past?"past":""}">
           <a href="#">${ev.title}</a>
           <div class="meta">
-            <span>${fmtDate(ev.start)}</span>
-            <span>· ${ev.location || "Ort folgt"}</span>
+            <span>${fmtDate(ev.start)}</span> ·
+            <span>${ev.location||"Ort folgt"}</span>
             <span class="badge">${catLabel(ev.category)}</span>
           </div>
-          <div>${ev.description ? ev.description : ""}</div>
-        </div>
-        `;
-      }).join("");
-
-      const u = new URL(location.href);
-      u.searchParams.set("view", state.view);
-      u.searchParams.set("cat", state.cat);
-      history.replaceState(null, "", u.toString());
+          <div>${ev.description||""}</div>
+        </div>`;
+      }).join("") || `<div class="muted">${state.view==="upcoming"?"Keine kommenden Termine.":"Keine vergangenen Termine."}</div>`;
     }
 
-    (async () => {
-      if (state.view === "past"){
-        $("#btn-upcoming").classList.remove("active");
-        $("#btn-upcoming").setAttribute("aria-selected","false");
-        $("#btn-past").classList.add("active");
-        $("#btn-past").setAttribute("aria-selected","true");
-      }
-      $$(".chip").forEach(ch => ch.classList.toggle("active", ch.dataset.cat === state.cat));
-
-      const url = `/content/events.json?v=${Date.now()}`;
-      try{
-        const res = await fetch(url, { cache:"no-store" });
-        if(!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        allItems = data.items || [];
-        render();
-      }catch(e){
-        console.error(e);
-        $("#events").textContent = "Konnte Termine nicht laden.";
-      }
+    (async()=>{
+      const res = await fetch(`/content/events.json?v=${Date.now()}`);
+      const data = await res.json();
+      allItems = data.items || [];
+      render();
     })();
 
-    $("#btn-upcoming").addEventListener("click", e=>{
-      e.preventDefault();
+    $("#btn-upcoming").onclick = () => {
       state.view = "upcoming";
       $("#btn-upcoming").classList.add("active");
-      $("#btn-upcoming").setAttribute("aria-selected","true");
       $("#btn-past").classList.remove("active");
-      $("#btn-past").setAttribute("aria-selected","false");
       render();
-    });
-
-    $("#btn-past").addEventListener("click", e=>{
-      e.preventDefault();
+    };
+    $("#btn-past").onclick = () => {
       state.view = "past";
       $("#btn-past").classList.add("active");
-      $("#btn-past").setAttribute("aria-selected","true");
       $("#btn-upcoming").classList.remove("active");
-      $("#btn-upcoming").setAttribute("aria-selected","false");
       render();
-    });
-
-    $("#filterBar").addEventListener("click", e=>{
+    };
+    $("#filterBar").onclick = e => {
       const btn = e.target.closest(".chip");
       if(!btn) return;
-      e.preventDefault();
       state.cat = btn.dataset.cat;
       $$(".chip").forEach(c => c.classList.toggle("active", c === btn));
       render();
-    });
+    };
   </script>
 </body>
 </html>
