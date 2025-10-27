@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root { color-scheme: light; }
+    * { box-sizing: border-box; }
     body {
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       margin: 0; background: #f6f7fb; color: #111;
@@ -28,11 +29,27 @@
       padding:22px; margin:20px 0;
     }
     h1 { margin: 0 0 12px; font-size: 24px; }
+    .controls { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin: 12px 0 6px; }
+    .switch { display:inline-flex; border:1px solid #e3e5ee; background:#f7f8fd; border-radius:999px; padding:4px; }
+    .switch button {
+      border:0; background:transparent; padding:8px 14px; border-radius:999px; font-weight:600; cursor:pointer;
+      color:#3b3f55;
+    }
+    .switch button.active { background:#174ea6; color:#fff; }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; }
+    .chip {
+      border:1px solid #e3e5ee; background:#fff; color:#243; border-radius:999px; padding:6px 12px; font-weight:600;
+      cursor:pointer;
+    }
+    .chip.active { background:#174ea6; color:#fff; border-color:#174ea6; }
+    .count { color:#666; font-size:14px; margin-left:auto; }
     .event { padding:16px 0; border-top:1px solid #eef0f4; }
     .event:first-child { border-top: 0; }
     .event a { color:#174ea6; text-decoration:none; font-weight:700; }
-    .meta { color:#666; margin:4px 0 6px; }
+    .meta { color:#666; margin:4px 0 6px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .badge { background:#eef4ff; color:#174ea6; padding:4px 8px; border-radius:999px; font-weight:600; font-size:12px; }
     footer { color:#666; font-size:14px; text-align:center; padding:28px 0 36px; }
+    .muted { color:#6b7280; }
   </style>
 </head>
 <body>
@@ -58,7 +75,27 @@
   <main class="wrap">
     <div class="card">
       <h1>Termine &amp; Veranstaltungen</h1>
-      <div id="events" aria-live="polite">Wird geladen…</div>
+
+      <!-- Filterleiste -->
+      <div class="controls" role="region" aria-label="Filter">
+        <div class="switch" role="tablist" aria-label="Zeitbereich">
+          <button id="btn-upcoming" role="tab" aria-selected="true" class="active">Kommende</button>
+          <button id="btn-past" role="tab" aria-selected="false">Vergangene</button>
+        </div>
+
+        <div class="filters" role="toolbar" aria-label="Kategorien">
+          <button class="chip active" data-cat="all">Alle</button>
+          <button class="chip" data-cat="clubmeeting">Clubmeetings</button>
+          <button class="chip" data-cat="private-charity">Private Charity</button>
+          <button class="chip" data-cat="club-charity">Club Charity</button>
+        </div>
+
+        <div class="count" id="count"></div>
+      </div>
+
+      <!-- Ergebnisliste -->
+      <div id="events" aria-live="polite" class="muted">Wird geladen…</div>
+
       <p style="margin-top:18px;"><a class="pill" href="/downloads.html">→ Zum Downloadbereich</a></p>
     </div>
   </main>
@@ -68,65 +105,138 @@
   </footer>
 
   <script>
-    // Hilfsfunktionen
+    // -------------------- Helper --------------------
+    const $ = sel => document.querySelector(sel);
+    const $all = sel => Array.from(document.querySelectorAll(sel));
+
     const fmtDate = (iso) => {
       if (!iso) return "";
       const d = new Date(iso);
       return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
     };
 
-    const categoryLabel = (value) => {
-      switch(value){
-        case "clubmeeting": return "Clubmeeting";
-        case "private-charity": return "Private Charity";
-        case "club-charity": return "Club Charity";
-        default: return "Termin";
-      }
+    const catLabel = (v) => ({
+      "clubmeeting": "Clubmeeting",
+      "private-charity": "Private Charity",
+      "club-charity": "Club Charity"
+    }[v] || "Termin");
+
+    // -------------------- State --------------------
+    let allItems = [];
+    const state = {
+      view: "upcoming",   // "upcoming" | "past"
+      cat:  "all"         // "all" | "clubmeeting" | "private-charity" | "club-charity"
     };
 
-    // Daten laden & rendern
+    // URL-Parameter lesen (z. B. ?view=past&cat=clubmeeting)
+    const params = new URLSearchParams(location.search);
+    if (["upcoming", "past"].includes(params.get("view"))) state.view = params.get("view");
+    if (["all","clubmeeting","private-charity","club-charity"].includes(params.get("cat"))) state.cat = params.get("cat");
+
+    // -------------------- Render --------------------
+    function render() {
+      const mount = $("#events");
+      const count = $("#count");
+
+      const today = new Date(); today.setHours(0,0,0,0);
+
+      let items = (allItems || []).slice().filter(it => {
+        const when = new Date(it.start);
+        if (isNaN(when)) return false;
+        return state.view === "upcoming" ? when >= today : when < today;
+      });
+
+      if (state.cat !== "all") {
+        items = items.filter(it => (it.category || "") === state.cat);
+      }
+
+      // sortieren
+      items.sort((a,b) => new Date(a.start) - new Date(b.start));
+      if (state.view === "past") items.reverse(); // vergangene: neuestes zuerst
+
+      // Zähler
+      count.textContent = `${items.length} ${items.length === 1 ? "Termin" : "Termine"}`;
+
+      // Ausgabe
+      if (!items.length) {
+        mount.classList.add("muted");
+        mount.innerHTML = state.view === "upcoming"
+          ? "Keine kommenden Termine in dieser Kategorie."
+          : "Keine vergangenen Termine in dieser Kategorie.";
+        return;
+      }
+      mount.classList.remove("muted");
+      mount.innerHTML = items.map(ev => `
+        <div class="event">
+          <a href="#" aria-label="${ev.title}">${ev.title}</a>
+          <div class="meta">
+            <span>${fmtDate(ev.start)}</span>
+            <span>· ${ev.location || "Ort folgt"}</span>
+            <span class="badge">${catLabel(ev.category)}</span>
+          </div>
+          <div>${ev.description ? ev.description : ""}</div>
+        </div>
+      `).join("");
+
+      // URL aktualisieren (ohne Neuladen)
+      const u = new URL(location.href);
+      u.searchParams.set("view", state.view);
+      u.searchParams.set("cat", state.cat);
+      history.replaceState(null, "", u.toString());
+    }
+
+    // -------------------- Init --------------------
     (async () => {
-      const mount = document.getElementById("events");
+      // Buttons initial aktivieren
+      if (state.view === "past") {
+        $("#btn-upcoming").classList.remove("active");
+        $("#btn-upcoming").setAttribute("aria-selected", "false");
+        $("#btn-past").classList.add("active");
+        $("#btn-past").setAttribute("aria-selected", "true");
+      }
+      $all(".chip").forEach(ch => {
+        ch.classList.toggle("active", ch.dataset.cat === state.cat);
+      });
+
+      // Daten laden (Cache-Busting)
+      const url = `/content/events.json?v=${Date.now()}`;
       try {
-        // Cache-Busting, damit Änderungen sofort sichtbar sind
-        const url = `/content/events.json?v=${Date.now()}`;
         const res = await fetch(url, { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-
-        const today = new Date();
-        today.setHours(0,0,0,0);
-
-        const items = (data.items || [])
-          .filter(it => {
-            const when = new Date(it.start);
-            if (isNaN(when)) return false;
-            return when >= today; // nur kommende Termine
-          })
-          .sort((a,b) => new Date(a.start) - new Date(b.start));
-
-        // ▼▼ HIER war vorher das Limit (slice(0,3)). Wir zeigen ALLE kommenden.
-        const visible = items; // kein Limit mehr
-
-        if (!visible.length) {
-          mount.textContent = "Keine kommenden Termine.";
-          return;
-        }
-
-        mount.innerHTML = visible.map(ev => `
-          <div class="event">
-            <a href="#" aria-label="${ev.title}">${ev.title}</a>
-            <div class="meta">
-              ${fmtDate(ev.start)} · ${ev.location || "Ort folgt"} · ${categoryLabel(ev.category)}
-            </div>
-            <div>${ev.description ? ev.description : ""}</div>
-          </div>
-        `).join("");
+        allItems = data.items || [];
+        render();
       } catch (err) {
-        console.error("Fehler beim Laden:", err);
-        mount.textContent = "Konnte Termine nicht laden.";
+        console.error(err);
+        $("#events").textContent = "Konnte Termine nicht laden.";
       }
     })();
+
+    // -------------------- Events --------------------
+    $("#btn-upcoming").addEventListener("click", () => {
+      state.view = "upcoming";
+      $("#btn-upcoming").classList.add("active");
+      $("#btn-upcoming").setAttribute("aria-selected", "true");
+      $("#btn-past").classList.remove("active");
+      $("#btn-past").setAttribute("aria-selected", "false");
+      render();
+    });
+    $("#btn-past").addEventListener("click", () => {
+      state.view = "past";
+      $("#btn-past").classList.add("active");
+      $("#btn-past").setAttribute("aria-selected", "true");
+      $("#btn-upcoming").classList.remove("active");
+      $("#btn-upcoming").setAttribute("aria-selected", "false");
+      render();
+    });
+
+    $all(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        state.cat = chip.dataset.cat;
+        $all(".chip").forEach(c => c.classList.toggle("active", c === chip));
+        render();
+      });
+    });
   </script>
 </body>
 </html>
