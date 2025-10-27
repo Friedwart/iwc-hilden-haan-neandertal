@@ -8,154 +8,217 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root { color-scheme: light; }
-    *{box-sizing:border-box}
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:#f6f7fb;color:#111}
-    header{background:#fff;border-bottom:1px solid #e8e9f0;position:sticky;top:0;z-index:10}
-    .wrap{max-width:980px;margin:0 auto;padding:16px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:700}
-    main .card{background:#fff;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:22px;margin:20px 0}
-    h1{margin:0 0 12px;font-size:24px}
-    .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:12px 0 6px}
-    .switch{display:inline-flex;border:1px solid #e3e5ee;background:#f7f8fd;border-radius:999px;padding:4px}
-    .switch button{border:0;background:transparent;padding:8px 14px;border-radius:999px;font-weight:600;cursor:pointer;color:#3b3f55}
-    .switch button.active{background:#174ea6;color:#fff}
-    .filters{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{border:1px solid #e3e5ee;background:#fff;color:#243;border-radius:999px;padding:6px 12px;font-weight:600;cursor:pointer}
-    .chip.active{background:#174ea6;color:#fff;border-color:#174ea6}
-    .count{color:#666;font-size:14px;margin-left:auto}
-    .event{padding:16px 0;border-top:1px solid #eef0f4;transition:opacity .3s ease,transform .3s ease}
-    .event:first-child{border-top:0}
-    .event a{color:#174ea6;text-decoration:none;font-weight:700}
-    .meta{color:#666;margin:4px 0 6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .badge{background:#eef4ff;color:#174ea6;padding:4px 8px;border-radius:999px;font-weight:600;font-size:12px}
-    footer{color:#666;font-size:14px;text-align:center;padding:28px 0 36px}
-    .muted{color:#6b7280}
-    .pill{background:#e9f0ff;color:#174ea6;border-radius:999px;padding:8px 14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-    .event.past{opacity:.6;transform:scale(.99)}
-    .event.past a{color:#555;font-style:italic}
+    * { box-sizing: border-box; }
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      margin:0;
+      background:#f6f7fb;
+      color:#111;
+    }
+    header {
+      background:#fff;
+      border-bottom:1px solid #e8e9f0;
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .wrap { max-width:980px; margin:0 auto; padding:16px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:700; }
+    main .card {
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 6px 24px rgba(0,0,0,.06);
+      padding:22px;
+      margin:20px 0;
+    }
+    h1 { margin:0 0 12px; font-size:24px; }
+    .controls {
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin:12px 0 6px;
+    }
+    .switch {
+      display:inline-flex;
+      border:1px solid #e3e5ee;
+      background:#f7f8fd;
+      border-radius:999px;
+      padding:4px;
+    }
+    .switch button {
+      border:0;
+      background:transparent;
+      padding:8px 14px;
+      border-radius:999px;
+      font-weight:600;
+      cursor:pointer;
+      color:#3b3f55;
+    }
+    .switch button.active {
+      background:#174ea6;
+      color:#fff;
+    }
+    .filters {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .chip {
+      border:1px solid #e3e5ee;
+      background:#fff;
+      color:#243;
+      border-radius:999px;
+      padding:6px 12px;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .chip.active {
+      background:#174ea6;
+      color:#fff;
+      border-color:#174ea6;
+    }
+    .count { color:#666; font-size:14px; margin-left:auto; }
+    .event {
+      padding:16px 0;
+      border-top:1px solid #eef0f4;
+      transition: opacity .3s ease, transform .3s ease;
+    }
+    .event:first-child { border-top:0; }
+    .event a { color:#174ea6; text-decoration:none; font-weight:700; }
+    .meta {
+      color:#666;
+      margin:4px 0 6px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .badge {
+      background:#eef4ff;
+      color:#174ea6;
+      padding:4px 8px;
+      border-radius:999px;
+      font-weight:600;
+      font-size:12px;
+    }
+    footer {
+      color:#666;
+      font-size:14px;
+      text-align:center;
+      padding:28px 0 36px;
+    }
+    .muted { color:#6b7280; }
+    .pill {
+      background:#e9f0ff;
+      color:#174ea6;
+      border-radius:999px;
+      padding:8px 14px;
+      font-weight:600;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    /* Vergangene Termine */
+    .event.past { opacity:0.6; transform:scale(0.99); }
+    .event.past a { color:#555; font-style:italic; }
   </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="brand">
-      <img src="/assets/logo.png" alt="Logo Inner Wheel Club" width="36" height="36" />
-      <div>Inner Wheel Club Hilden–Haan–Neandertal</div>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <img src="/assets/logo.png" alt="Logo Inner Wheel Club" width="36" height="36" />
+        <div>Inner Wheel Club Hilden–Haan–Neandertal</div>
+      </div>
+      <nav style="margin-top:10px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a class="pill" href="#">Termine</a>
+        <a class="pill" href="/downloads.html">Downloads</a>
+        <a class="pill" href="/about.html">Über uns</a>
+        <a class="pill" href="/admin/index.html">Admin</a>
+      </nav>
     </div>
-    <nav style="margin-top:10px;display:flex;gap:12px;flex-wrap:wrap">
-      <a class="pill" href="#">Termine</a>
-      <a class="pill" href="/downloads.html">Downloads</a>
-      <a class="pill" href="/about.html">Über uns</a>
-      <a class="pill" href="/admin/index.html">Admin</a>
-    </nav>
-  </div>
-</header>
+  </header>
 
-<main class="wrap">
-  <div class="card">
-    <h1>Termine &amp; Veranstaltungen</h1>
+  <main class="wrap">
+    <div class="card">
+      <h1>Termine &amp; Veranstaltungen</h1>
 
-    <div class="controls" role="region" aria-label="Filter">
-      <div class="switch" role="tablist" aria-label="Zeitbereich">
-        <button id="btn-all" type="button" role="tab" aria-selected="false">Alle</button>
-        <button id="btn-upcoming" type="button" role="tab" aria-selected="true" class="active">Kommende</button>
-        <button id="btn-past" type="button" role="tab" aria-selected="false">Vergangene</button>
+      <div class="controls" role="region" aria-label="Filter">
+        <div class="switch" role="tablist" aria-label="Zeitbereich">
+          <button id="btn-upcoming" type="button" role="tab" aria-selected="true" class="active">Kommende</button>
+          <button id="btn-past" type="button" role="tab" aria-selected="false">Vergangene</button>
+        </div>
+
+        <div class="filters" role="toolbar" aria-label="Kategorien" id="filterBar">
+          <button class="chip active" type="button" data-cat="all">Alle</button>
+          <button class="chip" type="button" data-cat="clubmeeting">Clubmeetings</button>
+          <button class="chip" type="button" data-cat="private-charity">Private Charity</button>
+          <button class="chip" type="button" data-cat="club-charity">Club Charity</button>
+        </div>
+
+        <div class="count" id="count"></div>
       </div>
 
-      <div class="filters" role="toolbar" aria-label="Kategorien" id="filterBar">
-        <button class="chip active" type="button" data-cat="all">Alle</button>
-        <button class="chip" type="button" data-cat="clubmeeting">Clubmeetings</button>
-        <button class="chip" type="button" data-cat="private-charity">Private Charity</button>
-        <button class="chip" type="button" data-cat="club-charity">Club Charity</button>
-      </div>
+      <div id="events" aria-live="polite" class="muted">Wird geladen…</div>
 
-      <div class="count" id="count"></div>
+      <p style="margin-top:18px;"><a class="pill" href="/downloads.html">→ Zum Downloadbereich</a></p>
     </div>
+  </main>
 
-    <div id="events" aria-live="polite" class="muted">Wird geladen…</div>
+  <footer>© 2025 Inner Wheel Club Hilden–Haan–Neandertal</footer>
 
-    <p style="margin-top:18px"><a class="pill" href="/downloads.html">→ Zum Downloadbereich</a></p>
-  </div>
-</main>
+  <script>
+    const $  = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
 
-<footer>© 2025 Inner Wheel Club Hilden–Haan–Neandertal</footer>
+    const fmtDate = iso => {
+      if (!iso) return "";
+      const d = new Date(iso);
+      return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
+    };
+    const catLabel = v => ({
+      "clubmeeting":"Clubmeeting",
+      "private-charity":"Private Charity",
+      "club-charity":"Club Charity"
+    }[v] || "Termin");
 
-<script>
-  const $  = s => document.querySelector(s);
-  const $$ = s => Array.from(document.querySelectorAll(s));
+    let allItems = [];
+    const state = { view:"upcoming", cat:"all" };
 
-  const fmtDate = iso => {
-    if (!iso) return "";
-    const d = new Date(iso);
-    return d.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric"});
-  };
-  const catLabel = v => ({
-    "clubmeeting":"Clubmeeting",
-    "private-charity":"Private Charity",
-    "club-charity":"Club Charity"
-  }[v] || "Termin");
+    const params = new URLSearchParams(location.search);
+    if (["upcoming","past"].includes(params.get("view"))) state.view = params.get("view");
+    if (["all","clubmeeting","private-charity","club-charity"].includes(params.get("cat"))) state.cat = params.get("cat");
 
-  let allItems = [];
-  const state = { view:"upcoming", cat:"all" };
+    function render(){
+      const mount = $("#events");
+      const cnt   = $("#count");
+      const today = new Date(); today.setHours(0,0,0,0);
 
-  // URL-Parameter übernehmen
-  const params = new URLSearchParams(location.search);
-  const pv = params.get("view");
-  if (["all","upcoming","past"].includes(pv)) state.view = pv;
-  const pc = params.get("cat");
-  if (["all","clubmeeting","private-charity","club-charity"].includes(pc)) state.cat = pc;
+      let items = (allItems||[]).filter(it=>{
+        const when = new Date(it.start);
+        if (isNaN(when)) return false;
+        return state.view === "upcoming" ? when >= today : when < today;
+      });
+      if (state.cat !== "all") items = items.filter(it => (it.category||"") === state.cat);
 
-  function setTabActive(id){
-    ["btn-all","btn-upcoming","btn-past"].forEach(k=>{
-      const b = $("#"+k);
-      const on = (k===id);
-      b.classList.toggle("active", on);
-      b.setAttribute("aria-selected", on ? "true":"false");
-    });
-  }
+      items.sort((a,b)=> new Date(a.start)-new Date(b.start));
+      if (state.view === "past") items.reverse();
 
-  function render(){
-    const mount=$("#events"), cnt=$("#count");
-    const today=new Date(); today.setHours(0,0,0,0);
+      cnt.textContent = `${items.length} ${items.length===1?'Termin':'Termine'}`;
 
-    // Grundliste nach Kategorie
-    let items = (allItems||[]).filter(it => state.cat==="all" ? true : (it.category||"")===state.cat);
-
-    // Ansicht: all / upcoming / past
-    if (state.view==="upcoming"){
-      items = items.filter(it => new Date(it.start) >= today)
-                   .sort((a,b)=>new Date(a.start)-new Date(b.start));
-    } else if (state.view==="past"){
-      items = items.filter(it => new Date(it.start) < today)
-                   .sort((a,b)=>new Date(b.start)-new Date(a.start));
-    } else { // all
-      const upcoming = items.filter(it=>new Date(it.start) >= today)
-                            .sort((a,b)=>new Date(a.start)-new Date(b.start));
-      const past     = items.filter(it=>new Date(it.start) <  today)
-                            .sort((a,b)=>new Date(b.start)-new Date(a.start));
-      items = [...upcoming, ...past];
-    }
-
-    cnt.textContent = `${items.length} ${items.length===1?'Termin':'Termine'}`;
-
-    if (!items.length){
-      mount.classList.add("muted");
-      mount.textContent = state.view==="past"
-        ? "Keine vergangenen Termine in dieser Kategorie."
-        : state.view==="upcoming"
-          ? "Keine kommenden Termine in dieser Kategorie."
-          : "Keine Termine gefunden.";
-      updateURL();
-      return;
-    }
-    mount.classList.remove("muted");
-
-    const todayMs = today.getTime();
-    mount.innerHTML = items.map(ev=>{
-      const start = new Date(ev.start);
-      const isPast = start.getTime() < todayMs;
-      return `
-        <div class="event ${isPast?'past':''}">
+      if (!items.length){
+        mount.classList.add("muted");
+        mount.textContent = state.view==="upcoming" ? "Keine kommenden Termine in dieser Kategorie." : "Keine vergangenen Termine in dieser Kategorie.";
+        return;
+      }
+      mount.classList.remove("muted");
+      mount.innerHTML = items.map(ev=>{
+        const when = new Date(ev.start);
+        const past = when < today;
+        return `
+        <div class="event ${past ? 'past' : ''}">
           <a href="#">${ev.title}</a>
           <div class="meta">
             <span>${fmtDate(ev.start)}</span>
@@ -163,49 +226,66 @@
             <span class="badge">${catLabel(ev.category)}</span>
           </div>
           <div>${ev.description ? ev.description : ""}</div>
-        </div>`;
-    }).join("");
+        </div>
+        `;
+      }).join("");
 
-    updateURL();
-  }
-
-  function updateURL(){
-    const u = new URL(location.href);
-    u.searchParams.set("view", state.view);
-    u.searchParams.set("cat", state.cat);
-    history.replaceState(null,"",u.toString());
-  }
-
-  // Initial laden
-  (async ()=>{
-    // Tabs visuell setzen
-    setTabActive(state.view==="all"?"btn-all":state.view==="past"?"btn-past":"btn-upcoming");
-    $$(".chip").forEach(ch => ch.classList.toggle("active", ch.dataset.cat===state.cat));
-
-    try{
-      const res = await fetch(`/content/events.json?v=${Date.now()}`,{cache:"no-store"});
-      if(!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      allItems = data.items || [];
-      render();
-    }catch(e){
-      console.error(e);
-      $("#events").textContent = "Konnte Termine nicht laden.";
+      const u = new URL(location.href);
+      u.searchParams.set("view", state.view);
+      u.searchParams.set("cat", state.cat);
+      history.replaceState(null, "", u.toString());
     }
-  })();
 
-  // Tab-Events
-  $("#btn-all").addEventListener("click",e=>{e.preventDefault();state.view="all";setTabActive("btn-all");render();});
-  $("#btn-upcoming").addEventListener("click",e=>{e.preventDefault();state.view="upcoming";setTabActive("btn-upcoming");render();});
-  $("#btn-past").addEventListener("click",e=>{e.preventDefault();state.view="past";setTabActive("btn-past");render();});
+    (async () => {
+      if (state.view === "past"){
+        $("#btn-upcoming").classList.remove("active");
+        $("#btn-upcoming").setAttribute("aria-selected","false");
+        $("#btn-past").classList.add("active");
+        $("#btn-past").setAttribute("aria-selected","true");
+      }
+      $$(".chip").forEach(ch => ch.classList.toggle("active", ch.dataset.cat === state.cat));
 
-  // Kategorie-Filter
-  $("#filterBar").addEventListener("click",e=>{
-    const btn=e.target.closest(".chip"); if(!btn) return;
-    state.cat=btn.dataset.cat;
-    $$(".chip").forEach(c=>c.classList.toggle("active",c===btn));
-    render();
-  });
-</script>
+      const url = `/content/events.json?v=${Date.now()}`;
+      try{
+        const res = await fetch(url, { cache:"no-store" });
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        allItems = data.items || [];
+        render();
+      }catch(e){
+        console.error(e);
+        $("#events").textContent = "Konnte Termine nicht laden.";
+      }
+    })();
+
+    $("#btn-upcoming").addEventListener("click", e=>{
+      e.preventDefault();
+      state.view = "upcoming";
+      $("#btn-upcoming").classList.add("active");
+      $("#btn-upcoming").setAttribute("aria-selected","true");
+      $("#btn-past").classList.remove("active");
+      $("#btn-past").setAttribute("aria-selected","false");
+      render();
+    });
+
+    $("#btn-past").addEventListener("click", e=>{
+      e.preventDefault();
+      state.view = "past";
+      $("#btn-past").classList.add("active");
+      $("#btn-past").setAttribute("aria-selected","true");
+      $("#btn-upcoming").classList.remove("active");
+      $("#btn-upcoming").setAttribute("aria-selected","false");
+      render();
+    });
+
+    $("#filterBar").addEventListener("click", e=>{
+      const btn = e.target.closest(".chip");
+      if(!btn) return;
+      e.preventDefault();
+      state.cat = btn.dataset.cat;
+      $$(".chip").forEach(c => c.classList.toggle("active", c === btn));
+      render();
+    });
+  </script>
 </body>
 </html>
