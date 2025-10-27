@@ -3,449 +3,211 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Adminbereich | IWC Hilden–Haan–Neandertal</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <title>Adminbereich | Inner Wheel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root { color-scheme: light; }
-    * { box-sizing: border-box; }
-    body {
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      margin: 0;
-      background: #f7f7fb;
-      color: #111;
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin:0; background:#f6f7fb; color:#0f172a; }
+    .wrap { max-width: 1100px; margin: 24px auto 64px; padding: 0 16px; }
+    h1 { font-size: 28px; margin: 8px 0 16px; }
+    .status { padding: 8px 12px; background:#eef2ff; color:#1e40af; border:1px solid #c7d2fe; border-radius:10px; display:inline-block; }
+    .bar { display:flex; gap:12px; margin:16px 0 20px; flex-wrap:wrap; }
+    .btn { appearance:none; border:1px solid #cbd5e1; background:#fff; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer; box-shadow:0 1px 0 rgba(0,0,0,.03); }
+    .btn.primary { background:#2563eb; border-color:#2563eb; color:#fff; }
+    .btn.ghost { background:#f8fafc; }
+    .card { background:#fff; border:1px solid #e2e8f0; border-radius:14px; box-shadow:0 2px 0 rgba(0,0,0,.02); padding:16px; margin-bottom:12px; }
+    .grid { display:grid; grid-template-columns: 1.3fr .7fr 1fr .9fr .8fr auto; gap:10px; align-items:center; }
+    .head { font-size:12px; font-weight:700; color:#334155; text-transform:uppercase; letter-spacing:.04em; margin:12px 0 6px; display:grid; grid-template-columns: 1.3fr .7fr 1fr .9fr .8fr auto; gap:10px; }
+    input[type="text"], input[type="date"], input[type="number"], select, textarea {
+      width:100%; border:1px solid #cbd5e1; border-radius:10px; padding:10px 12px; background:#fff; font: inherit;
     }
-
-    header {
-      background: #fff;
-      border-bottom: 1px solid #ececf2;
-      padding: 16px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    header .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1100px; margin: 0 auto; }
-    header h1 { font-size: 22px; margin: 0; }
-    header .status { font-size: 14px; color: #333; }
-    header .pill { display: inline-block; padding: 4px 8px; border-radius: 999px; background: #eef6ff; color: #1e88e5; font-weight: 600; font-size: 12px; }
-    header .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-    main { max-width: 1100px; margin: 24px auto; padding: 0 16px 48px; }
-    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-
-    button, .btn {
-      appearance: none;
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-weight: 600;
-      cursor: pointer;
-      background: #1e88e5;
-      color: #fff;
-      transition: background .2s, box-shadow .2s;
-    }
-    button:hover { background: #166fc2; }
-    button.secondary { background: #eef2f7; color: #1a2b3b; }
-    button.secondary:hover { background: #e2e8f0; }
-    button.danger { background: #e53935; }
-    button.danger:hover { background: #c62828; }
-
-    .note { font-size: 13px; color:#555; margin: 8px 0 0; }
-    .ok { color:#0a7a36; }
-    .err { color:#b00020; }
-
-    .card {
-      background: #fff;
-      border: 1px solid #ececf2;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,.05);
-      padding: 16px;
-      margin-bottom: 16px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: 1.4fr 0.6fr 1fr 1fr 1fr 1fr auto;
-      gap: 8px 12px;
-      align-items: start;
-    }
-    .grid .head { font-size: 12px; font-weight: 700; color:#475569; }
-    .grid input, .grid select, .grid textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #d9dbe3;
-      border-radius: 10px;
-      font-size: 14px;
-      background: #fff;
-    }
-    .grid textarea { min-height: 82px; resize: vertical; }
-    .row-actions { display: flex; gap: 8px; align-items: center; }
-    .muted { color:#64748b; }
-
-    .foot {
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
-      margin-top: 16px;
-    }
-    a.link { color:#4b32b8; text-decoration:none; font-weight:600; }
-    a.link:hover { text-decoration: underline; }
-
-    /* Table header */
-    .thead {
-      display: grid;
-      grid-template-columns: 1.4fr 0.6fr 1fr 1fr 1fr 1fr auto;
-      gap: 8px 12px;
-      padding: 10px 12px;
-      color: #475569;
-      font-weight: 700;
-      font-size: 12px;
-      margin: 8px 0;
+    textarea { min-height:56px; resize:vertical; }
+    .muted { color:#64748b; font-size:13px; }
+    .pill { font-size:12px; padding:4px 8px; border-radius:999px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; display:inline-block; }
+    .row-actions { display:flex; gap:8px; justify-content:flex-end; }
+    .toggle { display:inline-flex; align-items:center; gap:8px; user-select:none; }
+    .toggle input { width:18px; height:18px; }
+    .ok { color:#15803d; font-weight:600; margin-top:12px; }
+    .foot { display:flex; justify-content:space-between; align-items:center; margin-top:14px; }
+    @media (max-width: 980px) {
+      .grid, .head { grid-template-columns: 1fr; }
+      .row-actions { justify-content:flex-start; }
     }
   </style>
-
-  <!-- Supabase UMD (stellt window.supabase bereit) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <header>
-    <div class="row">
-      <div>
-        <h1>Adminbereich</h1>
-        <div id="status" class="status">
-          <span class="muted">Anmeldung wird geprüft…</span>
-        </div>
-      </div>
-      <div class="actions">
-        <a class="btn secondary" href="/" title="Zurück zur Startseite">← Zurück zur Startseite</a>
-        <button id="logout" class="secondary">Abmelden</button>
-      </div>
-    </div>
-  </header>
+  <div class="wrap">
+    <h1>Adminbereich</h1>
+    <div class="status" id="authState">Angemeldet – <span class="pill" id="rolePill">Adminzugriff gewährt.</span></div>
 
-  <main>
-    <div class="toolbar">
-      <button id="add">+ Termin hinzufügen</button>
-      <button id="save">Änderungen exportieren (JSON)</button>
-      <button id="copy" class="secondary">JSON in Zwischenablage</button>
+    <div class="bar">
+      <button class="btn primary" id="addBtn">+ Termin hinzufügen</button>
+      <button class="btn" id="exportBtn">Änderungen exportieren (JSON)</button>
+      <button class="btn ghost" id="toHome">← Zurück zur Startseite</button>
+      <div class="muted" id="saveHint" style="display:none;">✔️ Änderungen wurden erfolgreich gespeichert.</div>
     </div>
 
-    <div class="thead">
+    <div class="head">
       <div>Titel</div>
       <div>Datum (YYYY-MM-DD)</div>
       <div>Ort</div>
       <div>Kategorie</div>
-      <div>RSVP-Link</div>
-      <div>Kapazität</div>
-      <div>Aktionen</div>
+      <div>Anmeldung</div>
+      <div></div>
     </div>
-
     <div id="list"></div>
 
     <div class="foot">
-      <div>
-        <div id="msg" class="note">Hinweis: Beim Export werden die Daten in <code>/content/events.json</code> gespeichert.</div>
-      </div>
-      <div class="muted" id="version"></div>
+      <div class="muted">Einträge: <span id="count">0</span></div>
+      <div class="muted">Hinweis: Beim Export die heruntergeladene <code>events.json</code> in GitHub im Ordner <code>/content</code> hochladen (bestehende Datei ersetzen) – Vercel deployed automatisch.</div>
     </div>
-  </main>
+  </div>
 
   <script>
-    // ========= KONFIG =========
-    const SUPABASE_URL  = "https://itosmlnylqedxatxmelf.supabase.co";
-    const SUPABASE_KEY  = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv"; // Publishable (Client) Key
-    const API_SAVE_URL  = "/api/save-events"; // Vercel API Endpoint
-    const EVENTS_JSON   = "/content/events.json";
+    // ---- Konfiguration
+    const JSON_PATH = "/content/events.json";
+    const CATEGORIES = [
+      { value: "clubmeeting", label: "Clubmeeting" },
+      { value: "private-charity", label: "Private Charity" },
+      { value: "club-charity", label: "Club Charity" }
+    ];
 
-    // ========= SUPABASE AUTH =========
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // ---- State
+    let items = [];
 
-    async function requireAdmin() {
-      // Session prüfen
-      const { data: { session } } = await supabase.auth.getSession();
-      const statusEl = document.getElementById("status");
+    // ---- Utils
+    const el = (sel, ctx=document) => ctx.querySelector(sel);
+    const ce = (tag, cls) => { const n = document.createElement(tag); if (cls) n.className = cls; return n; };
 
-      if (!session) {
-        statusEl.innerHTML = 'Nicht angemeldet. <a class="link" href="/login.html">Zum Login</a>';
-        throw new Error("no_session");
-      }
-
-      const { data: { user } } = await supabase.auth.getUser();
-      const email = user?.email || "Unbekannt";
-      const role  = (user?.user_metadata && user.user_metadata.role) || (user?.raw_user_meta_data && user.raw_user_meta_data.role) || "member";
-
-      statusEl.innerHTML = `
-        Hallo <code>${email}</code> <span class="pill">Rolle: ${role}</span>
-        <div class="note ok">Adminzugriff gewährt.</div>
-      `;
-
-      if (role !== "admin") {
-        statusEl.innerHTML = `
-          Hallo <code>${email}</code> <span class="pill">Rolle: ${role}</span>
-          <div class="note err">Kein Admin – Zugriff verweigert.</div>
-        `;
-        throw new Error("not_admin");
-      }
-      return { email, role };
-    }
-
-    document.getElementById("logout").addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      window.location.href = "/";
-    });
-
-    // ========= STATE & RENDER =========
-    let state = { items: [] };
-
-    function blankItem() {
+    function newEmptyItem() {
       return {
         title: "",
-        category: "clubmeeting", // Standard
-        start: "",               // "YYYY-MM-DDTHH:mm:00"
+        category: "clubmeeting",
+        start: "",
         end: "",
         location: "",
         description: "",
-        rsvp_link: "",
-        capacity: ""
+        capacity: 0,
+        // Neu: automatisierte Anmeldung
+        rsvp_required: false,
+        // Rückwärtskompatibel: vorhandenes rsvp_link bleibt erhalten, wird aber nicht mehr im Admin gepflegt
+        rsvp_link: ""
       };
     }
 
-    function fmtDateToInput(start) {
-      if (!start) return "";
-      // erwartet "YYYY-MM-DDTHH:mm:ss"
-      const [date] = (start || "").split("T");
-      return date || "";
+    function loadJSON() {
+      return fetch(JSON_PATH, { cache: "no-store" })
+        .then(r => r.json())
+        .then(data => {
+          // normalize / rückwärtskompatibel
+          items = (data.items || []).map(e => ({
+            ...e,
+            rsvp_required: typeof e.rsvp_required === "boolean" ? e.rsvp_required : !!(e.rsvp_link && e.rsvp_link.trim())
+          }));
+          render();
+        }).catch(err => {
+          console.error("Fehler beim Laden:", err);
+          items = [];
+          render();
+        });
     }
 
-    function dateFromInput(value) {
-      const v = (value || "").trim();
-      if (!v) return "";
-      // konservativ: Uhrzeit weglassen -> 00:00:00
-      return `${v}T00:00:00`;
+    function saveToDiskAsJSON() {
+      const payload = { items: items.map(({ rsvp_required, ...rest }) => {
+        // wir behalten rsvp_link, falls noch vorhanden (legacy); Admin pflegt es nicht mehr aktiv
+        return { ...rest, rsvp_required };
+      })};
+
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "events.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      el("#saveHint").style.display = "inline";
+      setTimeout(()=> el("#saveHint").style.display = "none", 4000);
     }
 
     function render() {
-      const host = document.getElementById("list");
-      host.innerHTML = "";
-
-      state.items.forEach((item, idx) => {
-        const card = document.createElement("div");
-        card.className = "card";
-
-        const row = document.createElement("div");
-        row.className = "grid";
+      const list = el("#list");
+      list.innerHTML = "";
+      items.forEach((it, idx) => {
+        const card = ce("div", "card");
+        const row = ce("div", "grid");
 
         // Titel
-        const inTitle = input("text", item.title, "Titel");
-        // Datum
-        const inDate  = input("date", fmtDateToInput(item.start), "Datum");
-        // Ort
-        const inLoc   = input("text", item.location, "Ort");
-        // Kategorie
-        const selCat  = document.createElement("select");
-        ["clubmeeting","private-charity","club-charity","organisatorisches"].forEach(c => {
-          const opt = document.createElement("option");
-          opt.value = c;
-          opt.textContent = catLabel(c);
-          if (item.category === c) opt.selected = true;
-          selCat.appendChild(opt);
-        });
-        // RSVP
-        const inRSVP  = input("url", item.rsvp_link || "", "RSVP-Link");
-        // Kapazität
-        const inCap   = input("number", (item.capacity ?? "").toString(), "Kapazität");
+        const t = ce("input"); t.type="text"; t.value = it.title; t.placeholder="Titel";
+        t.addEventListener("input", e=> it.title = e.target.value);
+        row.appendChild(t);
 
-        // Aktionen (Löschen)
-        const actions = document.createElement("div");
-        actions.className = "row-actions";
-        const del = document.createElement("button");
-        del.className = "danger";
-        del.textContent = "Löschen";
-        del.addEventListener("click", () => {
-          if (confirm("Diesen Termin wirklich löschen?")) {
-            state.items.splice(idx, 1);
-            render();
-          }
+        // Datum
+        const d = ce("input"); d.type="date"; d.value = (it.start||"").slice(0,10);
+        d.addEventListener("input", e=>{
+          const day = e.target.value;
+          if (day) it.start = day + "T00:00:00";
+        });
+        row.appendChild(d);
+
+        // Ort
+        const loc = ce("input"); loc.type="text"; loc.placeholder="Ort"; loc.value = it.location || "";
+        loc.addEventListener("input", e=> it.location = e.target.value);
+        row.appendChild(loc);
+
+        // Kategorie
+        const cat = ce("select");
+        CATEGORIES.forEach(c=>{
+          const o = ce("option"); o.value = c.value; o.textContent = c.label;
+          if (it.category === c.value) o.selected = true;
+          cat.appendChild(o);
+        });
+        cat.addEventListener("change", e=> it.category = e.target.value);
+        row.appendChild(cat);
+
+        // Anmeldung erforderlich (Toggle)
+        const regWrap = ce("div");
+        const lbl = ce("label","toggle");
+        const cb = ce("input"); cb.type="checkbox"; cb.checked = !!it.rsvp_required;
+        cb.addEventListener("change", e=> it.rsvp_required = e.target.checked);
+        const span = ce("span"); span.textContent = "Anmeldung erforderlich";
+        lbl.append(cb, span);
+        regWrap.appendChild(lbl);
+        row.appendChild(regWrap);
+
+        // Actions
+        const actions = ce("div","row-actions");
+        const del = ce("button","btn"); del.textContent = "Löschen";
+        del.addEventListener("click", ()=>{
+          if (!confirm("Diesen Termin wirklich löschen?")) return;
+          items.splice(idx,1);
+          render();
         });
         actions.appendChild(del);
 
-        // zweite Zeile: Beschreibung
-        const desc = document.createElement("textarea");
-        desc.placeholder = "Beschreibung";
-        desc.value = item.description || "";
-
-        // ÄNDERUNGEN zurück in state schreiben bei Blur
-        inTitle.addEventListener("change", () => item.title = inTitle.value.trim());
-        inDate.addEventListener("change", () => item.start = dateFromInput(inDate.value));
-        inLoc.addEventListener("change", () => item.location = inLoc.value.trim());
-        selCat.addEventListener("change", () => item.category = selCat.value);
-        inRSVP.addEventListener("change", () => item.rsvp_link = inRSVP.value.trim());
-        inCap.addEventListener("change", () => item.capacity = tryNumber(inCap.value));
-        desc.addEventListener("change", () => item.description = desc.value.trim());
-
-        // in Grid einfügen
-        row.appendChild(inTitle);
-        row.appendChild(inDate);
-        row.appendChild(inLoc);
-        row.appendChild(selCat);
-        row.appendChild(inRSVP);
-        row.appendChild(inCap);
         row.appendChild(actions);
-
-        // Header-Zeile der Spalten (nur optisch für Screenreader sinnvoll) – wir nutzen separate thead oben
-        // Beschreibungszeile
-        const descWrap = document.createElement("div");
-        descWrap.style.gridColumn = "1 / -1";
-        descWrap.appendChild(desc);
-
         card.appendChild(row);
-        card.appendChild(descWrap);
-        host.appendChild(card);
+
+        // Beschreibung
+        const desc = ce("textarea");
+        desc.placeholder="Beschreibung";
+        desc.value = it.description || "";
+        desc.addEventListener("input", e=> it.description = e.target.value);
+        card.appendChild(desc);
+
+        list.appendChild(card);
       });
-
-      // Version/Info
-      document.getElementById("version").textContent = `Einträge: ${state.items.length}`;
+      el("#count").textContent = String(items.length);
     }
 
-    function input(type, value, placeholder) {
-      const el = document.createElement("input");
-      el.type = type;
-      el.value = value || "";
-      if (placeholder) el.placeholder = placeholder;
-      return el;
-    }
-
-    function catLabel(v) {
-      switch (v) {
-        case "clubmeeting": return "Clubmeeting";
-        case "private-charity": return "Private Charity";
-        case "club-charity": return "Club Charity";
-        case "organisatorisches": return "Organisatorisches";
-        default: return v;
-      }
-    }
-
-    function tryNumber(v) {
-      const n = parseInt(v, 10);
-      return Number.isFinite(n) ? n : "";
-    }
-
-    // ========= LADEN / SAMMELN =========
-    async function loadEvents() {
-      try {
-        const res = await fetch(EVENTS_JSON, { cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const data = await res.json();
-        if (data && Array.isArray(data.items)) {
-          state.items = data.items;
-        } else {
-          state.items = [];
-        }
-      } catch (e) {
-        console.warn("Konnte events.json nicht laden – starte leer:", e);
-        state.items = [];
-      }
+    // ---- Events
+    el("#addBtn").addEventListener("click", ()=>{
+      items.unshift(newEmptyItem());
       render();
-    }
-
-    function collectEventData() {
-      // state ist die Quelle der Wahrheit – falls Inputs noch nicht „change“ getriggert haben,
-      // erzwingen wir kein zusätzliches Sammeln; state ist schon aktuell.
-      return {
-        items: state.items.map(x => ({
-          title: (x.title || "").trim(),
-          category: x.category || "clubmeeting",
-          start: (x.start || "").trim(),
-          end: (x.end || "").trim(),
-          location: (x.location || "").trim(),
-          description: (x.description || "").trim(),
-          rsvp_link: (x.rsvp_link || "").trim(),
-          capacity: x.capacity === "" ? "" : Number(x.capacity)
-        }))
-      };
-    }
-
-    // ========= EXPORT =========
-    async function exportChanges() {
-      const msg = document.getElementById("msg");
-      try {
-        const payload = collectEventData();
-
-        // simple Validierung
-        for (const [i, it] of payload.items.entries()) {
-          if (!it.title)   throw new Error(`Eintrag ${i+1}: „Titel“ fehlt.`);
-          if (!it.start)   throw new Error(`Eintrag ${i+1}: „Datum“ fehlt.`);
-          if (!it.category) it.category = "clubmeeting";
-        }
-
-        msg.className = "note";
-        msg.textContent = "Speichere nach GitHub…";
-
-        const res = await fetch(API_SAVE_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok || !data.ok) {
-          throw new Error(data.error || `HTTP ${res.status}`);
-        }
-
-        msg.className = "note ok";
-        msg.textContent = "✅ Änderungen wurden erfolgreich gespeichert.";
-      } catch (err) {
-        console.error(err);
-        msg.className = "note err";
-        msg.textContent = "❌ Fehler beim Speichern: " + (err?.message || "Unbekannter Fehler");
-      }
-    }
-
-    async function copyJSONToClipboard() {
-      const json = JSON.stringify(collectEventData(), null, 2);
-      try {
-        await navigator.clipboard.writeText(json);
-        const msg = document.getElementById("msg");
-        msg.className = "note ok";
-        msg.textContent = "✔️ JSON in die Zwischenablage kopiert.";
-      } catch {
-        const blob = new Blob([json], { type: "application/json" });
-        const url  = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "events.json";
-        a.click();
-        URL.revokeObjectURL(url);
-      }
-    }
-
-    // ========= EVENTS =========
-    document.getElementById("add").addEventListener("click", () => {
-      state.items.unshift(blankItem());
-      render();
-      const msg = document.getElementById("msg");
-      msg.className = "note";
-      msg.textContent = "Neuer Eintrag hinzugefügt. Vergiss nicht zu speichern.";
     });
+    el("#exportBtn").addEventListener("click", saveToDiskAsJSON);
+    el("#toHome").addEventListener("click", ()=> location.href = "/");
 
-    document.getElementById("save").addEventListener("click", exportChanges);
-    document.getElementById("copy").addEventListener("click", copyJSONToClipboard);
-
-    // ========= STARTUP =========
-    (async function init() {
-      try {
-        await requireAdmin(); // redirectet nicht – zeigt Status
-        await loadEvents();
-      } catch (e) {
-        // bei fehlender Session oder fehlender Rolle blockieren wir die UI
-        if (e && (e.message === "no_session" || e.message === "not_admin")) {
-          document.querySelector(".toolbar").style.display = "none";
-          document.getElementById("list").innerHTML =
-            '<div class="card"><div class="note err">Kein Zugriff. Bitte als Admin einloggen.</div></div>';
-        } else {
-          const msg = document.getElementById("msg");
-          msg.className = "note err";
-          msg.textContent = "Fehler beim Initialisieren.";
-        }
-      }
-    })();
+    // ---- Init
+    loadJSON();
   </script>
 </body>
 </html>
