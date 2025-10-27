@@ -3,211 +3,262 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Adminbereich | Inner Wheel</title>
+  <title>Adminbereich | IWC App</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root { color-scheme: light; }
-    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin:0; background:#f6f7fb; color:#0f172a; }
-    .wrap { max-width: 1100px; margin: 24px auto 64px; padding: 0 16px; }
-    h1 { font-size: 28px; margin: 8px 0 16px; }
-    .status { padding: 8px 12px; background:#eef2ff; color:#1e40af; border:1px solid #c7d2fe; border-radius:10px; display:inline-block; }
-    .bar { display:flex; gap:12px; margin:16px 0 20px; flex-wrap:wrap; }
-    .btn { appearance:none; border:1px solid #cbd5e1; background:#fff; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer; box-shadow:0 1px 0 rgba(0,0,0,.03); }
-    .btn.primary { background:#2563eb; border-color:#2563eb; color:#fff; }
-    .btn.ghost { background:#f8fafc; }
-    .card { background:#fff; border:1px solid #e2e8f0; border-radius:14px; box-shadow:0 2px 0 rgba(0,0,0,.02); padding:16px; margin-bottom:12px; }
-    .grid { display:grid; grid-template-columns: 1.3fr .7fr 1fr .9fr .8fr auto; gap:10px; align-items:center; }
-    .head { font-size:12px; font-weight:700; color:#334155; text-transform:uppercase; letter-spacing:.04em; margin:12px 0 6px; display:grid; grid-template-columns: 1.3fr .7fr 1fr .9fr .8fr auto; gap:10px; }
-    input[type="text"], input[type="date"], input[type="number"], select, textarea {
-      width:100%; border:1px solid #cbd5e1; border-radius:10px; padding:10px 12px; background:#fff; font: inherit;
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:#f7f7fb; color:#111827;
     }
-    textarea { min-height:56px; resize:vertical; }
-    .muted { color:#64748b; font-size:13px; }
-    .pill { font-size:12px; padding:4px 8px; border-radius:999px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; display:inline-block; }
-    .row-actions { display:flex; gap:8px; justify-content:flex-end; }
-    .toggle { display:inline-flex; align-items:center; gap:8px; user-select:none; }
-    .toggle input { width:18px; height:18px; }
-    .ok { color:#15803d; font-weight:600; margin-top:12px; }
-    .foot { display:flex; justify-content:space-between; align-items:center; margin-top:14px; }
-    @media (max-width: 980px) {
-      .grid, .head { grid-template-columns: 1fr; }
-      .row-actions { justify-content:flex-start; }
+    .wrap{max-width:1100px; margin:32px auto; padding:0 16px}
+    h1{font-size:28px; margin:0 0 12px}
+    .sub{color:#059669; font-size:14px; margin-bottom:16px}
+    .topbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:16px 0 20px}
+    .btn{
+      border:0; border-radius:10px; padding:10px 14px; background:#2563eb; color:#fff;
+      font-weight:600; cursor:pointer; box-shadow:0 2px 8px rgba(37,99,235,.25);
+    }
+    .btn.sec{background:#eef2ff; color:#1e3a8a; box-shadow:none}
+    .btn.ghost{background:#fff; color:#111; border:1px solid #e5e7eb}
+    .note{font-size:13px; color:#6b7280; margin-top:8px}
+    .card{
+      background:#fff; border-radius:16px; box-shadow:0 1px 26px rgba(17,24,39,.06);
+      margin:14px 0; padding:14px; border:1px solid #eef2f7;
+    }
+    .row{display:grid; grid-template-columns: 1.5fr 160px 1fr 1fr 160px auto; gap:10px; align-items:center}
+    .row+.row{margin-top:10px}
+    .lab{font-size:12px; color:#6b7280; margin:8px 2px 4px}
+    input, select, textarea{
+      width:100%; padding:10px 12px; border-radius:12px; border:1px solid #e5e7eb; background:#fff;
+      font:inherit; outline:none;
+    }
+    textarea{min-height:84px; resize:vertical}
+    .muted{color:#6b7280}
+    .pill{display:inline-block; padding:4px 10px; background:#eef2ff; color:#1e3a8a; border-radius:999px; font-size:12px; font-weight:600}
+    .acts{display:flex; align-items:center; gap:10px; justify-content:flex-end}
+    .ok{color:#059669; font-weight:600}
+    .err{color:#dc2626; font-weight:600}
+    .footer{display:flex; justify-content:space-between; align-items:center; margin-top:16px}
+    .small{font-size:12px; color:#6b7280}
+    .chk{display:flex; align-items:center; gap:8px; font-size:14px}
+    @media (max-width:992px){
+      .row{grid-template-columns: 1.4fr 150px 1fr 1fr 140px auto}
+    }
+    @media (max-width:800px){
+      .row{grid-template-columns: 1fr}
+      .acts{justify-content:flex-start}
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1>Adminbereich</h1>
-    <div class="status" id="authState">Angemeldet – <span class="pill" id="rolePill">Adminzugriff gewährt.</span></div>
+    <div class="sub" id="statusLine">Angemeldet – <span class="ok">Adminzugriff aktiv.</span></div>
 
-    <div class="bar">
-      <button class="btn primary" id="addBtn">+ Termin hinzufügen</button>
-      <button class="btn" id="exportBtn">Änderungen exportieren (JSON)</button>
-      <button class="btn ghost" id="toHome">← Zurück zur Startseite</button>
-      <div class="muted" id="saveHint" style="display:none;">✔️ Änderungen wurden erfolgreich gespeichert.</div>
+    <div class="topbar">
+      <button class="btn" id="addBtn">+ Termin hinzufügen</button>
+      <button class="btn sec" id="saveBtn">Änderungen speichern</button>
+      <a class="btn ghost" href="../index.html">← Zurück zur Startseite</a>
+      <span id="saveState" class="note"></span>
     </div>
 
-    <div class="head">
-      <div>Titel</div>
-      <div>Datum (YYYY-MM-DD)</div>
-      <div>Ort</div>
-      <div>Kategorie</div>
-      <div>Anmeldung</div>
-      <div></div>
-    </div>
     <div id="list"></div>
 
-    <div class="foot">
-      <div class="muted">Einträge: <span id="count">0</span></div>
-      <div class="muted">Hinweis: Beim Export die heruntergeladene <code>events.json</code> in GitHub im Ordner <code>/content</code> hochladen (bestehende Datei ersetzen) – Vercel deployed automatisch.</div>
+    <div class="footer">
+      <span class="small">Einträge: <span id="count">0</span></span>
+      <span class="small muted" id="apiInfo">Speichert direkt nach <code>/content/events.json</code> (GitHub via Vercel Function).</span>
     </div>
   </div>
 
   <script>
-    // ---- Konfiguration
-    const JSON_PATH = "/content/events.json";
+    // --- Konfiguration ---
+    const FILE_PATH = "content/events.json";   // Zielpfad im Repo
     const CATEGORIES = [
-      { value: "clubmeeting", label: "Clubmeeting" },
-      { value: "private-charity", label: "Private Charity" },
-      { value: "club-charity", label: "Club Charity" }
+      {value:"clubmeeting", label:"Clubmeeting"},
+      {value:"private-charity", label:"Private Charity"},
+      {value:"club-charity", label:"Club Charity"}
     ];
 
-    // ---- State
+    // --- State ---
     let items = [];
 
-    // ---- Utils
-    const el = (sel, ctx=document) => ctx.querySelector(sel);
-    const ce = (tag, cls) => { const n = document.createElement(tag); if (cls) n.className = cls; return n; };
+    // --- Utils ---
+    const $ = sel => document.querySelector(sel);
+    const el = (tag, attrs={}, children=[]) => {
+      const n = document.createElement(tag);
+      Object.entries(attrs).forEach(([k,v])=>{
+        if(k==="class") n.className = v;
+        else if(k==="for") n.htmlFor = v;
+        else if(k==="text") n.textContent = v;
+        else n.setAttribute(k,v);
+      });
+      (Array.isArray(children)?children:[children]).filter(Boolean).forEach(c=>{
+        if(typeof c==="string") n.appendChild(document.createTextNode(c));
+        else n.appendChild(c);
+      });
+      return n;
+    };
+    const fmt = d => d ? new Date(d).toISOString().slice(0,10) : "";
 
-    function newEmptyItem() {
+    function emptyItem(){
       return {
-        title: "",
-        category: "clubmeeting",
-        start: "",
-        end: "",
-        location: "",
+        title: "", category: "clubmeeting",
+        start: fmt(new Date()),
+        end: "", location: "",
         description: "",
+        rsvp_link: "",
         capacity: 0,
-        // Neu: automatisierte Anmeldung
-        rsvp_required: false,
-        // Rückwärtskompatibel: vorhandenes rsvp_link bleibt erhalten, wird aber nicht mehr im Admin gepflegt
-        rsvp_link: ""
+        require_signup: false
       };
     }
 
-    function loadJSON() {
-      return fetch(JSON_PATH, { cache: "no-store" })
-        .then(r => r.json())
-        .then(data => {
-          // normalize / rückwärtskompatibel
-          items = (data.items || []).map(e => ({
-            ...e,
-            rsvp_required: typeof e.rsvp_required === "boolean" ? e.rsvp_required : !!(e.rsvp_link && e.rsvp_link.trim())
-          }));
-          render();
-        }).catch(err => {
-          console.error("Fehler beim Laden:", err);
-          items = [];
-          render();
-        });
+    // --- Render ---
+    function render(){
+      const cont = $("#list");
+      cont.innerHTML = "";
+      items.forEach((it, idx)=>{
+        const card = el("div", {class:"card"});
+        // Kopfzeile mit Metadaten
+        const head = el("div", {class:"row"},
+          [
+            field("Titel", input("text", it.title, v => {it.title=v})),
+            field("Datum", input("date", fmt(it.start), v => { it.start = v ? v+"T00:00:00" : "" })),
+            field("Ort", input("text", it.location, v => {it.location=v})),
+            field("Kategorie", selectCat(it.category, v => {it.category=v})),
+            field("Kapazität", input("number", it.capacity, v => {it.capacity= Number(v||0) })),
+            el("div", {class:"acts"}, [
+              el("label", {class:"chk"}, [
+                checkbox(it.require_signup, v => {it.require_signup = v}),
+                el("span", {text:"Anmeldung erforderlich"})
+              ]),
+              delBtn(idx)
+            ])
+          ]
+        );
+        // Beschreibung
+        const desc = field("", textarea(it.description, v=>{it.description=v}));
+        card.appendChild(head);
+        card.appendChild(desc);
+        cont.appendChild(card);
+      });
+      $("#count").textContent = String(items.length);
     }
 
-    function saveToDiskAsJSON() {
-      const payload = { items: items.map(({ rsvp_required, ...rest }) => {
-        // wir behalten rsvp_link, falls noch vorhanden (legacy); Admin pflegt es nicht mehr aktiv
-        return { ...rest, rsvp_required };
-      })};
+    function field(label, control){
+      return el("div", {}, [
+        label ? el("div", {class:"lab", text:label}) : null,
+        control
+      ]);
+    }
+    function input(type, value, oninput){
+      const i = el("input", {type, value});
+      i.addEventListener("input", e=> oninput(e.target.value));
+      return i;
+    }
+    function textarea(value, oninput){
+      const t = el("textarea", {}, value);
+      t.addEventListener("input", e=> oninput(e.target.value));
+      return t;
+    }
+    function selectCat(value, onchg){
+      const s = el("select");
+      CATEGORIES.forEach(c=>{
+        s.appendChild(el("option", {value:c.value, text:c.label}));
+      });
+      s.value = value || "clubmeeting";
+      s.addEventListener("change", e=> onchg(e.target.value));
+      return s;
+    }
+    function checkbox(checked, onchg){
+      const c = el("input", {type:"checkbox"});
+      c.checked = !!checked;
+      c.addEventListener("change", e=> onchg(e.target.checked));
+      return c;
+    }
+    function delBtn(idx){
+      const b = el("button", {class:"btn ghost", type:"button"}, "Löschen");
+      b.addEventListener("click", ()=>{
+        if(confirm("Diesen Termin löschen?")){ items.splice(idx,1); render(); }
+      });
+      return b;
+    }
 
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    // --- Laden / Speichern ---
+    async function load(){
+      try{
+        const r = await fetch("../content/events.json?ts="+Date.now());
+        const j = await r.json();
+        items = Array.isArray(j.items) ? j.items : [];
+      }catch(e){
+        console.error(e);
+        items = [];
+      }
+      render();
+    }
+
+    function normalizeForSave(list){
+      // sortiere nach Datum aufsteigend, säubere Felder
+      const cleaned = list.map(x=>({
+        title: (x.title||"").trim(),
+        category: (x.category||"clubmeeting").trim(),
+        start: (x.start||"").trim(),
+        end: (x.end||"").trim(),
+        location: (x.location||"").trim(),
+        description: (x.description||"").trim(),
+        rsvp_link: (x.rsvp_link||"").trim(),
+        capacity: Number(x.capacity||0),
+        require_signup: !!x.require_signup
+      }));
+      cleaned.sort((a,b)=> (a.start||"").localeCompare(b.start||""));
+      return { items: cleaned };
+    }
+
+    async function save(){
+      const payload = normalizeForSave(items);
+      setSaveState("Speichern …");
+      try{
+        const res = await fetch("/api/save-events", {
+          method:"POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({ path: FILE_PATH, content: JSON.stringify(payload, null, 2) })
+        });
+        if(!res.ok){
+          const txt = await res.text();
+          throw new Error(txt || ("HTTP "+res.status));
+        }
+        setSaveState("✓ Gespeichert.");
+      }catch(err){
+        console.error(err);
+        setSaveState("Fehler beim Speichern – Fallback auf manuellen Export.", true);
+        // Falls API nicht verfügbar: Datei zum Download anbieten
+        download("events.json", JSON.stringify(payload, null, 2));
+      }
+    }
+
+    function setSaveState(msg, isErr=false){
+      const n = $("#saveState");
+      n.textContent = msg;
+      n.className = "note " + (isErr ? "err" : "ok");
+      if(!isErr) setTimeout(()=>{ n.textContent=""; n.className="note"; }, 2500);
+    }
+
+    function download(name, text){
       const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "events.json";
+      a.href = URL.createObjectURL(new Blob([text], {type:"application/json"}));
+      a.download = name;
       a.click();
       URL.revokeObjectURL(a.href);
-      el("#saveHint").style.display = "inline";
-      setTimeout(()=> el("#saveHint").style.display = "none", 4000);
     }
 
-    function render() {
-      const list = el("#list");
-      list.innerHTML = "";
-      items.forEach((it, idx) => {
-        const card = ce("div", "card");
-        const row = ce("div", "grid");
+    // --- Events ---
+    $("#addBtn").addEventListener("click", ()=>{ items.unshift(emptyItem()); render(); });
+    $("#saveBtn").addEventListener("click", save);
 
-        // Titel
-        const t = ce("input"); t.type="text"; t.value = it.title; t.placeholder="Titel";
-        t.addEventListener("input", e=> it.title = e.target.value);
-        row.appendChild(t);
-
-        // Datum
-        const d = ce("input"); d.type="date"; d.value = (it.start||"").slice(0,10);
-        d.addEventListener("input", e=>{
-          const day = e.target.value;
-          if (day) it.start = day + "T00:00:00";
-        });
-        row.appendChild(d);
-
-        // Ort
-        const loc = ce("input"); loc.type="text"; loc.placeholder="Ort"; loc.value = it.location || "";
-        loc.addEventListener("input", e=> it.location = e.target.value);
-        row.appendChild(loc);
-
-        // Kategorie
-        const cat = ce("select");
-        CATEGORIES.forEach(c=>{
-          const o = ce("option"); o.value = c.value; o.textContent = c.label;
-          if (it.category === c.value) o.selected = true;
-          cat.appendChild(o);
-        });
-        cat.addEventListener("change", e=> it.category = e.target.value);
-        row.appendChild(cat);
-
-        // Anmeldung erforderlich (Toggle)
-        const regWrap = ce("div");
-        const lbl = ce("label","toggle");
-        const cb = ce("input"); cb.type="checkbox"; cb.checked = !!it.rsvp_required;
-        cb.addEventListener("change", e=> it.rsvp_required = e.target.checked);
-        const span = ce("span"); span.textContent = "Anmeldung erforderlich";
-        lbl.append(cb, span);
-        regWrap.appendChild(lbl);
-        row.appendChild(regWrap);
-
-        // Actions
-        const actions = ce("div","row-actions");
-        const del = ce("button","btn"); del.textContent = "Löschen";
-        del.addEventListener("click", ()=>{
-          if (!confirm("Diesen Termin wirklich löschen?")) return;
-          items.splice(idx,1);
-          render();
-        });
-        actions.appendChild(del);
-
-        row.appendChild(actions);
-        card.appendChild(row);
-
-        // Beschreibung
-        const desc = ce("textarea");
-        desc.placeholder="Beschreibung";
-        desc.value = it.description || "";
-        desc.addEventListener("input", e=> it.description = e.target.value);
-        card.appendChild(desc);
-
-        list.appendChild(card);
-      });
-      el("#count").textContent = String(items.length);
-    }
-
-    // ---- Events
-    el("#addBtn").addEventListener("click", ()=>{
-      items.unshift(newEmptyItem());
-      render();
-    });
-    el("#exportBtn").addEventListener("click", saveToDiskAsJSON);
-    el("#toHome").addEventListener("click", ()=> location.href = "/");
-
-    // ---- Init
-    loadJSON();
+    // init
+    load();
   </script>
 </body>
 </html>
