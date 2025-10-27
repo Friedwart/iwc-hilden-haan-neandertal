@@ -4,81 +4,68 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login wird abgeschlossen …</title>
-
   <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-
   <style>
+    :root { color-scheme: light; }
     body {
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      margin: 0; display: grid; place-items: center; min-height: 100vh;
-      background: #f7f7fb; color: #333;
+      margin:0; display:grid; place-items:center; min-height:100vh; background:#f7f7fb;
     }
-    .card {
-      background:#fff; padding:28px 24px; border-radius:16px;
-      box-shadow:0 6px 24px rgba(0,0,0,.08); width:min(520px,92vw); text-align:center;
-    }
-    h1{font-size:22px;margin-bottom:6px}
-    p{color:#555;margin:0 0 12px}
-    .err{color:#b00020;margin-top:12px;font-weight:600;white-space:pre-wrap}
+    .card { background:#fff; padding:28px 24px; border-radius:16px; box-shadow:0 6px 24px rgba(0,0,0,.08); width:min(560px,92vw); }
+    h1{ margin:0 0 8px; font-size:24px; }
+    p{ margin:0; color:#555; }
+    .err{ color:#b00020; font-weight:600; }
   </style>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="card">
     <h1>Bitte einen Moment …</h1>
-    <p>Wir schließen deinen Login ab und leiten dich weiter.</p>
-    <p id="error" class="err" hidden></p>
+    <p id="status">Wir schließen deinen Login ab und leiten dich weiter.</p>
   </div>
 
   <script>
-    // --- Supabase Verbindungsdaten ---
     const SUPABASE_URL = "https://itosmlnylqedxatxmelf.supabase.co";
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
-    const REDIRECT_AFTER = "/admin/"; // Ziel nach erfolgreichem Login
+    const SUPABASE_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const statusEl = document.getElementById('status');
 
-    function parseHash() {
-      const h = (window.location.hash || "").replace(/^#/, "");
-      return Object.fromEntries(new URLSearchParams(h));
+    function getHashParams() {
+      const hash = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : "";
+      return new URLSearchParams(hash);
     }
 
     (async () => {
-      const showErr = (msg) => {
-        const el = document.getElementById("error");
-        el.hidden = false;
-        el.textContent = "Fehler beim Login: " + msg;
-      };
-
       try {
-        // 1) Magic-Link-Fall: Tokens im URL-Hash (#access_token / #refresh_token)
-        const hashParams = parseHash();
-        const access_token = hashParams["access_token"];
-        const refresh_token = hashParams["refresh_token"];
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get("code");
+        const hash = getHashParams();
+        const access_token = hash.get("access_token");
+        const refresh_token = hash.get("refresh_token");
 
-        if (access_token && refresh_token) {
-          const { error } = await supabase.auth.setSession({ access_token, refresh_token });
-          if (error) throw error;
-          window.location.replace(REDIRECT_AFTER);
-          return;
-        }
-
-        // 2) OAuth/PKCE-Fall (nur zur Vollständigkeit): ?code=… in der Query
-        const qs = new URLSearchParams(window.location.search);
-        const code = qs.get("code");
         if (code) {
-          const { error } = await supabase.auth.exchangeCodeForSession(window.location.search);
+          // PKCE / Code-Flow
+          const { data, error } = await supabase.auth.exchangeCodeForSession(url.href);
           if (error) throw error;
-          window.location.replace(REDIRECT_AFTER);
-          return;
+          console.log("[exchangeCodeForSession OK]", data);
+        } else if (access_token && refresh_token) {
+          // Hash-Token-Flow
+          const { data, error } = await supabase.auth.setSession({ access_token, refresh_token });
+          if (error) throw error;
+          console.log("[setSession OK]", data);
+        } else {
+          throw new Error("Keine Token in der URL gefunden. Öffne den Link aus der E-Mail erneut.");
         }
 
-        // Weder Hash-Tokens noch Code vorhanden
-        showErr("Keine Token in der URL gefunden. Öffne den Link aus der E-Mail erneut.");
-      } catch (err) {
-        showErr(err?.message || String(err));
+        // Auf die Startseite
+        const target = window.location.origin + "/";
+        window.location.replace(target);
+      } catch (e) {
+        console.error("[auth-callback error]", e);
+        statusEl.className = "err";
+        statusEl.textContent = "Fehler beim Login: " + (e?.message || "Unbekannter Fehler.");
       }
     })();
   </script>
