@@ -18,34 +18,56 @@
 
     header {
       background: #fff;
-      padding: 12px 20px;
+      padding: 14px 22px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
     }
 
     header img {
-      height: 48px;
+      height: 50px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    nav a {
+      text-decoration: none;
+      background: #1e88e5;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    nav a:hover {
+      background: #166fc2;
     }
 
     main {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 40px auto;
-      padding: 20px;
+      padding: 24px;
       background: #fff;
       border-radius: 16px;
       box-shadow: 0 6px 20px rgba(0,0,0,.06);
     }
 
     h1 {
-      font-size: 22px;
+      font-size: 24px;
       margin-top: 0;
     }
 
     .event {
       border-bottom: 1px solid #eee;
-      padding: 10px 0;
+      padding: 10px 0 14px;
     }
 
     .event:last-child {
@@ -55,6 +77,7 @@
     .event-title {
       font-weight: 600;
       color: #1e88e5;
+      font-size: 18px;
     }
 
     footer {
@@ -65,15 +88,11 @@
       padding: 20px;
     }
 
-    /* 🧩 FIX: blockierendes Overlay entfernen */
-    #fides-overlay,
-    .fides-overlay,
-    .fides-modal,
-    .fides-backdrop {
+    /* 🔧 Fix: blockierendes Consent-/Overlay-Element ausschalten */
+    #fides-overlay, .fides-overlay, .fides-modal, .fides-backdrop {
       display: none !important;
       pointer-events: none !important;
     }
-
     body.fides-overlay-modal-link-show {
       overflow: auto !important;
     }
@@ -82,10 +101,21 @@
 
 <body>
   <header>
-    <img src="assets/logo.png" alt="Inner Wheel Logo" />
-    <div>
-      <a href="login.html" style="text-decoration:none; color:#1e88e5; font-weight:600;">Admin</a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <img src="assets/logo.png" alt="Inner Wheel Logo" />
+      <strong>Inner Wheel Club Hilden–Haan–Neandertal</strong>
     </div>
+
+    <nav>
+      <a href="index.html">Termine</a>
+      <a href="clubmeetings.html">Clubmeetings</a>
+      <a href="charity.html">Private Charity</a>
+      <a href="clubcharity.html">Club Charity</a>
+      <a href="orga.html">Organisatorisches</a>
+      <a href="downloads.html">Downloads</a>
+      <a href="about.html">Über uns</a>
+      <a href="login.html" style="background:#fff;color:#1e88e5;border:1px solid #1e88e5;">Admin</a>
+    </nav>
   </header>
 
   <main>
@@ -109,7 +139,15 @@
       <p>Benefizabend zugunsten des Frauenhauses Hilden.</p>
     </div>
 
-    <a href="downloads.html" style="display:block;margin-top:30px;color:#4b32b8;font-weight:500;text-decoration:none;">→ Zum Downloadbereich</a>
+    <div class="event">
+      <div class="event-title">Clubversammlung Frühjahr</div>
+      <div>März 2026 · Hilden</div>
+      <p>Jahresplanung, Wahlen und Mitgliederberichte.</p>
+    </div>
+
+    <a href="downloads.html" style="display:block;margin-top:30px;color:#4b32b8;font-weight:500;text-decoration:none;">
+      → Zum Downloadbereich
+    </a>
   </main>
 
   <footer>
