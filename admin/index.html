@@ -3,215 +3,449 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin – Termine bearbeiten</title>
+  <title>Adminbereich | IWC Hilden–Haan–Neandertal</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    :root{color-scheme:light}
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:#f7f7fb}
-    .wrap{max-width:980px;margin:24px auto;padding:0 16px}
-    .card{background:#fff;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.08);padding:24px}
-    h1{margin:0 0 12px}
-    .note{font-size:14px;color:#555}
-    .ok{color:#0a7a36}.err{color:#b00020}
-    .row{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;gap:12px;align-items:center}
-    .row + .row{margin-top:10px}
-    input,textarea,select{width:100%;padding:10px 12px;border:1px solid #d9dbe3;border-radius:10px;font-size:14px}
-    textarea{min-height:60px}
-    .toolbar{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
-    button{padding:10px 14px;border:0;border-radius:10px;background:#1e88e5;color:#fff;font-weight:600;cursor:pointer}
-    button.secondary{background:#e9eef5;color:#1b2b4b}
-    button.danger{background:#c62828}
-    .pill{display:inline-block;background:#eef6ff;color:#1b4b91;border-radius:999px;padding:4px 10px;font-size:12px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-    .footer{margin-top:16px;font-size:13px;color:#666}
-    .hidden{display:none}
-    .grid-head{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;gap:12px;margin:12px 0 8px;font-weight:600;color:#364a63}
-    .hr{height:1px;background:#eef1f6;margin:16px 0}
-    .badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#eaf7ea;color:#0a7a36;font-size:12px}
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background: #f7f7fb;
+      color: #111;
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid #ececf2;
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 1100px; margin: 0 auto; }
+    header h1 { font-size: 22px; margin: 0; }
+    header .status { font-size: 14px; color: #333; }
+    header .pill { display: inline-block; padding: 4px 8px; border-radius: 999px; background: #eef6ff; color: #1e88e5; font-weight: 600; font-size: 12px; }
+    header .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    main { max-width: 1100px; margin: 24px auto; padding: 0 16px 48px; }
+    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+
+    button, .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #1e88e5;
+      color: #fff;
+      transition: background .2s, box-shadow .2s;
+    }
+    button:hover { background: #166fc2; }
+    button.secondary { background: #eef2f7; color: #1a2b3b; }
+    button.secondary:hover { background: #e2e8f0; }
+    button.danger { background: #e53935; }
+    button.danger:hover { background: #c62828; }
+
+    .note { font-size: 13px; color:#555; margin: 8px 0 0; }
+    .ok { color:#0a7a36; }
+    .err { color:#b00020; }
+
+    .card {
+      background: #fff;
+      border: 1px solid #ececf2;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.05);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.6fr 1fr 1fr 1fr 1fr auto;
+      gap: 8px 12px;
+      align-items: start;
+    }
+    .grid .head { font-size: 12px; font-weight: 700; color:#475569; }
+    .grid input, .grid select, .grid textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d9dbe3;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #fff;
+    }
+    .grid textarea { min-height: 82px; resize: vertical; }
+    .row-actions { display: flex; gap: 8px; align-items: center; }
+    .muted { color:#64748b; }
+
+    .foot {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      margin-top: 16px;
+    }
+    a.link { color:#4b32b8; text-decoration:none; font-weight:600; }
+    a.link:hover { text-decoration: underline; }
+
+    /* Table header */
+    .thead {
+      display: grid;
+      grid-template-columns: 1.4fr 0.6fr 1fr 1fr 1fr 1fr auto;
+      gap: 8px 12px;
+      padding: 10px 12px;
+      color: #475569;
+      font-weight: 700;
+      font-size: 12px;
+      margin: 8px 0;
+    }
   </style>
+
+  <!-- Supabase UMD (stellt window.supabase bereit) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="topbar">
+  <header>
+    <div class="row">
+      <div>
         <h1>Adminbereich</h1>
-        <div id="who"></div>
-      </div>
-      <div id="status" class="note">Prüfe Anmeldung…</div>
-
-      <div id="editor" class="hidden">
-        <div class="hr"></div>
-        <div class="toolbar">
-          <button id="btnAdd">+ Termin hinzufügen</button>
-          <button id="btnExport">Änderungen exportieren (JSON)</button>
-          <button id="btnCopy" class="secondary">JSON in Zwischenablage</button>
-          <a id="downloadLink" class="pill hidden" download="events.json">events.json herunterladen</a>
-        </div>
-
-        <div class="grid-head">
-          <div>Titel</div>
-          <div>Datum (YYYY-MM-DD)</div>
-          <div>Ort</div>
-          <div>Kategorie</div>
-          <div>Aktionen</div>
-        </div>
-        <div id="rows"></div>
-
-        <div class="hr"></div>
-        <div class="footer">
-          <div class="badge">Hinweis</div>
-          &nbsp;Nach dem Export die heruntergeladene <code>events.json</code> in GitHub im Ordner
-          <code>/content</code> hochladen (bestehende Datei ersetzen &gt; Commit). Vercel deployed automatisch.
+        <div id="status" class="status">
+          <span class="muted">Anmeldung wird geprüft…</span>
         </div>
       </div>
-
-      <div id="notAdmin" class="hidden">
-        <div class="hr"></div>
-        <p class="err">Kein Adminzugriff. Bitte mit einem Admin-Konto anmelden.</p>
-        <p><a class="pill" href="/login.html">→ Zum Login</a></p>
+      <div class="actions">
+        <a class="btn secondary" href="/" title="Zurück zur Startseite">← Zurück zur Startseite</a>
+        <button id="logout" class="secondary">Abmelden</button>
       </div>
     </div>
-  </div>
+  </header>
 
-<script>
-  // ——— Supabase Initialisierung ———
-  const SUPABASE_URL  = "https://itosmlnylqedxatxmelf.supabase.co";
-  const SUPABASE_KEY  = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  <main>
+    <div class="toolbar">
+      <button id="add">+ Termin hinzufügen</button>
+      <button id="save">Änderungen exportieren (JSON)</button>
+      <button id="copy" class="secondary">JSON in Zwischenablage</button>
+    </div>
 
-  const el = (id) => document.getElementById(id);
-  const status  = el('status');
-  const editor  = el('editor');
-  const notAdmin = el('notAdmin');
-  const who = el('who');
-  const rows = el('rows');
+    <div class="thead">
+      <div>Titel</div>
+      <div>Datum (YYYY-MM-DD)</div>
+      <div>Ort</div>
+      <div>Kategorie</div>
+      <div>RSVP-Link</div>
+      <div>Kapazität</div>
+      <div>Aktionen</div>
+    </div>
 
-  let data = []; // aktuelle events.json im Speicher
+    <div id="list"></div>
 
-  // Hilfen
-  function rowTemplate(item, idx){
-    return `
-      <div class="row" data-idx="${idx}">
-        <input value="${escapeHtml(item.title||'')}" placeholder="Titel" />
-        <input value="${escapeHtml(item.date||'')}" placeholder="YYYY-MM-DD" />
-        <input value="${escapeHtml(item.place||'')}" placeholder="Ort" />
-        <select>
-          ${["Clubmeeting","Private Charity","Club Charity","Organisatorisches"].map(c =>
-            `<option ${c===(item.category||"")?"selected":""}>${c}</option>`
-          ).join("")}
-        </select>
-        <div style="display:flex;gap:8px;justify-content:flex-end">
-          <button class="secondary" data-act="more" title="Beschreibung bearbeiten">Text</button>
-          <button class="danger" data-act="del">Löschen</button>
-        </div>
+    <div class="foot">
+      <div>
+        <div id="msg" class="note">Hinweis: Beim Export werden die Daten in <code>/content/events.json</code> gespeichert.</div>
       </div>
-      <div class="row" style="grid-template-columns:1fr" data-idx="${idx}">
-        <textarea placeholder="Beschreibung (optional)">${escapeHtml(item.text||"")}</textarea>
-      </div>
-    `;
-  }
-  function render(){
-    rows.innerHTML = data.map(rowTemplate).join("") || `<p class="note">Noch keine Einträge.</p>`;
-  }
-  function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+      <div class="muted" id="version"></div>
+    </div>
+  </main>
 
-  // Daten aus /content/events.json laden
-  async function loadEvents(){
-    const res = await fetch('/content/events.json', {cache:'no-store'});
-    if(!res.ok){ throw new Error('Konnte /content/events.json nicht laden'); }
-    data = await res.json();
-    if(!Array.isArray(data)){ data = []; }
-    render();
-  }
+  <script>
+    // ========= KONFIG =========
+    const SUPABASE_URL  = "https://itosmlnylqedxatxmelf.supabase.co";
+    const SUPABASE_KEY  = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv"; // Publishable (Client) Key
+    const API_SAVE_URL  = "/api/save-events"; // Vercel API Endpoint
+    const EVENTS_JSON   = "/content/events.json";
 
-  // Änderungen aus DOM zurück in data schreiben
-  function syncFromDom(){
-    const rowsDom = rows.querySelectorAll('.row');
-    const result = [];
-    for(let i=0;i<rowsDom.length;i+=2){
-      const top = rowsDom[i];
-      const bottom = rowsDom[i+1];
-      const [title,date,place,category] = top.querySelectorAll('input, select');
-      const text = bottom.querySelector('textarea');
-      result.push({
-        title: title.value.trim(),
-        date:  date.value.trim(),
-        place: place.value.trim(),
-        category: category.value.trim(),
-        text: text.value.trim()
-      });
+    // ========= SUPABASE AUTH =========
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function requireAdmin() {
+      // Session prüfen
+      const { data: { session } } = await supabase.auth.getSession();
+      const statusEl = document.getElementById("status");
+
+      if (!session) {
+        statusEl.innerHTML = 'Nicht angemeldet. <a class="link" href="/login.html">Zum Login</a>';
+        throw new Error("no_session");
+      }
+
+      const { data: { user } } = await supabase.auth.getUser();
+      const email = user?.email || "Unbekannt";
+      const role  = (user?.user_metadata && user.user_metadata.role) || (user?.raw_user_meta_data && user.raw_user_meta_data.role) || "member";
+
+      statusEl.innerHTML = `
+        Hallo <code>${email}</code> <span class="pill">Rolle: ${role}</span>
+        <div class="note ok">Adminzugriff gewährt.</div>
+      `;
+
+      if (role !== "admin") {
+        statusEl.innerHTML = `
+          Hallo <code>${email}</code> <span class="pill">Rolle: ${role}</span>
+          <div class="note err">Kein Admin – Zugriff verweigert.</div>
+        `;
+        throw new Error("not_admin");
+      }
+      return { email, role };
     }
-    data = result;
-  }
 
-  // Export als Datei & Copy
-  function exportJson(){
-    syncFromDom();
-    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.getElementById('downloadLink');
-    a.href = url;
-    a.classList.remove('hidden');
-  }
-  async function copyJson(){
-    syncFromDom();
-    await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-    toast('JSON in die Zwischenablage kopiert.', 'ok');
-  }
-  function toast(msg, cls='note'){ status.textContent = msg; status.className = cls; }
+    document.getElementById("logout").addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.href = "/";
+    });
 
-  // Events
-  rows.addEventListener('click', (e)=>{
-    const btn = e.target.closest('button');
-    if(!btn) return;
-    const act = btn.dataset.act;
-    const idx = +btn.closest('.row').dataset.idx;
-    if(act==='del'){
-      data.splice(idx,1);
+    // ========= STATE & RENDER =========
+    let state = { items: [] };
+
+    function blankItem() {
+      return {
+        title: "",
+        category: "clubmeeting", // Standard
+        start: "",               // "YYYY-MM-DDTHH:mm:00"
+        end: "",
+        location: "",
+        description: "",
+        rsvp_link: "",
+        capacity: ""
+      };
+    }
+
+    function fmtDateToInput(start) {
+      if (!start) return "";
+      // erwartet "YYYY-MM-DDTHH:mm:ss"
+      const [date] = (start || "").split("T");
+      return date || "";
+    }
+
+    function dateFromInput(value) {
+      const v = (value || "").trim();
+      if (!v) return "";
+      // konservativ: Uhrzeit weglassen -> 00:00:00
+      return `${v}T00:00:00`;
+    }
+
+    function render() {
+      const host = document.getElementById("list");
+      host.innerHTML = "";
+
+      state.items.forEach((item, idx) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const row = document.createElement("div");
+        row.className = "grid";
+
+        // Titel
+        const inTitle = input("text", item.title, "Titel");
+        // Datum
+        const inDate  = input("date", fmtDateToInput(item.start), "Datum");
+        // Ort
+        const inLoc   = input("text", item.location, "Ort");
+        // Kategorie
+        const selCat  = document.createElement("select");
+        ["clubmeeting","private-charity","club-charity","organisatorisches"].forEach(c => {
+          const opt = document.createElement("option");
+          opt.value = c;
+          opt.textContent = catLabel(c);
+          if (item.category === c) opt.selected = true;
+          selCat.appendChild(opt);
+        });
+        // RSVP
+        const inRSVP  = input("url", item.rsvp_link || "", "RSVP-Link");
+        // Kapazität
+        const inCap   = input("number", (item.capacity ?? "").toString(), "Kapazität");
+
+        // Aktionen (Löschen)
+        const actions = document.createElement("div");
+        actions.className = "row-actions";
+        const del = document.createElement("button");
+        del.className = "danger";
+        del.textContent = "Löschen";
+        del.addEventListener("click", () => {
+          if (confirm("Diesen Termin wirklich löschen?")) {
+            state.items.splice(idx, 1);
+            render();
+          }
+        });
+        actions.appendChild(del);
+
+        // zweite Zeile: Beschreibung
+        const desc = document.createElement("textarea");
+        desc.placeholder = "Beschreibung";
+        desc.value = item.description || "";
+
+        // ÄNDERUNGEN zurück in state schreiben bei Blur
+        inTitle.addEventListener("change", () => item.title = inTitle.value.trim());
+        inDate.addEventListener("change", () => item.start = dateFromInput(inDate.value));
+        inLoc.addEventListener("change", () => item.location = inLoc.value.trim());
+        selCat.addEventListener("change", () => item.category = selCat.value);
+        inRSVP.addEventListener("change", () => item.rsvp_link = inRSVP.value.trim());
+        inCap.addEventListener("change", () => item.capacity = tryNumber(inCap.value));
+        desc.addEventListener("change", () => item.description = desc.value.trim());
+
+        // in Grid einfügen
+        row.appendChild(inTitle);
+        row.appendChild(inDate);
+        row.appendChild(inLoc);
+        row.appendChild(selCat);
+        row.appendChild(inRSVP);
+        row.appendChild(inCap);
+        row.appendChild(actions);
+
+        // Header-Zeile der Spalten (nur optisch für Screenreader sinnvoll) – wir nutzen separate thead oben
+        // Beschreibungszeile
+        const descWrap = document.createElement("div");
+        descWrap.style.gridColumn = "1 / -1";
+        descWrap.appendChild(desc);
+
+        card.appendChild(row);
+        card.appendChild(descWrap);
+        host.appendChild(card);
+      });
+
+      // Version/Info
+      document.getElementById("version").textContent = `Einträge: ${state.items.length}`;
+    }
+
+    function input(type, value, placeholder) {
+      const el = document.createElement("input");
+      el.type = type;
+      el.value = value || "";
+      if (placeholder) el.placeholder = placeholder;
+      return el;
+    }
+
+    function catLabel(v) {
+      switch (v) {
+        case "clubmeeting": return "Clubmeeting";
+        case "private-charity": return "Private Charity";
+        case "club-charity": return "Club Charity";
+        case "organisatorisches": return "Organisatorisches";
+        default: return v;
+      }
+    }
+
+    function tryNumber(v) {
+      const n = parseInt(v, 10);
+      return Number.isFinite(n) ? n : "";
+    }
+
+    // ========= LADEN / SAMMELN =========
+    async function loadEvents() {
+      try {
+        const res = await fetch(EVENTS_JSON, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        if (data && Array.isArray(data.items)) {
+          state.items = data.items;
+        } else {
+          state.items = [];
+        }
+      } catch (e) {
+        console.warn("Konnte events.json nicht laden – starte leer:", e);
+        state.items = [];
+      }
       render();
     }
-    if(act==='more'){
-      // nichts extra – das Textfeld ist bereits sichtbar; Fokus setzen
-      const txt = rows.querySelectorAll('textarea')[idx];
-      if(txt) txt.focus();
-    }
-  });
-  document.getElementById('btnAdd').addEventListener('click', ()=>{
-    data.push({ title:'Neuer Termin', date:'2025-01-01', place:'', category:'Clubmeeting', text:'' });
-    render();
-  });
-  document.getElementById('btnExport').addEventListener('click', exportJson);
-  document.getElementById('btnCopy').addEventListener('click', copyJson);
 
-  // Auth prüfen & Rolle auslesen
-  (async () => {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if(error || !user){
-      status.innerHTML = 'Nicht angemeldet.';
-      notAdmin.classList.remove('hidden');
-      return;
-    }
-    who.innerHTML = `<span class="pill">${user.email}</span>`;
-
-    const role = (user.user_metadata && user.user_metadata.role) || (user.app_metadata && user.app_metadata.role);
-    if(role !== 'admin'){
-      status.innerHTML = 'Angemeldet, aber keine Admin-Rechte.';
-      notAdmin.classList.remove('hidden');
-      return;
+    function collectEventData() {
+      // state ist die Quelle der Wahrheit – falls Inputs noch nicht „change“ getriggert haben,
+      // erzwingen wir kein zusätzliches Sammeln; state ist schon aktuell.
+      return {
+        items: state.items.map(x => ({
+          title: (x.title || "").trim(),
+          category: x.category || "clubmeeting",
+          start: (x.start || "").trim(),
+          end: (x.end || "").trim(),
+          location: (x.location || "").trim(),
+          description: (x.description || "").trim(),
+          rsvp_link: (x.rsvp_link || "").trim(),
+          capacity: x.capacity === "" ? "" : Number(x.capacity)
+        }))
+      };
     }
 
-    status.innerHTML = 'Angemeldet – <span class="ok">Adminzugriff gewährt.</span>';
-    editor.classList.remove('hidden');
+    // ========= EXPORT =========
+    async function exportChanges() {
+      const msg = document.getElementById("msg");
+      try {
+        const payload = collectEventData();
 
-    try{
-      await loadEvents();
-    }catch(err){
-      status.textContent = 'Fehler: ' + err.message;
-      status.className = 'err';
+        // simple Validierung
+        for (const [i, it] of payload.items.entries()) {
+          if (!it.title)   throw new Error(`Eintrag ${i+1}: „Titel“ fehlt.`);
+          if (!it.start)   throw new Error(`Eintrag ${i+1}: „Datum“ fehlt.`);
+          if (!it.category) it.category = "clubmeeting";
+        }
+
+        msg.className = "note";
+        msg.textContent = "Speichere nach GitHub…";
+
+        const res = await fetch(API_SAVE_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || `HTTP ${res.status}`);
+        }
+
+        msg.className = "note ok";
+        msg.textContent = "✅ Änderungen wurden erfolgreich gespeichert.";
+      } catch (err) {
+        console.error(err);
+        msg.className = "note err";
+        msg.textContent = "❌ Fehler beim Speichern: " + (err?.message || "Unbekannter Fehler");
+      }
     }
-  })();
-</script>
+
+    async function copyJSONToClipboard() {
+      const json = JSON.stringify(collectEventData(), null, 2);
+      try {
+        await navigator.clipboard.writeText(json);
+        const msg = document.getElementById("msg");
+        msg.className = "note ok";
+        msg.textContent = "✔️ JSON in die Zwischenablage kopiert.";
+      } catch {
+        const blob = new Blob([json], { type: "application/json" });
+        const url  = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "events.json";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    // ========= EVENTS =========
+    document.getElementById("add").addEventListener("click", () => {
+      state.items.unshift(blankItem());
+      render();
+      const msg = document.getElementById("msg");
+      msg.className = "note";
+      msg.textContent = "Neuer Eintrag hinzugefügt. Vergiss nicht zu speichern.";
+    });
+
+    document.getElementById("save").addEventListener("click", exportChanges);
+    document.getElementById("copy").addEventListener("click", copyJSONToClipboard);
+
+    // ========= STARTUP =========
+    (async function init() {
+      try {
+        await requireAdmin(); // redirectet nicht – zeigt Status
+        await loadEvents();
+      } catch (e) {
+        // bei fehlender Session oder fehlender Rolle blockieren wir die UI
+        if (e && (e.message === "no_session" || e.message === "not_admin")) {
+          document.querySelector(".toolbar").style.display = "none";
+          document.getElementById("list").innerHTML =
+            '<div class="card"><div class="note err">Kein Zugriff. Bitte als Admin einloggen.</div></div>';
+        } else {
+          const msg = document.getElementById("msg");
+          msg.className = "note err";
+          msg.textContent = "Fehler beim Initialisieren.";
+        }
+      }
+    })();
+  </script>
 </body>
 </html>
