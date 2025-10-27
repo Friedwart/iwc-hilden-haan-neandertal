@@ -4,154 +4,202 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Inner Wheel Club Hilden–Haan–Neandertal</title>
-
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-
   <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
     body {
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       background: #f7f7fb;
-      color: #333;
+      color: #222;
     }
 
-    header {
+    /* Header / Navigation */
+    .topbar {
       background: #fff;
-      padding: 14px 22px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-bottom: 1px solid #ececf3;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 14px 16px;
+    }
+    .brand {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      gap: 12px;
     }
-
-    header img {
-      height: 50px;
+    .brand h1 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
     }
-
-    nav {
+    .nav {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 12px;
+    }
+    .chip {
+      background: #2f75e0;
+      color: #fff;
+      border: 0;
+      border-radius: 20px;
+      padding: 8px 14px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .chip.secondary {
+      background: #e7eefb;
+      color: #1e4fb1;
     }
 
-    nav a {
-      text-decoration: none;
+    /* Admin Button – standardmäßig versteckt */
+    #admin-btn {
+      display: none; /* wird per JS eingeschaltet, wenn role: "admin" */
       background: #1e88e5;
       color: #fff;
+      border-radius: 10px;
       padding: 8px 14px;
-      border-radius: 8px;
       font-weight: 600;
-      transition: background 0.2s;
+      text-decoration: none;
+      float: right;
     }
+    #admin-btn:hover { background: #166fc2; }
 
-    nav a:hover {
-      background: #166fc2;
-    }
-
-    main {
-      max-width: 1000px;
-      margin: 40px auto;
-      padding: 24px;
+    /* Inhalt */
+    main.wrap { padding-top: 16px; }
+    .card {
       background: #fff;
       border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,.06);
+      box-shadow: 0 6px 24px rgba(0,0,0,.08);
+      padding: 20px 22px;
+      margin: 16px 0;
     }
-
-    h1 {
-      font-size: 24px;
-      margin-top: 0;
+    .card h2 {
+      margin: 0 0 16px;
+      font-size: 22px;
     }
-
     .event {
-      border-bottom: 1px solid #eee;
-      padding: 10px 0 14px;
+      padding: 18px 0;
+      border-top: 1px solid #f0f1f6;
     }
-
-    .event:last-child {
-      border-bottom: none;
-    }
-
-    .event-title {
+    .event:first-of-type { border-top: 0; }
+    .event a {
       font-weight: 600;
-      color: #1e88e5;
-      font-size: 18px;
+      color: #1e4fb1;
+      text-decoration: none;
     }
+    .event a:hover { text-decoration: underline; }
+    .event .meta { color:#555; margin-top: 4px; }
+    .event .desc { margin-top: 10px; }
 
+    .link {
+      display: inline-block;
+      margin-top: 16px;
+      color: #4b32b8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .link:hover { text-decoration: underline; }
+
+    /* Footer */
     footer {
-      text-align: center;
       color: #666;
-      font-size: 13px;
-      margin-top: 60px;
-      padding: 20px;
-    }
-
-    /* 🔧 Fix: blockierendes Consent-/Overlay-Element ausschalten */
-    #fides-overlay, .fides-overlay, .fides-modal, .fides-backdrop {
-      display: none !important;
-      pointer-events: none !important;
-    }
-    body.fides-overlay-modal-link-show {
-      overflow: auto !important;
+      font-size: 14px;
+      padding: 24px 16px 40px;
+      text-align: center;
     }
   </style>
+
+  <!-- Supabase JS v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
-  <header>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <img src="assets/logo.png" alt="Inner Wheel Logo" />
-      <strong>Inner Wheel Club Hilden–Haan–Neandertal</strong>
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <img src="/assets/logo.png" alt="IWC" width="36" height="36" />
+        <h1>Inner Wheel Club Hilden–Haan–Neandertal</h1>
+        <a id="admin-btn" href="/admin/index.html" style="margin-left:auto">Admin</a>
+      </div>
+
+      <nav class="nav" aria-label="Hauptnavigation">
+        <a class="chip" href="/">Termine</a>
+        <a class="chip secondary" href="#clubmeetings">Clubmeetings</a>
+        <a class="chip secondary" href="#private-charity">Private Charity</a>
+        <a class="chip secondary" href="#club-charity">Club Charity</a>
+        <a class="chip secondary" href="#orga">Organisatorisches</a>
+        <a class="chip secondary" href="/downloads.html">Downloads</a>
+        <a class="chip secondary" href="/about.html">Über uns</a>
+      </nav>
     </div>
+  </div>
 
-    <nav>
-      <a href="index.html">Termine</a>
-      <a href="clubmeetings.html">Clubmeetings</a>
-      <a href="charity.html">Private Charity</a>
-      <a href="clubcharity.html">Club Charity</a>
-      <a href="orga.html">Organisatorisches</a>
-      <a href="downloads.html">Downloads</a>
-      <a href="about.html">Über uns</a>
-      <a href="login.html" style="background:#fff;color:#1e88e5;border:1px solid #1e88e5;">Admin</a>
-    </nav>
-  </header>
+  <main class="wrap">
+    <section class="card">
+      <h2>Termine &amp; Veranstaltungen</h2>
 
-  <main>
-    <h1>Termine & Veranstaltungen</h1>
+      <!-- Beispiel-Events (deine JSON/Build-Logik kann hier weiterlaufen wie zuvor) -->
+      <div class="event">
+        <a href="#">Weihnachtsmarkt Roncalli</a>
+        <div class="meta">05.12.2025 · Köln Roncalliplatz</div>
+        <div class="desc">Gemeinsamer Besuch, Glühweinstand, Spendenaktion.</div>
+      </div>
 
-    <div class="event">
-      <div class="event-title">Weihnachtsmarkt Roncalli</div>
-      <div>05.12.2025 · Köln Roncalliplatz</div>
-      <p>Gemeinsamer Besuch, Glühweinstand, Spendenaktion.</p>
-    </div>
+      <div class="event">
+        <a href="#">Monatsmeeting Dezember</a>
+        <div class="meta">10.12.2025 · Clubraum Haan</div>
+        <div class="desc">Jahresrückblick und Planung.</div>
+      </div>
 
-    <div class="event">
-      <div class="event-title">Monatsmeeting Dezember</div>
-      <div>10.12.2025 · Clubraum Haan</div>
-      <p>Jahresrückblick und Planung.</p>
-    </div>
+      <div class="event">
+        <a href="#">Private Charity Dinner</a>
+        <div class="meta">Januar 2026 · Haan</div>
+        <div class="desc">Benefizabend zugunsten des Frauenhauses Hilden.</div>
+      </div>
 
-    <div class="event">
-      <div class="event-title">Private Charity Dinner</div>
-      <div>Januar 2026 · Haan</div>
-      <p>Benefizabend zugunsten des Frauenhauses Hilden.</p>
-    </div>
-
-    <div class="event">
-      <div class="event-title">Clubversammlung Frühjahr</div>
-      <div>März 2026 · Hilden</div>
-      <p>Jahresplanung, Wahlen und Mitgliederberichte.</p>
-    </div>
-
-    <a href="downloads.html" style="display:block;margin-top:30px;color:#4b32b8;font-weight:500;text-decoration:none;">
-      → Zum Downloadbereich
-    </a>
+      <a class="link" href="/downloads.html">→ Zum Downloadbereich</a>
+    </section>
   </main>
 
   <footer>
     © 2025 Inner Wheel Club Hilden–Haan–Neandertal
   </footer>
+
+  <script>
+    // 1) Supabase initialisieren
+    const SUPABASE_URL = "https://itosmlnylqedxatxmelf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv"; // dein publishable key
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // 2) Admin-Sichtbarkeit anhand user_metadata.role === "admin"
+    async function showAdminIfAllowed() {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        console.warn("auth.getUser error:", error.message);
+        return;
+      }
+      const user = data?.user;
+      if (!user) return;
+
+      // Rolle aus user_metadata oder raw_user_meta_data lesen
+      const role =
+        user.user_metadata?.role ||
+        user.raw_user_meta_data?.role ||
+        null;
+
+      if (role === "admin") {
+        document.getElementById("admin-btn").style.display = "inline-block";
+      }
+    }
+
+    showAdminIfAllowed();
+  </script>
 </body>
 </html>
