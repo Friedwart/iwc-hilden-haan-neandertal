@@ -4,168 +4,63 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Inner Wheel Club Hilden–Haan–Neandertal</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root { color-scheme: light; }
-    * { box-sizing: border-box; }
     body {
-      margin: 0;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: #f7f7fb;
-      color: #222;
+      margin: 0; background: #f6f7fb; color: #111;
     }
-
-    /* Header / Navigation */
-    .topbar {
-      background: #fff;
-      border-bottom: 1px solid #ececf3;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+    header {
+      background: #fff; border-bottom: 1px solid #e8e9f0;
+      position: sticky; top: 0; z-index: 10;
     }
-    .wrap {
-      max-width: 1060px;
-      margin: 0 auto;
-      padding: 14px 16px;
+    .wrap { max-width: 980px; margin: 0 auto; padding: 16px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:700; }
+    nav { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+    .pill {
+      background:#e9f0ff; color:#174ea6; border-radius:999px; padding:8px 14px; font-weight:600;
+      display:inline-flex; align-items:center; gap:8px; text-decoration:none;
     }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    main .card {
+      background:#fff; border-radius:16px; box-shadow:0 6px 24px rgba(0,0,0,.06);
+      padding:22px; margin:20px 0;
     }
-    .brand h1 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0;
-    }
-    .nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .chip {
-      background: #2f75e0;
-      color: #fff;
-      border: 0;
-      border-radius: 20px;
-      padding: 8px 14px;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .chip.secondary {
-      background: #e7eefb;
-      color: #1e4fb1;
-    }
-
-    /* Admin Button – standardmäßig versteckt */
-    #admin-btn {
-      display: none; /* wird per JS eingeschaltet, wenn role: "admin" */
-      background: #1e88e5;
-      color: #fff;
-      border-radius: 10px;
-      padding: 8px 14px;
-      font-weight: 600;
-      text-decoration: none;
-      float: right;
-    }
-    #admin-btn:hover { background: #166fc2; }
-
-    /* Inhalt */
-    main.wrap { padding-top: 16px; }
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,.08);
-      padding: 20px 22px;
-      margin: 16px 0;
-    }
-    .card h2 {
-      margin: 0 0 16px;
-      font-size: 22px;
-    }
-    .event {
-      padding: 18px 0;
-      border-top: 1px solid #f0f1f6;
-    }
-    .event:first-of-type { border-top: 0; }
-    .event a {
-      font-weight: 600;
-      color: #1e4fb1;
-      text-decoration: none;
-    }
-    .event a:hover { text-decoration: underline; }
-    .event .meta { color:#555; margin-top: 4px; }
-    .event .desc { margin-top: 10px; }
-
-    .link {
-      display: inline-block;
-      margin-top: 16px;
-      color: #4b32b8;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .link:hover { text-decoration: underline; }
-
-    /* Footer */
-    footer {
-      color: #666;
-      font-size: 14px;
-      padding: 24px 16px 40px;
-      text-align: center;
-    }
+    h1 { margin: 0 0 12px; font-size: 24px; }
+    .event { padding:16px 0; border-top:1px solid #eef0f4; }
+    .event:first-child { border-top: 0; }
+    .event a { color:#174ea6; text-decoration:none; font-weight:700; }
+    .meta { color:#666; margin:4px 0 6px; }
+    footer { color:#666; font-size:14px; text-align:center; padding:28px 0 36px; }
   </style>
-
-  <!-- Supabase JS v2 -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <div class="topbar">
+  <header>
     <div class="wrap">
       <div class="brand">
-        <img src="/assets/logo.png" alt="IWC" width="36" height="36" />
-        <h1>Inner Wheel Club Hilden–Haan–Neandertal</h1>
-        <a id="admin-btn" href="/admin/index.html" style="margin-left:auto">Admin</a>
+        <img src="/assets/logo.png" alt="" width="36" height="36" />
+        <div>Inner Wheel Club Hilden–Haan–Neandertal</div>
       </div>
-
-      <nav class="nav" aria-label="Hauptnavigation">
-        <a class="chip" href="/">Termine</a>
-        <a class="chip secondary" href="#clubmeetings">Clubmeetings</a>
-        <a class="chip secondary" href="#private-charity">Private Charity</a>
-        <a class="chip secondary" href="#club-charity">Club Charity</a>
-        <a class="chip secondary" href="#orga">Organisatorisches</a>
-        <a class="chip secondary" href="/downloads.html">Downloads</a>
-        <a class="chip secondary" href="/about.html">Über uns</a>
+      <nav aria-label="Bereiche">
+        <a class="pill" href="#">Termine</a>
+        <a class="pill" href="#clubmeetings">Clubmeetings</a>
+        <a class="pill" href="#private-charity">Private Charity</a>
+        <a class="pill" href="#club-charity">Club Charity</a>
+        <a class="pill" href="#orga">Organisatorisches</a>
+        <a class="pill" href="#downloads">Downloads</a>
+        <a class="pill" href="#about">Über uns</a>
+        <a class="pill" href="/admin/index.html">Admin</a>
       </nav>
     </div>
-  </div>
+  </header>
 
   <main class="wrap">
-    <section class="card">
-      <h2>Termine &amp; Veranstaltungen</h2>
-
-      <!-- Beispiel-Events (deine JSON/Build-Logik kann hier weiterlaufen wie zuvor) -->
-      <div class="event">
-        <a href="#">Weihnachtsmarkt Roncalli</a>
-        <div class="meta">05.12.2025 · Köln Roncalliplatz</div>
-        <div class="desc">Gemeinsamer Besuch, Glühweinstand, Spendenaktion.</div>
-      </div>
-
-      <div class="event">
-        <a href="#">Monatsmeeting Dezember</a>
-        <div class="meta">10.12.2025 · Clubraum Haan</div>
-        <div class="desc">Jahresrückblick und Planung.</div>
-      </div>
-
-      <div class="event">
-        <a href="#">Private Charity Dinner</a>
-        <div class="meta">Januar 2026 · Haan</div>
-        <div class="desc">Benefizabend zugunsten des Frauenhauses Hilden.</div>
-      </div>
-
-      <a class="link" href="/downloads.html">→ Zum Downloadbereich</a>
-    </section>
+    <div class="card">
+      <h1>Termine &amp; Veranstaltungen</h1>
+      <div id="events" aria-live="polite">Wird geladen…</div>
+      <p style="margin-top:18px;"><a class="pill" href="/downloads.html">→ Zum Downloadbereich</a></p>
+    </div>
   </main>
 
   <footer>
@@ -173,33 +68,65 @@
   </footer>
 
   <script>
-    // 1) Supabase initialisieren
-    const SUPABASE_URL = "https://itosmlnylqedxatxmelf.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv"; // dein publishable key
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Hilfsfunktionen
+    const fmtDate = (iso) => {
+      if (!iso) return "";
+      const d = new Date(iso);
+      return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
+    };
 
-    // 2) Admin-Sichtbarkeit anhand user_metadata.role === "admin"
-    async function showAdminIfAllowed() {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.warn("auth.getUser error:", error.message);
-        return;
+    const categoryLabel = (value) => {
+      switch(value){
+        case "clubmeeting": return "Clubmeeting";
+        case "private-charity": return "Private Charity";
+        case "club-charity": return "Club Charity";
+        default: return "Termin";
       }
-      const user = data?.user;
-      if (!user) return;
+    };
 
-      // Rolle aus user_metadata oder raw_user_meta_data lesen
-      const role =
-        user.user_metadata?.role ||
-        user.raw_user_meta_data?.role ||
-        null;
+    // Daten laden & rendern
+    (async () => {
+      const mount = document.getElementById("events");
+      try {
+        // Cache-Busting, damit Änderungen sofort sichtbar sind
+        const url = `/content/events.json?v=${Date.now()}`;
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
 
-      if (role === "admin") {
-        document.getElementById("admin-btn").style.display = "inline-block";
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        const items = (data.items || [])
+          .filter(it => {
+            const when = new Date(it.start);
+            if (isNaN(when)) return false;
+            return when >= today; // nur kommende Termine
+          })
+          .sort((a,b) => new Date(a.start) - new Date(b.start));
+
+        // ▼▼ HIER war vorher das Limit (slice(0,3)). Wir zeigen ALLE kommenden.
+        const visible = items; // kein Limit mehr
+
+        if (!visible.length) {
+          mount.textContent = "Keine kommenden Termine.";
+          return;
+        }
+
+        mount.innerHTML = visible.map(ev => `
+          <div class="event">
+            <a href="#" aria-label="${ev.title}">${ev.title}</a>
+            <div class="meta">
+              ${fmtDate(ev.start)} · ${ev.location || "Ort folgt"} · ${categoryLabel(ev.category)}
+            </div>
+            <div>${ev.description ? ev.description : ""}</div>
+          </div>
+        `).join("");
+      } catch (err) {
+        console.error("Fehler beim Laden:", err);
+        mount.textContent = "Konnte Termine nicht laden.";
       }
-    }
-
-    showAdminIfAllowed();
+    })();
   </script>
 </body>
 </html>
