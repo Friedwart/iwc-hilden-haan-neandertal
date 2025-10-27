@@ -4,164 +4,229 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Inner Wheel Club Hilden–Haan–Neandertal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root { color-scheme: light; }
-    body { font-family: 'Inter',system-ui,sans-serif; background:#f6f7fb; margin:0; color:#111; }
-    header{background:#fff;border-bottom:1px solid #e8e9f0;position:sticky;top:0;z-index:10}
-    .wrap{max-width:980px;margin:0 auto;padding:16px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:16px}
-    nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-    nav a{text-decoration:none;background:#e9f0ff;color:#174ea6;border-radius:999px;padding:8px 14px;font-weight:600;transition:background .2s}
-    nav a:hover,nav a.active{background:#174ea6;color:#fff}
-    main .card{background:#fff;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.06);padding:22px;margin:20px 0}
-    h1{margin:0 0 12px;font-size:24px}
-    .switch{display:inline-flex;border:1px solid #e3e5ee;border-radius:999px;padding:4px;background:#f7f8fd;margin-bottom:14px}
-    .switch button{border:0;background:transparent;padding:8px 14px;border-radius:999px;font-weight:600;cursor:pointer;color:#3b3f55}
-    .switch button.active{background:#174ea6;color:#fff}
-    .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-    .chip{border:1px solid #e3e5ee;background:#fff;border-radius:999px;padding:6px 12px;font-weight:600;cursor:pointer}
-    .chip.active{background:#174ea6;color:#fff}
-    .count{color:#666;font-size:14px;margin-top:4px}
-    .event{padding:16px 0;border-top:1px solid #eef0f4;display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:start}
-    .event:first-child{border-top:0}
-    .event a.title{color:#174ea6;text-decoration:none;font-weight:700}
-    .event .title.disabled{color:#111;pointer-events:none;cursor:default}
-    .meta{color:#666;margin:4px 0 6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-    .badge{background:#eef4ff;color:#174ea6;padding:4px 8px;border-radius:999px;font-weight:600;font-size:12px}
-    .btn{border:1px solid #d8def2;background:#174ea6;color:#fff;border-radius:10px;padding:8px 12px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:6px}
-    .btn:hover{filter:brightness(1.05)}
-    footer{color:#666;font-size:14px;text-align:center;padding:28px 0 36px}
-    .muted{color:#6b7280}
-    .pill{background:#e9f0ff;color:#174ea6;border-radius:999px;padding:8px 14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-    .event.past{opacity:.6;transform:scale(.99)}
-    .event.past a.title{color:#555;font-style:italic}
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:#f7f7fb; color:#0f172a; margin:0; }
+    .top { max-width:1100px; margin:0 auto; padding:18px 16px; display:flex; align-items:center; gap:12px; }
+    .brand { display:flex; align-items:center; gap:10px; font-weight:800; }
+    .brand img { width:28px; height:28px; }
+    .nav { margin-left:auto; display:flex; gap:10px; }
+    .nav a { text-decoration:none; background:#e7efff; color:#0f172a; padding:8px 12px; border-radius:999px; font-weight:600; border:1px solid #d0defe; }
+    .main { max-width:1100px; margin:0 auto 80px; padding: 0 16px; }
+    .panel { background:#fff; border:1px solid #e2e8f0; border-radius:16px; box-shadow:0 2px 0 rgba(0,0,0,.02); margin-top:14px; }
+    .panel h2 { font-size:26px; padding:18px 18px 8px; margin:0; }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; padding:0 16px 12px; }
+    .chip { border:1px solid #cbd5e1; background:#f8fafc; color:#0f172a; border-radius:999px; padding:8px 12px; font-weight:700; cursor:pointer; }
+    .chip.active { background:#2b6df6; border-color:#2b6df6; color:#fff; }
+    .list { padding: 6px 2px 12px; }
+    .item { padding:16px; border-top:1px solid #eef2f7; }
+    .item:first-child { border-top:none; }
+    .title { font-size:18px; font-weight:800; margin:0 0 6px; }
+    .meta { font-size:14px; color:#334155; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .meta .tag { font-size:12px; padding:4px 8px; border-radius:999px; background:#eef2ff; color:#1e40af; border:1px solid #c7d2fe; }
+    .desc { margin-top:8px; color:#0f172a; }
+    .row { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    .btn { appearance:none; border:1px solid #2563eb; background:#2563eb; color:#fff; padding:8px 12px; border-radius:10px; font-weight:700; text-decoration:none; }
+    .btn[disabled] { opacity:.6; pointer-events:none; }
+    .muted { color:#64748b; }
+    .count { margin-left:auto; color:#64748b; font-size:14px; padding-right:18px; }
   </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
+  <header class="top">
     <div class="brand">
-      <img src="/assets/logo.png" alt="Logo Inner Wheel Club" width="36" height="36">
+      <img src="/assets/logo.png" alt="" />
       <div>Inner Wheel Club Hilden–Haan–Neandertal</div>
     </div>
-    <nav>
-      <a href="/index.html" class="active">Termine</a>
-      <a href="/about.html">Über uns</a>
-      <a href="/organisation.html">Organisation Charity</a>
-      <a href="/bestellungen.html">Bestellungen</a>
+    <nav class="nav">
+      <a href="/">Termine</a>
+      <a href="#ueber-uns">Über uns</a>
       <a href="/downloads.html">Downloads</a>
-      <a href="/admin/index.html">Admin</a>
+      <a href="/admin/">Admin</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<main class="wrap">
-  <div class="card">
-    <h1>Termine & Veranstaltungen</h1>
+  <main class="main">
+    <section class="panel">
+      <h2>Termine & Veranstaltungen</h2>
 
-    <div class="switch">
-      <button id="btn-upcoming" class="active">Kommende</button>
-      <button id="btn-past">Vergangene</button>
-    </div>
+      <div class="filters" id="filterBar">
+        <button class="chip active" data-scope="upcoming">Kommende</button>
+        <button class="chip" data-scope="past">Vergangene</button>
+        <span class="chip" data-cat="clubmeeting">Clubmeetings</span>
+        <span class="chip" data-cat="private-charity">Private Charity</span>
+        <span class="chip" data-cat="club-charity">Club Charity</span>
+        <span class="count" id="count"></span>
+      </div>
 
-    <div class="filters" id="filterBar">
-      <button class="chip active" data-cat="all">Alle Kategorien</button>
-      <button class="chip" data-cat="clubmeeting">Clubmeetings</button>
-      <button class="chip" data-cat="private-charity">Private Charity</button>
-      <button class="chip" data-cat="club-charity">Club Charity</button>
-    </div>
+      <div class="list" id="list"></div>
+      <div style="padding: 0 16px 16px;">
+        <a class="btn" href="/downloads.html">→ Zum Downloadbereich</a>
+      </div>
+    </section>
+  </main>
 
-    <div class="count" id="count"></div>
-    <div id="events" class="muted">Wird geladen…</div>
+  <script>
+    // ======= Konfiguration =======
+    // Trage hier den Basis-Link zu deinem Google-Formular ein.
+    // Die Seite hängt automatisch ?event=<Titel>&date=<YYYY-MM-DD> an.
+    const RSVP_BASE_URL = "https://example.com/forms/rsvp"; // <- HIER EINMALIG ANPASSEN
 
-    <p style="margin-top:18px;">
-      <a class="pill" href="/downloads.html">→ Zum Downloadbereich</a>
-    </p>
-  </div>
-</main>
+    const DATA_URL = "/content/events.json";
 
-<footer>© 2025 Inner Wheel Club Hilden–Haan–Neandertal</footer>
+    // ======= State / Filter =======
+    let rawItems = [];
+    let scope = "upcoming"; // "upcoming" | "past"
+    let cats = new Set();   // ausgewählte Kategorien (leer = alle)
 
-<script>
-  const $ = s => document.querySelector(s);
-  const $$ = s => Array.from(document.querySelectorAll(s));
-  const fmtDate = iso => new Date(iso).toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric"});
-  const catLabel = v => ({ "clubmeeting":"Clubmeeting","private-charity":"Private Charity","club-charity":"Club Charity" }[v]||"Termin");
+    // ======= Helpers =======
+    const $ = (s, c=document)=> c.querySelector(s);
+    const $$ = (s, c=document)=> Array.from(c.querySelectorAll(s));
+    const fmtDate = (iso) => {
+      if (!iso) return "";
+      const d = new Date(iso);
+      return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
+    };
+    const todayISO = () => new Date().toISOString().slice(0,10);
 
-  let allItems = [];
-  const state = { view:"upcoming", cat:"all" };
+    function isUpcoming(it) {
+      const d = (it.start||"").slice(0,10);
+      return d >= todayISO();
+    }
 
-  function safeUrl(u){
-    try{
-      if(!u) return "";
-      const url = new URL(u, location.origin);
-      return url.href;
-    }catch{ return ""; }
-  }
+    function visible(items){
+      // Scope
+      let res = items.filter(it => scope === "upcoming" ? isUpcoming(it) : !isUpcoming(it));
+      // Kategorien
+      if (cats.size) res = res.filter(it => cats.has(it.category));
+      // Sortierung
+      res.sort((a,b)=> (a.start||"").localeCompare(b.start||""));
+      if (scope === "past") res.reverse();
+      return res;
+    }
 
-  function render(){
-    const today = new Date(); today.setHours(0,0,0,0);
-    let items = allItems.filter(it=>{
-      const d = new Date(it.start);
-      return state.view==="upcoming" ? d>=today : d<today;
-    });
-    if(state.cat!=="all") items = items.filter(it=>it.category===state.cat);
-    items.sort((a,b)=> new Date(a.start)-new Date(b.start));
-    if(state.view==="past") items.reverse();
+    function badge(label){
+      const span = document.createElement("span");
+      span.className = "tag";
+      span.textContent = label;
+      return span;
+    }
 
-    $("#count").textContent = `${items.length} ${items.length===1?"Termin":"Termine"}`;
+    function buildRSVPLink(it){
+      // 1) Falls vorhandener rsvp_link (Legacy) → benutzen
+      if (it.rsvp_link && it.rsvp_link.trim()) return it.rsvp_link.trim();
+      // 2) Falls keine Anmeldung erforderlich → kein Link
+      if (!it.rsvp_required) return "";
+      // 3) Sonst aus Basis + Parametern generieren
+      if (!RSVP_BASE_URL) return ""; // kein Basislink gesetzt → kein Button
+      const u = new URL(RSVP_BASE_URL, location.origin);
+      u.searchParams.set("event", it.title || "");
+      u.searchParams.set("date", (it.start||"").slice(0,10));
+      return u.toString();
+    }
 
-    const html = items.map(ev=>{
-      const d = new Date(ev.start);
-      const past = d < today;
-      const rsvp = safeUrl(ev.rsvp_link || "");
-      const titleLink = rsvp ? `<a class="title" href="${rsvp}" target="_blank" rel="noopener noreferrer" aria-label="Für ${ev.title} anmelden">${ev.title}</a>` 
-                             : `<span class="title disabled" aria-label="${ev.title}">${ev.title}</span>`;
-      const btn = rsvp ? `<a class="btn" href="${rsvp}" target="_blank" rel="noopener noreferrer" aria-label="Anmelden: ${ev.title}">Anmelden</a>` : "";
-      return `
-        <div class="event ${past?"past":""}">
-          <div>
-            ${titleLink}
-            <div class="meta">
-              <span>${fmtDate(ev.start)}</span> ·
-              <span>${ev.location||"Ort folgt"}</span>
-              <span class="badge">${catLabel(ev.category)}</span>
-            </div>
-            <div>${ev.description||""}</div>
-          </div>
-          <div>${btn}</div>
-        </div>`;
-    }).join("");
+    function render(){
+      const list = $("#list");
+      list.innerHTML = "";
+      const items = visible(rawItems);
 
-    $("#events").innerHTML = html || `<div class="muted">${state.view==="upcoming"?"Keine kommenden Termine.":"Keine vergangenen Termine."}</div>`;
-  }
+      $("#count").textContent = `${items.length} Termin${items.length===1?"":"e"}`;
 
-  (async()=>{
-    const res = await fetch(`/content/events.json?v=${Date.now()}`);
-    const data = await res.json();
-    allItems = data.items || [];
-    render();
-  })();
+      items.forEach(it=>{
+        const wrap = document.createElement("div");
+        wrap.className = "item";
 
-  $("#btn-upcoming").onclick = () => {
-    state.view = "upcoming";
-    $("#btn-upcoming").classList.add("active");
-    $("#btn-past").classList.remove("active");
-    render();
-  };
-  $("#btn-past").onclick = () => {
-    state.view = "past";
-    $("#btn-past").classList.add("active");
-    $("#btn-upcoming").classList.remove("active");
-    render();
-  };
-  $("#filterBar").onclick = e => {
-    const btn = e.target.closest(".chip"); if(!btn) return;
-    state.cat = btn.dataset.cat;
-    $$(".chip").forEach(c=>c.classList.toggle("active", c===btn));
-    render();
-  };
-</script>
+        const row = document.createElement("div");
+        row.className = "row";
+
+        const left = document.createElement("div");
+        const title = document.createElement("h3"); title.className="title"; title.textContent = it.title || "—";
+        const meta = document.createElement("div"); meta.className="meta";
+        meta.append(
+          document.createTextNode(fmtDate(it.start)),
+          document.createTextNode(" · "),
+          document.createTextNode(it.location || "—")
+        );
+        // Kategorie-Badge
+        const catMap = {
+          "clubmeeting": "Clubmeeting",
+          "private-charity": "Private Charity",
+          "club-charity": "Club Charity"
+        };
+        meta.append(badge(catMap[it.category] || it.category || "Kategorie"));
+        left.append(title, meta);
+
+        if (it.description) {
+          const d = document.createElement("div");
+          d.className = "desc";
+          d.textContent = it.description;
+          left.appendChild(d);
+        }
+
+        const right = document.createElement("div");
+        const rsvpURL = buildRSVPLink(it);
+        if (rsvpURL) {
+          const btn = document.createElement("a");
+          btn.className = "btn";
+          btn.href = rsvpURL;
+          btn.target = "_blank";
+          btn.rel="noopener";
+          btn.textContent = "Anmelden";
+          right.appendChild(btn);
+        } else {
+          const m = document.createElement("div");
+          m.className = "muted";
+          m.textContent = it.rsvp_required ? "Anmeldung nicht verfügbar." : "Keine Anmeldung erforderlich.";
+          right.appendChild(m);
+        }
+
+        row.append(left, right);
+        wrap.appendChild(row);
+        list.appendChild(wrap);
+      });
+    }
+
+    function attachFilters(){
+      // Scope-Toggle
+      $$('.chip[data-scope]').forEach(ch=>{
+        ch.addEventListener('click', ()=>{
+          $$('.chip[data-scope]').forEach(x=> x.classList.remove('active'));
+          ch.classList.add('active');
+          scope = ch.dataset.scope;
+          render();
+        });
+      });
+
+      // Kategorien
+      $$('.chip[data-cat]').forEach(ch=>{
+        ch.addEventListener('click', ()=>{
+          const cat = ch.dataset.cat;
+          if (cats.has(cat)) { cats.delete(cat); ch.classList.remove('active'); }
+          else { cats.add(cat); ch.classList.add('active'); }
+          render();
+        });
+      });
+    }
+
+    async function boot(){
+      try {
+        const res = await fetch(DATA_URL, { cache: "no-store" });
+        const data = await res.json();
+        // Normalize + sichere Defaults
+        rawItems = (data.items || []).map(e => ({
+          ...e,
+          rsvp_required: typeof e.rsvp_required === "boolean" ? e.rsvp_required : !!(e.rsvp_link && e.rsvp_link.trim())
+        }));
+      } catch(e){
+        rawItems = [];
+        console.error(e);
+      }
+      attachFilters();
+      render();
+    }
+
+    boot();
+  </script>
 </body>
-</html> 
+</html>
