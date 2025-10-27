@@ -2,30 +2,133 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="refresh" content="0; url=/login.html" />
-  <meta name="robots" content="noindex" />
-  <title>Weiterleitung zum Login …</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin | Inner Wheel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    html,body{height:100%} body{
-      margin:0; display:grid; place-items:center; font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background:#f7f7fb; color:#222;
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: #f7f7fb;
+      color: #222;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
     }
-    .card{background:#fff; padding:24px 20px; border-radius:14px; box-shadow:0 6px 24px rgba(0,0,0,.08); width:min(560px,92vw)}
-    h1{font-size:20px; margin:0 0 6px}
-    p{margin:0}
-    a{color:#1e88e5; text-decoration:none} a:hover{text-decoration:underline}
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.08);
+      padding: 24px 22px;
+      width: min(860px, 92vw);
+    }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    p  { margin: 0 0 14px; color:#555; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+    .btn {
+      background: #1e88e5; color:#fff; border:0; border-radius:10px;
+      padding: 10px 14px; font-weight:600; text-decoration:none; cursor:pointer;
+    }
+    .btn:hover { background:#166fc2; }
+    .ghost { background:#e7eefb; color:#1e4fb1; }
+    .mt { margin-top: 18px; }
+    .note { font-size:13px; color:#666; margin-top: 10px; }
+    .err  { color:#b00020; }
+    .ok   { color:#0a7a36; }
+    .kpi {
+      background:#f4f6ff; border:1px solid #e7eafd; border-radius:12px;
+      padding:12px 14px; margin-top: 14px;
+    }
+    .kpi h3 { margin:0 0 6px; font-size:16px; }
+    .kpi code { background:#fff; border:1px solid #ececf3; border-radius:6px; padding:2px 6px; }
+    a.link { color:#1e4fb1; text-decoration:none; }
+    a.link:hover { text-decoration:underline; }
   </style>
-  <script>
-    // Fallback-Weiterleitung via JS (für Browser, die Meta-Refresh blocken)
-    window.location.replace("/login.html");
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <div class="card">
-    <h1>Weiterleitung zum Mitglieder-Login …</h1>
-    <p>Falls die Weiterleitung nicht automatisch startet, klicke hier:
-      <a href="/login.html">Zum Login</a>
-    </p>
+  <div class="card" id="card">
+    <h1>Adminbereich</h1>
+    <p id="welcome">Lade Benutzer …</p>
+
+    <div class="kpi">
+      <h3>Status</h3>
+      <div id="status">–</div>
+    </div>
+
+    <div class="row mt">
+      <a class="btn ghost" href="/">← Zurück zur Startseite</a>
+      <button class="btn" id="logout">Abmelden</button>
+    </div>
+
+    <div class="note" id="msg"></div>
   </div>
+
+  <script>
+    // Supabase initialisieren
+    const SUPABASE_URL = "https://itosmlnylqedxatxmelf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_1TpKLx_2B6gmbx0BfRDcww_5CUAQBgv";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const welcome = document.getElementById('welcome');
+    const statusEl = document.getElementById('status');
+    const msg = document.getElementById('msg');
+    const logoutBtn = document.getElementById('logout');
+
+    // kleine Helper
+    function go(href){ window.location.href = href; }
+    function showStatus(html){ statusEl.innerHTML = html; }
+
+    async function guard() {
+      // 1) Session/User laden
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        msg.textContent = "Fehler: " + (error.message || "Authentifizierung fehlgeschlagen");
+        msg.className = "note err";
+        // zur Login-Seite (mit Rückkehr zum Admin)
+        setTimeout(() => go("/login.html"), 800);
+        return;
+      }
+
+      const user = data?.user;
+      if (!user) {
+        // nicht eingeloggt → erst einloggen
+        go("/login.html");
+        return;
+      }
+
+      const email = user.email || "(ohne E-Mail)";
+      // 2) Rolle prüfen (user_metadata oder raw_user_meta_data)
+      const role = user.user_metadata?.role || user.raw_user_meta_data?.role || null;
+
+      welcome.textContent = `Hallo ${email}!`;
+      showStatus(
+        `Angemeldet als <code>${email}</code><br>` +
+        `Rolle: <code>${role ?? "keine"}</code>`
+      );
+
+      if (role !== "admin") {
+        msg.textContent = "Zugriff verweigert: Du bist kein Admin.";
+        msg.className = "note err";
+        setTimeout(() => go("/"), 1200);
+        return;
+      }
+
+      // alles gut
+      msg.textContent = "✔️ Adminzugriff gewährt.";
+      msg.className = "note ok";
+    }
+
+    logoutBtn.addEventListener("click", async () => {
+      msg.textContent = "Melde ab …";
+      msg.className = "note";
+      await supabase.auth.signOut();
+      go("/");
+    });
+
+    guard();
+  </script>
 </body>
 </html>
