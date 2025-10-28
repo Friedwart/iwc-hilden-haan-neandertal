@@ -23,6 +23,17 @@
       "require_signup": true
     },
     {
+      "title": "Neuer Termin, um Anmeldung zu checken",
+      "category": "private-charity",
+      "start": "2025-11-01T00:00:00",
+      "end": "",
+      "location": "Mühlenbusch",
+      "description": "Schauen, ob das Anmeldeformular funktioniert",
+      "rsvp_link": "",
+      "capacity": 10,
+      "require_signup": true
+    },
+    {
       "title": "Weihnachtsmarkt Roncalli",
       "category": "club-charity",
       "start": "2025-12-05T17:00:00",
