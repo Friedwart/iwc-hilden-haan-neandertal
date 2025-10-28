@@ -1,78 +1,85 @@
-// File: api/save-events.js
-// Serverless-Funktion (Vercel) zum Speichern von content/events.json in GitHub
+// /api/save-events.js
+// Speichert content in ein GitHub-Repo (Repo Contents API) via Personal Access Token
+// Erwartet JSON: { path: "content/events.json", content: "<stringified JSON>" }
+// Optional: ?health=1 -> simple health-check
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
-  }
-
   try {
-    const token  = process.env.GITHUB_TOKEN;
-    const repo   = process.env.GITHUB_REPO   || 'Friedwart/iwc-hilden-haan-neandertal';
-    const branch = process.env.GITHUB_BRANCH || 'main';
-    const path   = process.env.EVENTS_PATH   || 'content/events.json';
-
-    if (!token)  throw new Error('Missing GITHUB_TOKEN');
-    if (!repo)   throw new Error('Missing GITHUB_REPO');
-    if (!path)   throw new Error('Missing EVENTS_PATH');
-
-    const body = req.body && typeof req.body === 'object' ? req.body : JSON.parse(req.body || '{}');
-    if (!body || !Array.isArray(body.items)) {
-      return res.status(400).json({ ok: false, error: 'Invalid payload: expected { items: [...] }' });
+    // Healthcheck
+    if (req.method === "GET" && "health" in req.query) {
+      return res.status(200).json({ ok: true, message: "save-events alive" });
     }
 
-    const apiBase = 'https://api.github.com';
-    const getUrl  = `${apiBase}/repos/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
+    if (req.method !== "POST") {
+      res.setHeader("Allow", "POST, GET");
+      return res.status(405).json({ error: "Method not allowed" });
+    }
 
-    let sha = undefined;
+    const token = process.env.GITHUB_TOKEN;
+    const repoFull = process.env.GITHUB_REPO || "Friedwart/iwc-hilden-haan-neandertal";
+    const branch = process.env.GITHUB_BRANCH || "main";
+
+    if (!token) {
+      return res.status(500).json({ error: "GITHUB_TOKEN missing" });
+    }
+
+    const { path, content } = req.body || {};
+    if (!path || typeof content !== "string") {
+      return res.status(400).json({ error: "Body must include { path, content }" });
+    }
+
+    const [owner, repo] = repoFull.split("/");
+    const apiBase = "https://api.github.com";
+
+    // 1) SHA der bestehenden Datei holen (falls vorhanden)
+    let sha = null;
     {
-      const r = await fetch(getUrl, {
-        headers: { Authorization: `Bearer ${token}`, 'User-Agent': 'vercel-save-events' }
-      });
-      if (r.ok) {
+      const r = await fetch(
+        `${apiBase}/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`,
+        { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" } }
+      );
+      if (r.status === 200) {
         const j = await r.json();
-        sha = j.sha; // vorhandene Datei -> Update
+        sha = j.sha;
       } else if (r.status !== 404) {
-        const t = await r.text();
-        return res.status(502).json({ ok: false, error: 'GitHub read failed', detail: t });
+        const txt = await r.text();
+        return res.status(502).json({ error: "Failed to read file", status: r.status, detail: txt });
       }
     }
 
-    const contentJson = JSON.stringify({ items: body.items }, null, 2) + '\n';
-    const contentB64  = Buffer.from(contentJson, 'utf8').toString('base64');
+    // 2) Commit vorbereiten
+    const now = new Date().toISOString();
+    const message = `Update ${path} via Admin (${now})`;
 
-    const putUrl = `${apiBase}/repos/${repo}/contents/${encodeURIComponent(path)}`;
-    const commitMessage = `Update ${path} via Admin (Vercel)`;
+    const putBody = {
+      message,
+      content: Buffer.from(content, "utf8").toString("base64"),
+      branch,
+      ...(sha ? { sha } : {})
+    };
 
-    const putResp = await fetch(putUrl, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'User-Agent': 'vercel-save-events'
-      },
-      body: JSON.stringify({
-        message: commitMessage,
-        content: contentB64,
-        sha,              // undefined => neue Datei; ansonsten Update
-        branch,
-        committer: { name: 'IWC Admin', email: 'admin@iwc-app.local' }
-      })
-    });
+    const putRes = await fetch(
+      `${apiBase}/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(putBody)
+      }
+    );
 
-    if (!putResp.ok) {
-      const txt = await putResp.text();
-      return res.status(502).json({ ok: false, error: 'GitHub write failed', detail: txt });
+    if (!putRes.ok) {
+      const txt = await putRes.text();
+      return res.status(502).json({ error: "GitHub PUT failed", status: putRes.status, detail: txt });
     }
 
-    const result = await putResp.json();
-    return res.status(200).json({ ok: true, path, branch, commit: result?.commit?.sha || null });
+    const result = await putRes.json();
+    return res.status(200).json({ ok: true, path, commit: result.commit && result.commit.sha });
   } catch (err) {
-    return res.status(500).json({ ok: false, error: err?.message || String(err) });
+    console.error(err);
+    return res.status(500).json({ error: "Unhandled error", detail: String(err) });
   }
 }
-
-export const config = {
-  api: { bodyParser: { sizeLimit: '1mb' } }
-};
