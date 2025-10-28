@@ -1,253 +1,402 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Inner Wheel Club Hilden–Haan–Neandertal – Termine</title>
-  <link rel="icon" href="/assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --text:#0b1020;
-      --muted:#6b7280;
-      --brand:#3b82f6;
-      --brand-600:#2563eb;
-      --chip:#eef2ff;
-      --chip-on:#1f2937;
-      --line:#e5e7eb;
-      --ok:#16a34a;
+      --bg:#f6f7fb; --card:#fff; --text:#0f172a; --muted:#6b7280;
+      --brand:#3b82f6; --brand-600:#2563eb; --chip:#e5edff; --chip-dark:#183a8f1a;
+      --ok:#10b981; --err:#ef4444; --line:#e5e7eb;
+      --badge-bg:#eef2ff; --badge:#2242b8;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";line-height:1.45}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif}
     a{color:var(--brand);text-decoration:none}
-    .container{max-width:980px;margin:0 auto;padding:16px}
-    .topnav{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:6px 0 14px}
-    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
-    .brand img{width:28px;height:28px;border-radius:50%}
-    .pill{padding:8px 14px;border-radius:999px;background:#e9ecf7;color:#0f172a;display:inline-block}
-    .pill.primary{background:var(--brand);color:#fff}
-    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 10px}
-    .tab{padding:8px 12px;border-radius:999px;background:#eef2f7;color:#111827;border:1px solid transparent;cursor:pointer;user-select:none}
-    .tab.active{background:#dbeafe;border-color:#bfdbfe}
-    .chips{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 2px}
-    .chip{padding:7px 12px;border-radius:999px;background:var(--chip);color:#111827;cursor:pointer;border:1px solid transparent;user-select:none}
-    .chip.active{background:#e2e8f0;border-color:#cbd5e1}
-    .muted{color:var(--muted)}
-    .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.06);padding:18px}
-    h1{font-size:24px;margin:4px 0 6px}
-    .list{display:flex;flex-direction:column;gap:16px;margin-top:12px}
-    .event{background:#fff;padding:16px;border-radius:12px;border:1px solid var(--line)}
-    .event h3{margin:0 0 6px;font-size:18px}
-    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .badge{font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#374151;border:1px solid #dbeafe}
-    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid var(--brand-600);color:#fff;background:var(--brand);cursor:pointer}
-    .btn:focus,.btn:hover{background:var(--brand-600)}
-    .btn.ghost{background:#fff;color:var(--brand-600)}
-    .footerlink{display:inline-block;margin-top:8px}
-    .right{margin-left:auto}
-    .counter{color:var(--muted);font-size:14px}
+    .wrap{max-width:980px;margin-inline:auto;padding:28px 16px 60px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo{width:38px;height:38px;border-radius:50%;background:#dbeafe;display:inline-block}
+    .brand{font-weight:700;font-size:20px;line-height:1.2}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 24px}
+    .tab{
+      background:#eaf1ff;color:#0b2b7a;padding:8px 14px;border-radius:999px;font-weight:600;
+      box-shadow:0 1px 0 rgba(0,0,0,.05)
+    }
+    .tab.ghost{background:#edf2f7;color:#0f172a}
+    .tab:hover{filter:brightness(.97)}
+    .tab:focus-visible{outline:2px solid var(--brand-600);outline-offset:2px}
+
+    h2{margin:4px 0 12px;font-size:28px}
+    .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 18px}
+    .chip{
+      border:1px solid var(--line);background:#fff;color:#1f2937;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:600
+    }
+    .chip.active{background:var(--brand);border-color:var(--brand);color:#fff}
+    .chip.muted{color:#6b7280;background:#f3f4f6}
+    .counter{margin-left:auto;color:var(--muted);font-weight:600}
+
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 14px;
+      margin:12px 0;box-shadow:0 1px 0 rgba(0,0,0,.03)
+    }
+    .title{font-size:20px;font-weight:700;margin:0 0 4px}
+    .meta{color:var(--muted);font-weight:600;margin-bottom:10px}
+    .desc{margin:8px 0 10px;line-height:1.55}
+    .badge{
+      display:inline-block;background:var(--badge-bg);color:var(--badge);
+      border-radius:999px;padding:4px 10px;font-weight:700;font-size:12px;margin-left:8px
+    }
+    .row{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+    .btn{
+      appearance:none;border:0;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer;
+      background:var(--brand);color:#fff;box-shadow:0 1px 0 rgba(0,0,0,.08)
+    }
+    .btn:hover{background:var(--brand-600)}
+    .btn.ghost{background:#eef2ff;color:#0b2b7a}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    /* Modal */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;place-items:center;padding:18px;z-index:30
+    }
+    .modal{width:min(640px,100%);background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:0 10px 35px rgba(0,0,0,.18)}
+    .modal header{padding:16px 18px;border-bottom:1px solid var(--line);gap:12px}
+    .modal .content{padding:16px 18px}
+    .modal .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .modal label{font-weight:600;font-size:14px}
+    .modal input,.modal textarea,.modal select{
+      width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit
+    }
+    .modal textarea{min-height:90px;resize:vertical}
+    .modal .actions{display:flex;gap:10px;justify-content:flex-end;padding:12px 18px 18px}
+    .note{color:var(--muted);font-size:13px}
+    .alert{padding:10px 12px;border-radius:10px;margin-bottom:10px}
+    .alert.ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+    .alert.err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+
+    @media (max-width:680px){
+      .modal .grid{grid-template-columns:1fr}
+      .row{align-items:flex-start}
+    }
   </style>
 </head>
 <body>
-  <header class="container">
-    <div class="topnav">
-      <div class="brand">
-        <img src="/assets/logo.png" alt="IWC Logo" />
-        <div>Inner Wheel Club Hilden–Haan–Neandertal</div>
-      </div>
-      <span class="right"></span>
-      <a class="pill" href="index.html">Termine</a>
-      <a class="pill" href="about.html">Über uns</a>
-      <a class="pill" href="downloads.html">Downloads</a>
-      <a class="pill" href="admin/">Admin</a>
-    </div>
-  </header>
+  <div class="wrap">
+    <header>
+      <div class="logo" aria-hidden="true"></div>
+      <div class="brand">Inner Wheel Club Hilden–Haan–Neandertal</div>
+    </header>
 
-  <main class="container">
-    <div class="card">
-      <h1>Termine &amp; Veranstaltungen</h1>
+    <nav class="tabs" aria-label="Hauptnavigation">
+      <a class="tab" href="./index.html">Termine</a>
+      <a class="tab ghost" href="./ueber-uns.html">Über uns</a>
+      <a class="tab ghost" href="./downloads.html">Downloads</a>
+      <a class="tab ghost" href="./admin/">Admin</a>
+    </nav>
 
-      <!-- Tabs -->
-      <div class="tabs" id="scopeTabs">
-        <div class="tab" data-scope="upcoming">Kommende</div>
-        <div class="tab" data-scope="past">Vergangene</div>
-      </div>
+    <section>
+      <h2>Termine &amp; Veranstaltungen</h2>
 
-      <!-- Kategorie-Chips (Einfachauswahl) -->
-      <div class="chips" id="catChips">
-        <div class="chip" data-cat="clubmeeting">Clubmeetings</div>
-        <div class="chip" data-cat="private-charity">Private Charity</div>
-        <div class="chip" data-cat="club-charity">Club Charity</div>
-        <div class="right counter" id="counter">0 Termine</div>
+      <div class="controls" id="filters">
+        <button class="chip active" data-scope="upcoming">Kommende</button>
+        <button class="chip" data-scope="past">Vergangene</button>
+
+        <button class="chip" data-cat="clubmeeting">Clubmeetings</button>
+        <button class="chip" data-cat="private-charity">Private Charity</button>
+        <button class="chip" data-cat="club-charity">Club Charity</button>
+
+        <div class="counter" id="counter">0 Termine</div>
       </div>
 
-      <div class="list" id="list"></div>
+      <div id="list"></div>
 
-      <div style="padding:0 16px;">
-        <a class="btn ghost footerlink" href="/downloads.html">→ Zum Downloadbereich</a>
+      <div style="padding:0 2px;margin-top:18px">
+        <a class="btn ghost" href="./downloads.html">→ Zum Downloadbereich</a>
       </div>
-    </div>
-  </main>
+    </section>
+  </div>
 
-  <script>
-    // ======= Konfiguration =======
-    // Falls du ein *globales* Formular als Fallback nutzen willst (wenn rsvp_link leer ist):
-    const DEFAULT_RSVP_LINK = "https://forms.gle/DEIN-ECHTER-FORMULARLINK"; // <-- HIER EINMALIG ANPASSEN
-    const DATA_URL = "/content/events.json";
+  <!-- RSVP Modal -->
+  <div class="modal-backdrop" id="rsvpBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rsvpTitle">
+      <header>
+        <div style="font-weight:800;font-size:18px" id="rsvpTitle">Anmeldung</div>
+      </header>
+      <div class="content">
+        <div id="rsvpAlert" class="alert" style="display:none"></div>
 
-    // ======= State =======
-    let rawItems = [];
-    let scope = "upcoming";      // "upcoming" | "past"
-    let selectedCat = "";        // "", "clubmeeting" | "private-charity" | "club-charity"
+        <div class="note" id="rsvpEventNote"></div>
 
-    // ======= Helpers =======
-    const $  = (sel, c = document) => c.querySelector(sel);
-    const $$ = (sel, c = document) => Array.from(c.querySelectorAll(sel));
+        <form id="rsvpForm" autocomplete="on">
+          <input type="hidden" name="eventId" id="f_eventId" />
+          <input type="hidden" name="date" id="f_date" />
+          <input type="hidden" name="title" id="f_title" />
 
-    const todayISO = () => new Date().toISOString().slice(0,10); // YYYY-MM-DD (UTC)
-    function fmtDate(iso) {
-      if (!iso) return "";
-      const d = new Date(iso);
-      // sichere Fallbacks bei nur Datum „YYYY-MM-DD“
-      if (Number.isNaN(d.getTime()) && /^\d{4}-\d{2}-\d{2}$/.test(iso)) {
-        return new Date(iso+"T00:00:00").toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
-      }
-      return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
-    }
-    function startDateOnly(item) {
-      // wir vergleichen nur YYYY-MM-DD
-      const s = (item.start || "").slice(0,10);
-      return s || "";
-    }
-    function isUpcoming(item) {
-      const s = startDateOnly(item);
-      return s >= todayISO();
-    }
-    function byStartAsc(a,b){ return (a.start||"").localeCompare(b.start||""); }
-    function byStartDesc(a,b){ return (b.start||"").localeCompare(a.start||""); }
-
-    function signupHtmlFor(event) {
-      const needsSignup = event.require_signup === true || event.signup_required === true;
-      const rsvp = (event.rsvp_link && event.rsvp_link.trim())
-        ? event.rsvp_link.trim()
-        : DEFAULT_RSVP_LINK;
-
-      if (needsSignup) {
-        return `<a class="btn" href="${rsvp}" target="_blank" rel="noopener">Anmelden</a>`;
-      }
-      return `<span class="muted">Keine Anmeldung erforderlich.</span>`;
-    }
-
-    function categoryBadge(cat) {
-      if (!cat) return "";
-      const map = {
-        "clubmeeting": "Clubmeeting",
-        "private-charity": "Private Charity",
-        "club-charity": "Club Charity"
-      };
-      const label = map[cat] || cat;
-      return `<span class="badge">${label}</span>`;
-    }
-
-    function locationText(loc) {
-      return loc ? ` · ${loc}` : "";
-    }
-
-    // ======= Render =======
-    function render() {
-      let items = rawItems.slice();
-
-      // 1) SCOPE
-      if (scope === "upcoming") {
-        items = items.filter(isUpcoming).sort(byStartAsc);
-      } else {
-        items = items.filter(i => !isUpcoming(i)).sort(byStartDesc);
-      }
-
-      // 2) Kategorie (Einfachauswahl)
-      if (selectedCat) {
-        items = items.filter(i => (i.category || "").toLowerCase() === selectedCat);
-      }
-
-      // 3) Ausgabe
-      const html = items.map(ev => {
-        const date = fmtDate(ev.start);
-        const cat  = (ev.category || "").toLowerCase();
-
-        return `
-          <div class="event">
-            <h3>${ev.title || "Ohne Titel"}</h3>
-            <div class="row muted" style="margin-bottom:6px;">
-              <span>${date}${locationText(ev.location)}</span>
-              <span class="right">${categoryBadge(cat)}</span>
+          <div class="grid" style="margin-top:12px">
+            <div>
+              <label for="f_name">Name*</label>
+              <input id="f_name" name="name" required placeholder="Vor- und Nachname" />
             </div>
-            ${ev.description ? `<div class="muted" style="margin:8px 0 10px;">${ev.description}</div>` : ``}
-            <div class="row">
-              ${signupHtmlFor(ev)}
+            <div>
+              <label for="f_email">E-Mail</label>
+              <input id="f_email" name="email" inputmode="email" placeholder="optionale Bestätigung" />
+            </div>
+            <div>
+              <label for="f_guests">Anzahl Personen</label>
+              <select id="f_guests" name="guests">
+                <option>1</option><option>2</option><option>3</option><option>4</option>
+              </select>
+            </div>
+            <div>
+              <label for="f_note">Hinweis (optional)</label>
+              <input id="f_note" name="note" placeholder="z. B. Allergien, spätes Kommen…" />
             </div>
           </div>
-        `;
-      }).join("");
+        </form>
 
-      $("#list").innerHTML = html || `<div class="muted" style="padding:4px 2px 10px;">Keine Einträge gefunden.</div>`;
-      $("#counter").textContent = `${items.length} Termin${items.length===1?"":"e"}`;
-      updateUISelections();
-    }
+        <p class="note" style="margin-top:8px">Mit „Senden“ wird Ihre Anmeldung dem entsprechenden Termin zugeordnet und intern gespeichert.</p>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" id="rsvpCancel">Abbrechen</button>
+        <button class="btn" id="rsvpSubmit">Senden</button>
+      </div>
+    </div>
+  </div>
 
-    function updateUISelections() {
-      // Tabs
-      $$("#scopeTabs .tab").forEach(t => {
-        t.classList.toggle("active", t.dataset.scope === scope);
-      });
-      // Chips (Einfachauswahl)
-      $$("#catChips .chip").forEach(c => {
-        c.classList.toggle("active", c.dataset.cat === selectedCat);
-      });
-    }
+  <script>
+    // ========= Konfiguration =========
+    const DATA_URL = "/content/events.json";
 
-    // ======= Events (UI) =======
-    function bindUI() {
-      // Tabs
-      $$("#scopeTabs .tab").forEach(t => {
-        t.addEventListener("click", () => {
-          scope = t.dataset.scope;
-          render();
-        });
-      });
+    // ========= State =========
+    let rawItems = [];
+    let scope = "upcoming"; // "upcoming" | "past"
+    let activeCat = "";     // exklusiv: "", "clubmeeting" | "private-charity" | "club-charity"
 
-      // Kategorie-Chips: Einfachauswahl (erneutes Klicken = abwählen)
-      $$("#catChips .chip").forEach(chip => {
-        chip.addEventListener("click", () => {
-          const cat = chip.dataset.cat;
-          selectedCat = (selectedCat === cat) ? "" : cat;
-          render();
-        });
-      });
-    }
+    // ========= Utils =========
+    const $  = (s, c=document) => c.querySelector(s);
+    const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
 
-    // ======= Start =======
-    async function boot() {
-      bindUI();
-      // „Kommende“ als Standard aktiv setzen
-      scope = "upcoming";
-      selectedCat = "";
+    const todayISO = () => new Date().toISOString().slice(0,10);
+    const fmtDate = iso => {
+      if (!iso) return "";
+      const d = new Date(iso);
+      return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
+    };
+    const slug = s => (s||"")
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
-      // Cache-Busting
-      const url = DATA_URL + "?v=" + Date.now();
-      try {
-        const res = await fetch(url, { cache: "no-store" });
-        const data = await res.json();
+    const isUpcoming = it => (it.start||"").slice(0,10) >= todayISO();
+    const badgeLabel = cat => ({
+      "clubmeeting": "Clubmeeting",
+      "private-charity": "Private Charity",
+      "club-charity": "Club Charity"
+    }[cat] || "Termin");
 
-        // Erwartete Struktur: { items: [ ... ] }
-        rawItems = Array.isArray(data?.items) ? data.items : [];
-        render();
-      } catch (e) {
-        console.error("Fehler beim Laden der events.json:", e);
-        $("#list").innerHTML = `<div class="muted">Fehler beim Laden der Termine.</div>`;
+    // ========= Rendering =========
+    function render() {
+      const list = $("#list");
+      list.innerHTML = "";
+
+      let items = [...rawItems];
+
+      // Scope: kommende/verg.
+      items = items.filter(it => scope === "upcoming" ? isUpcoming(it) : !isUpcoming(it));
+
+      // Kategorie exklusiv
+      if (activeCat) items = items.filter(it => (it.category||"").toLowerCase() === activeCat);
+
+      // Sortierung
+      items.sort((a,b) => (a.start > b.start ? 1 : -1));
+      if (scope === "upcoming") items.reverse(); // neueste oben? -> wir möchten nächste bald oben
+      // Besser: aufsteigend für kommende
+      if (scope === "upcoming") items.sort((a,b)=> a.start.localeCompare(b.start));
+
+      // Counter
+      $("#counter").textContent = `${items.length} ${items.length === 1 ? "Termin" : "Termine"}`;
+
+      // Karten
+      for (const it of items) {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const title = document.createElement("h3");
+        title.className = "title";
+        title.textContent = it.title || "Ohne Titel";
+
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = badgeLabel((it.category||"").toLowerCase());
+        title.appendChild(badge);
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        const loc = it.location ? " · " + it.location : "";
+        meta.textContent = `${fmtDate(it.start)}${loc}`;
+
+        const desc = document.createElement("div");
+        desc.className = "desc";
+        desc.textContent = it.description || "";
+
+        const row = document.createElement("div");
+        row.className = "row";
+
+        if (it.require_signup) {
+          const btn = document.createElement("button");
+          btn.className = "btn";
+          btn.textContent = "Anmelden";
+          btn.addEventListener("click", () => openRsvp(it));
+          row.appendChild(btn);
+        } else {
+          const hint = document.createElement("div");
+          hint.className = "note";
+          hint.textContent = "Keine Anmeldung erforderlich.";
+          row.appendChild(hint);
+        }
+
+        card.appendChild(title);
+        card.appendChild(meta);
+        if (it.description) card.appendChild(desc);
+        card.appendChild(row);
+        list.appendChild(card);
       }
     }
 
+    // ========= Daten laden =========
+    async function boot() {
+      try {
+        const r = await fetch(DATA_URL, { cache: "no-store" });
+        const data = await r.json();
+        rawItems = Array.isArray(data?.items) ? data.items : [];
+      } catch (e) {
+        console.error("Fehler beim Laden:", e);
+        rawItems = [];
+      }
+      restoreFiltersFromURL();
+      render();
+    }
+
+    // ========= Filter-UI =========
+    $("#filters").addEventListener("click", (ev) => {
+      const el = ev.target.closest(".chip"); if (!el) return;
+
+      if (el.dataset.scope) {
+        // toggle scope; exklusiv
+        scope = el.dataset.scope;
+        $$(".chip[data-scope]").forEach(c => c.classList.toggle("active", c === el));
+      }
+
+      if (el.dataset.cat !== undefined) {
+        // Kategorie exklusiv
+        const cat = el.dataset.cat;
+        activeCat = (activeCat === cat) ? "" : cat;
+        $$(".chip[data-cat]").forEach(c => c.classList.toggle("active", c.dataset.cat === activeCat && activeCat!==""));
+      }
+
+      syncURL();
+      render();
+    });
+
+    function syncURL(){
+      const p = new URLSearchParams();
+      p.set("view", scope);
+      if (activeCat) p.set("cat", activeCat);
+      const u = location.pathname + "?" + p.toString();
+      history.replaceState({}, "", u);
+    }
+    function restoreFiltersFromURL(){
+      const q = new URLSearchParams(location.search);
+      scope = q.get("view") === "past" ? "past" : "upcoming";
+      activeCat = (q.get("cat")||"").toLowerCase();
+
+      // visuell setzen
+      $$(".chip[data-scope]").forEach(c => c.classList.toggle("active", c.dataset.scope === scope));
+      $$(".chip[data-cat]").forEach(c => c.classList.toggle("active", c.dataset.cat === activeCat && activeCat!==""));
+    }
+
+    // ========= RSVP Modal =========
+    const rsvpState = { item:null };
+
+    function openRsvp(item){
+      rsvpState.item = item;
+      const dateStr = (item.start||"").slice(0,10);
+      const id = `${dateStr}_${slug(item.title||"event")}`;
+
+      $("#rsvpTitle").textContent = `Anmeldung – ${item.title||"Termin"}`;
+      $("#rsvpEventNote").textContent = `${fmtDate(item.start)} · ${item.location||"Ort wird noch bekanntgegeben"}`;
+
+      $("#f_eventId").value = id;
+      $("#f_date").value = dateStr;
+      $("#f_title").value = item.title||"";
+
+      $("#f_name").value = "";
+      $("#f_email").value = "";
+      $("#f_guests").value = "1";
+      $("#f_note").value = "";
+
+      setAlert(""); // hide
+      $("#rsvpSubmit").disabled = false;
+
+      $("#rsvpBackdrop").style.display = "grid";
+      $("#f_name").focus();
+    }
+
+    function closeRsvp(){
+      $("#rsvpBackdrop").style.display = "none";
+    }
+
+    function setAlert(msg, type=""){
+      const box = $("#rsvpAlert");
+      if (!msg){ box.style.display="none"; return; }
+      box.textContent = msg;
+      box.className = "alert " + (type==="err" ? "err" : "ok");
+      box.style.display = "";
+    }
+
+    $("#rsvpCancel").addEventListener("click",(e)=>{e.preventDefault(); closeRsvp();});
+    $("#rsvpBackdrop").addEventListener("click",(e)=>{ if (e.target.id==="rsvpBackdrop") closeRsvp(); });
+
+    $("#rsvpSubmit").addEventListener("click", async (e)=>{
+      e.preventDefault();
+      const name = $("#f_name").value.trim();
+      const email = $("#f_email").value.trim();
+      const guests = parseInt($("#f_guests").value||"1",10);
+      const note = $("#f_note").value.trim();
+      const eventId = $("#f_eventId").value;
+      const date = $("#f_date").value;
+      const title = $("#f_title").value;
+
+      if (!name){ setAlert("Bitte Namen angeben.", "err"); $("#f_name").focus(); return; }
+
+      $("#rsvpSubmit").disabled = true;
+      setAlert("");
+
+      try{
+        const res = await fetch("/api/rsvp", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({ eventId, title, date, name, email, guests, note })
+        });
+        const json = await res.json();
+
+        if (!res.ok || !json.ok){
+          throw new Error(json?.error || `HTTP ${res.status}`);
+        }
+
+        setAlert("Vielen Dank! Ihre Anmeldung wurde gespeichert.", "ok");
+        setTimeout(()=> closeRsvp(), 1200);
+      }catch(err){
+        console.error(err);
+        setAlert("Leider ist ein Fehler aufgetreten. Bitte später erneut versuchen.", "err");
+        $("#rsvpSubmit").disabled = false;
+      }
+    });
+
+    // Start
     boot();
   </script>
 </body>
