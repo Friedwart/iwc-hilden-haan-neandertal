@@ -1,95 +1,114 @@
 // api/rsvp.js
-// Speichert RSVP-Einträge in content/rsvps.json via GitHub API (wie save-events.js)
+// Speichert RSVP-Einträge in content/rsvp.json via GitHub API
 
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  // CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  if (req.method === "OPTIONS") return res.status(204).end();
-  if (req.method !== "POST") return res.status(405).json({ ok: false, error: "Method not allowed" });
+  // --- Healthcheck: muss VOR der Method-Checks kommen ---
+  if (req.method === 'GET' && (req.query?.health || req.query?.health === '1')) {
+    return res.status(200).json({ ok: true, message: 'rsvp alive' });
+  }
+
+  if (req.method === 'OPTIONS') return res.status(204).end();
+  if (req.method !== 'POST') {
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  }
 
   try {
+    // Body parsen
+    const body = req.body ? req.body : await parseNodeRequestBody(req);
     const {
       eventId,       // z.B. "2025-12-05_weihnachtsmarkt-roncalli"
-      title,         // Anzeigezwecke
-      date,          // ISO (YYYY-MM-DD)
-      name,          // Pflicht
-      email,         // optional
-      guests = 1,    // optional
-      note = ""      // optional
-    } = await req.json?.() || await parseNodeRequestBody(req);
+      title = '',
+      date  = '',
+      name,
+      email = '',
+      guests = 1,
+      note = ''
+    } = body || {};
 
     if (!eventId || !name) {
-      return res.status(400).json({ ok: false, error: "Missing eventId or name" });
+      return res.status(400).json({ ok: false, error: 'Missing eventId or name' });
     }
 
-    const repo = process.env.VERCEL_GIT_REPO_SLUG || "iwc-hilden-haan-neandertal";
-    const owner = process.env.VERCEL_GIT_REPO_OWNER || "Friedwart";
-    const filePath = "content/rsvps.json";
-    const token = process.env.GITHUB_TOKEN;
+    // 1) RSVP-Datei aus Repo lesen
+    const owner = 'Friedwart';
+    const repo  = 'iwc-hilden-haan-neandertal';
+    const path  = 'content/rsvp.json'; // <— Datei liegt hier
+    const gh    = await ghGetFile(owner, repo, path);
+    const items = gh.json?.items ?? [];
 
-    if (!token) return res.status(500).json({ ok: false, error: "GITHUB_TOKEN missing" });
-
-    // 1) rsvps.json lesen
-    const fileResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
-      headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" }
+    // 2) Neuen Eintrag anhängen
+    const nowISO = new Date().toISOString();
+    items.push({
+      id: `${eventId}__${nowISO}`,
+      eventId,
+      title,
+      date,
+      name,
+      email,
+      guests,
+      note,
+      createdAt: nowISO
     });
 
-    if (!fileResp.ok) {
-      const txt = await fileResp.text();
-      return res.status(500).json({ ok: false, error: "Read rsvps.json failed", detail: txt });
-    }
+    // 3) Datei zurückschreiben
+    const content = JSON.stringify({ items }, null, 2) + '\n';
+    await ghPutFile(owner, repo, path, content, gh.sha, 'Add RSVP entry via API');
 
-    const fileJson = await fileResp.json();
-    const sha = fileJson.sha;
-    const current = JSON.parse(Buffer.from(fileJson.content, "base64").toString("utf-8"));
-
-    // 2) neuen Eintrag anhängen
-    const now = new Date().toISOString();
-    current.items.push({
-      id: `${eventId}__${now}`,
-      eventId, title, date, name, email, guests,
-      note, created_at: now
-    });
-
-    // 3) zurückschreiben
-    const newContentB64 = Buffer.from(JSON.stringify(current, null, 2), "utf-8").toString("base64");
-
-    const commitResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github+json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: "Add RSVP via /api/rsvp",
-        content: newContentB64,
-        sha
-      })
-    });
-
-    if (!commitResp.ok) {
-      const txt = await commitResp.text();
-      return res.status(500).json({ ok: false, error: "Commit failed", detail: txt });
-    }
-
-    return res.status(200).json({ ok: true, message: "RSVP saved" });
-  } catch (e) {
-    return res.status(500).json({ ok: false, error: e?.message || String(e) });
+    return res.status(200).json({ ok: true, saved: { eventId, name, guests } });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ ok: false, error: String(err?.message || err) });
   }
 }
 
-// Helfer für Node-Umgebung (Vercel) ohne req.json()
+/* ---------------- Helpers ---------------- */
+
 async function parseNodeRequestBody(req) {
   return await new Promise((resolve, reject) => {
-    let data = "";
-    req.on("data", chunk => (data += chunk));
-    req.on("end", () => {
-      try { resolve(JSON.parse(data || "{}")); }
+    let data = '';
+    req.on('data', chunk => (data += chunk));
+    req.on('end', () => {
+      try { resolve(data ? JSON.parse(data) : {}); }
       catch (e) { reject(e); }
     });
-    req.on("error", reject);
+    req.on('error', reject);
   });
+}
+
+const GH_BASE = 'https://api.github.com';
+const GH_TOKEN = process.env.GITHUB_TOKEN;
+
+async function ghGetFile(owner, repo, path) {
+  const url = `${GH_BASE}/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`;
+  const r = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${GH_TOKEN}`, 'Accept': 'application/vnd.github+json' }
+  });
+  if (!r.ok) throw new Error(`GitHub GET failed: ${r.status} ${await r.text()}`);
+  const json = await r.json();
+  const content = Buffer.from(json.content, 'base64').toString('utf8');
+  return { sha: json.sha, json: JSON.parse(content) };
+}
+
+async function ghPutFile(owner, repo, path, rawContent, sha, message) {
+  const url = `${GH_BASE}/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`;
+  const body = {
+    message,
+    content: Buffer.from(rawContent, 'utf8').toString('base64'),
+    sha
+  };
+  const r = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${GH_TOKEN}`,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(`GitHub PUT failed: ${r.status} ${await r.text()}`);
 }
