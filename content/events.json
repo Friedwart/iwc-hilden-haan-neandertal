@@ -53,7 +53,7 @@
       "description": "",
       "rsvp_link": "",
       "capacity": 42,
-      "require_signup": false
+      "require_signup": true
     },
     {
       "title": "Zweiter Test-Titel 🍓",
@@ -64,7 +64,7 @@
       "description": "2. Testbeschreibung❤️",
       "rsvp_link": "",
       "capacity": 10,
-      "require_signup": false
+      "require_signup": true
     }
   ]
 }
