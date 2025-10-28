@@ -1,34 +1,26 @@
 {
   "items": [
     {
-      "title": "Test Vergangener Termin",
+      "title": "Vergangener Termin",
       "category": "organisatorisches",
       "start": "2025-06-10T00:00:00",
       "end": "",
       "location": "Testort",
       "description": "Dieser Termin ist vergangen 😅",
       "rsvp_link": "",
-      "capacity": 5
+      "capacity": 5,
+      "require_signup": false
     },
     {
-      "title": "Zweiter Test-Titel 🍓",
+      "title": "👻 TEST",
       "category": "private-charity",
-      "start": "2026-05-06T00:00:00",
+      "start": "2025-10-28",
       "end": "",
-      "location": "Testort",
-      "description": "2. Testbeschreibung❤️",
+      "location": "",
+      "description": "TESTTEXT Literatur umfasst alle veröffentlichten Schriften, sowohl in erfundener (\"Belletristik\") als auch in sachlicher Form (\"Sachtexte\"). Ursprünglich bedeutete \"Literatur\" Wissenschaft oder Schrifttum im Allgemeinen, wird heute aber oft enger als \"schöne Literatur\" (Dichtungen, Romane, Dramen etc.) im Gegensatz zu Sachtexten verstanden. Ein wichtiges Kriterium ist der bewusste und kunstvolle Umgang mit der Sprache.",
       "rsvp_link": "",
-      "capacity": 10
-    },
-    {
-      "title": "Test-Titel 🎄",
-      "category": "clubmeeting",
-      "start": "2026-02-01T00:00:00",
-      "end": "",
-      "location": "Testort",
-      "description": "",
-      "rsvp_link": "",
-      "capacity": 42
+      "capacity": 0,
+      "require_signup": false
     },
     {
       "title": "Weihnachtsmarkt Roncalli",
@@ -38,7 +30,8 @@
       "location": "Köln, Roncalliplatz",
       "description": "Gemeinsamer Besuch, Glühweinstand, Spendenaktion.",
       "rsvp_link": "https://forms.gle/DEIN-ANMELDELINK",
-      "capacity": 40
+      "capacity": 40,
+      "require_signup": false
     },
     {
       "title": "Monatsmeeting Dezember",
@@ -48,7 +41,30 @@
       "location": "Haan, Clubraum",
       "description": "Jahresrückblick und Planung.",
       "rsvp_link": "",
-      "capacity": 50
+      "capacity": 50,
+      "require_signup": false
+    },
+    {
+      "title": "Test-Titel 🎄",
+      "category": "clubmeeting",
+      "start": "2026-02-01T00:00:00",
+      "end": "",
+      "location": "Testort",
+      "description": "",
+      "rsvp_link": "",
+      "capacity": 42,
+      "require_signup": false
+    },
+    {
+      "title": "Zweiter Test-Titel 🍓",
+      "category": "private-charity",
+      "start": "2026-05-06T00:00:00",
+      "end": "",
+      "location": "Testort",
+      "description": "2. Testbeschreibung❤️",
+      "rsvp_link": "",
+      "capacity": 10,
+      "require_signup": false
     }
   ]
 }
