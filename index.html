@@ -1,229 +1,251 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Inner Wheel Club Hilden–Haan–Neandertal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Inner Wheel Club Hilden–Haan–Neandertal – Termine</title>
+  <link rel="icon" href="/assets/logo.png" />
   <style>
-    :root { color-scheme: light; }
-    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:#f7f7fb; color:#0f172a; margin:0; }
-    .top { max-width:1100px; margin:0 auto; padding:18px 16px; display:flex; align-items:center; gap:12px; }
-    .brand { display:flex; align-items:center; gap:10px; font-weight:800; }
-    .brand img { width:28px; height:28px; }
-    .nav { margin-left:auto; display:flex; gap:10px; }
-    .nav a { text-decoration:none; background:#e7efff; color:#0f172a; padding:8px 12px; border-radius:999px; font-weight:600; border:1px solid #d0defe; }
-    .main { max-width:1100px; margin:0 auto 80px; padding: 0 16px; }
-    .panel { background:#fff; border:1px solid #e2e8f0; border-radius:16px; box-shadow:0 2px 0 rgba(0,0,0,.02); margin-top:14px; }
-    .panel h2 { font-size:26px; padding:18px 18px 8px; margin:0; }
-    .filters { display:flex; gap:8px; flex-wrap:wrap; padding:0 16px 12px; }
-    .chip { border:1px solid #cbd5e1; background:#f8fafc; color:#0f172a; border-radius:999px; padding:8px 12px; font-weight:700; cursor:pointer; }
-    .chip.active { background:#2b6df6; border-color:#2b6df6; color:#fff; }
-    .list { padding: 6px 2px 12px; }
-    .item { padding:16px; border-top:1px solid #eef2f7; }
-    .item:first-child { border-top:none; }
-    .title { font-size:18px; font-weight:800; margin:0 0 6px; }
-    .meta { font-size:14px; color:#334155; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .meta .tag { font-size:12px; padding:4px 8px; border-radius:999px; background:#eef2ff; color:#1e40af; border:1px solid #c7d2fe; }
-    .desc { margin-top:8px; color:#0f172a; }
-    .row { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-    .btn { appearance:none; border:1px solid #2563eb; background:#2563eb; color:#fff; padding:8px 12px; border-radius:10px; font-weight:700; text-decoration:none; }
-    .btn[disabled] { opacity:.6; pointer-events:none; }
-    .muted { color:#64748b; }
-    .count { margin-left:auto; color:#64748b; font-size:14px; padding-right:18px; }
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#0b1020;
+      --muted:#6b7280;
+      --brand:#3b82f6;
+      --brand-600:#2563eb;
+      --chip:#eef2ff;
+      --chip-on:#1f2937;
+      --line:#e5e7eb;
+      --ok:#16a34a;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";line-height:1.45}
+    a{color:var(--brand);text-decoration:none}
+    .container{max-width:980px;margin:0 auto;padding:16px}
+    .topnav{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:6px 0 14px}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+    .brand img{width:28px;height:28px;border-radius:50%}
+    .pill{padding:8px 14px;border-radius:999px;background:#e9ecf7;color:#0f172a;display:inline-block}
+    .pill.primary{background:var(--brand);color:#fff}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 10px}
+    .tab{padding:8px 12px;border-radius:999px;background:#eef2f7;color:#111827;border:1px solid transparent;cursor:pointer;user-select:none}
+    .tab.active{background:#dbeafe;border-color:#bfdbfe}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 2px}
+    .chip{padding:7px 12px;border-radius:999px;background:var(--chip);color:#111827;cursor:pointer;border:1px solid transparent;user-select:none}
+    .chip.active{background:#e2e8f0;border-color:#cbd5e1}
+    .muted{color:var(--muted)}
+    .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.06);padding:18px}
+    h1{font-size:24px;margin:4px 0 6px}
+    .list{display:flex;flex-direction:column;gap:16px;margin-top:12px}
+    .event{background:#fff;padding:16px;border-radius:12px;border:1px solid var(--line)}
+    .event h3{margin:0 0 6px;font-size:18px}
+    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .badge{font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#374151;border:1px solid #dbeafe}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid var(--brand-600);color:#fff;background:var(--brand);cursor:pointer}
+    .btn:focus,.btn:hover{background:var(--brand-600)}
+    .btn.ghost{background:#fff;color:var(--brand-600)}
+    .footerlink{display:inline-block;margin-top:8px}
+    .right{margin-left:auto}
+    .counter{color:var(--muted);font-size:14px}
   </style>
 </head>
 <body>
-  <header class="top">
-    <div class="brand">
-      <img src="/assets/logo.png" alt="" />
-      <div>Inner Wheel Club Hilden–Haan–Neandertal</div>
+  <header class="container">
+    <div class="topnav">
+      <div class="brand">
+        <img src="/assets/logo.png" alt="IWC Logo" />
+        <div>Inner Wheel Club Hilden–Haan–Neandertal</div>
+      </div>
+      <span class="right"></span>
+      <a class="pill" href="index.html">Termine</a>
+      <a class="pill" href="about.html">Über uns</a>
+      <a class="pill" href="downloads.html">Downloads</a>
+      <a class="pill" href="admin/">Admin</a>
     </div>
-    <nav class="nav">
-      <a href="/">Termine</a>
-      <a href="#ueber-uns">Über uns</a>
-      <a href="/downloads.html">Downloads</a>
-      <a href="/admin/">Admin</a>
-    </nav>
   </header>
 
-  <main class="main">
-    <section class="panel">
-      <h2>Termine & Veranstaltungen</h2>
+  <main class="container">
+    <div class="card">
+      <h1>Termine &amp; Veranstaltungen</h1>
 
-      <div class="filters" id="filterBar">
-        <button class="chip active" data-scope="upcoming">Kommende</button>
-        <button class="chip" data-scope="past">Vergangene</button>
-        <span class="chip" data-cat="clubmeeting">Clubmeetings</span>
-        <span class="chip" data-cat="private-charity">Private Charity</span>
-        <span class="chip" data-cat="club-charity">Club Charity</span>
-        <span class="count" id="count"></span>
+      <!-- Tabs -->
+      <div class="tabs" id="scopeTabs">
+        <div class="tab" data-scope="upcoming">Kommende</div>
+        <div class="tab" data-scope="past">Vergangene</div>
+      </div>
+
+      <!-- Kategorie-Chips (Einfachauswahl) -->
+      <div class="chips" id="catChips">
+        <div class="chip" data-cat="clubmeeting">Clubmeetings</div>
+        <div class="chip" data-cat="private-charity">Private Charity</div>
+        <div class="chip" data-cat="club-charity">Club Charity</div>
+        <div class="right counter" id="counter">0 Termine</div>
       </div>
 
       <div class="list" id="list"></div>
-      <div style="padding: 0 16px 16px;">
-        <a class="btn" href="/downloads.html">→ Zum Downloadbereich</a>
+
+      <div style="padding:0 16px;">
+        <a class="btn ghost footerlink" href="/downloads.html">→ Zum Downloadbereich</a>
       </div>
-    </section>
+    </div>
   </main>
 
   <script>
     // ======= Konfiguration =======
-    // Trage hier den Basis-Link zu deinem Google-Formular ein.
-    // Die Seite hängt automatisch ?event=<Titel>&date=<YYYY-MM-DD> an.
-    const RSVP_BASE_URL = "https://example.com/forms/rsvp"; // <- HIER EINMALIG ANPASSEN
-
+    // Falls du ein *globales* Formular als Fallback nutzen willst (wenn rsvp_link leer ist):
+    const DEFAULT_RSVP_LINK = "https://forms.gle/DEIN-ECHTER-FORMULARLINK"; // <-- HIER EINMALIG ANPASSEN
     const DATA_URL = "/content/events.json";
 
-    // ======= State / Filter =======
+    // ======= State =======
     let rawItems = [];
-    let scope = "upcoming"; // "upcoming" | "past"
-    let cats = new Set();   // ausgewählte Kategorien (leer = alle)
+    let scope = "upcoming";      // "upcoming" | "past"
+    let selectedCat = "";        // "", "clubmeeting" | "private-charity" | "club-charity"
 
     // ======= Helpers =======
-    const $ = (s, c=document)=> c.querySelector(s);
-    const $$ = (s, c=document)=> Array.from(c.querySelectorAll(s));
-    const fmtDate = (iso) => {
+    const $  = (sel, c = document) => c.querySelector(sel);
+    const $$ = (sel, c = document) => Array.from(c.querySelectorAll(sel));
+
+    const todayISO = () => new Date().toISOString().slice(0,10); // YYYY-MM-DD (UTC)
+    function fmtDate(iso) {
       if (!iso) return "";
       const d = new Date(iso);
-      return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
-    };
-    const todayISO = () => new Date().toISOString().slice(0,10);
-
-    function isUpcoming(it) {
-      const d = (it.start||"").slice(0,10);
-      return d >= todayISO();
-    }
-
-    function visible(items){
-      // Scope
-      let res = items.filter(it => scope === "upcoming" ? isUpcoming(it) : !isUpcoming(it));
-      // Kategorien
-      if (cats.size) res = res.filter(it => cats.has(it.category));
-      // Sortierung
-      res.sort((a,b)=> (a.start||"").localeCompare(b.start||""));
-      if (scope === "past") res.reverse();
-      return res;
-    }
-
-    function badge(label){
-      const span = document.createElement("span");
-      span.className = "tag";
-      span.textContent = label;
-      return span;
-    }
-
-    function buildRSVPLink(it){
-      // 1) Falls vorhandener rsvp_link (Legacy) → benutzen
-      if (it.rsvp_link && it.rsvp_link.trim()) return it.rsvp_link.trim();
-      // 2) Falls keine Anmeldung erforderlich → kein Link
-      if (!it.rsvp_required) return "";
-      // 3) Sonst aus Basis + Parametern generieren
-      if (!RSVP_BASE_URL) return ""; // kein Basislink gesetzt → kein Button
-      const u = new URL(RSVP_BASE_URL, location.origin);
-      u.searchParams.set("event", it.title || "");
-      u.searchParams.set("date", (it.start||"").slice(0,10));
-      return u.toString();
-    }
-
-    function render(){
-      const list = $("#list");
-      list.innerHTML = "";
-      const items = visible(rawItems);
-
-      $("#count").textContent = `${items.length} Termin${items.length===1?"":"e"}`;
-
-      items.forEach(it=>{
-        const wrap = document.createElement("div");
-        wrap.className = "item";
-
-        const row = document.createElement("div");
-        row.className = "row";
-
-        const left = document.createElement("div");
-        const title = document.createElement("h3"); title.className="title"; title.textContent = it.title || "—";
-        const meta = document.createElement("div"); meta.className="meta";
-        meta.append(
-          document.createTextNode(fmtDate(it.start)),
-          document.createTextNode(" · "),
-          document.createTextNode(it.location || "—")
-        );
-        // Kategorie-Badge
-        const catMap = {
-          "clubmeeting": "Clubmeeting",
-          "private-charity": "Private Charity",
-          "club-charity": "Club Charity"
-        };
-        meta.append(badge(catMap[it.category] || it.category || "Kategorie"));
-        left.append(title, meta);
-
-        if (it.description) {
-          const d = document.createElement("div");
-          d.className = "desc";
-          d.textContent = it.description;
-          left.appendChild(d);
-        }
-
-        const right = document.createElement("div");
-        const rsvpURL = buildRSVPLink(it);
-        if (rsvpURL) {
-          const btn = document.createElement("a");
-          btn.className = "btn";
-          btn.href = rsvpURL;
-          btn.target = "_blank";
-          btn.rel="noopener";
-          btn.textContent = "Anmelden";
-          right.appendChild(btn);
-        } else {
-          const m = document.createElement("div");
-          m.className = "muted";
-          m.textContent = it.rsvp_required ? "Anmeldung nicht verfügbar." : "Keine Anmeldung erforderlich.";
-          right.appendChild(m);
-        }
-
-        row.append(left, right);
-        wrap.appendChild(row);
-        list.appendChild(wrap);
-      });
-    }
-
-    function attachFilters(){
-      // Scope-Toggle
-      $$('.chip[data-scope]').forEach(ch=>{
-        ch.addEventListener('click', ()=>{
-          $$('.chip[data-scope]').forEach(x=> x.classList.remove('active'));
-          ch.classList.add('active');
-          scope = ch.dataset.scope;
-          render();
-        });
-      });
-
-      // Kategorien
-      $$('.chip[data-cat]').forEach(ch=>{
-        ch.addEventListener('click', ()=>{
-          const cat = ch.dataset.cat;
-          if (cats.has(cat)) { cats.delete(cat); ch.classList.remove('active'); }
-          else { cats.add(cat); ch.classList.add('active'); }
-          render();
-        });
-      });
-    }
-
-    async function boot(){
-      try {
-        const res = await fetch(DATA_URL, { cache: "no-store" });
-        const data = await res.json();
-        // Normalize + sichere Defaults
-        rawItems = (data.items || []).map(e => ({
-          ...e,
-          rsvp_required: typeof e.rsvp_required === "boolean" ? e.rsvp_required : !!(e.rsvp_link && e.rsvp_link.trim())
-        }));
-      } catch(e){
-        rawItems = [];
-        console.error(e);
+      // sichere Fallbacks bei nur Datum „YYYY-MM-DD“
+      if (Number.isNaN(d.getTime()) && /^\d{4}-\d{2}-\d{2}$/.test(iso)) {
+        return new Date(iso+"T00:00:00").toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
       }
-      attachFilters();
-      render();
+      return d.toLocaleDateString("de-DE", { day:"2-digit", month:"2-digit", year:"numeric" });
+    }
+    function startDateOnly(item) {
+      // wir vergleichen nur YYYY-MM-DD
+      const s = (item.start || "").slice(0,10);
+      return s || "";
+    }
+    function isUpcoming(item) {
+      const s = startDateOnly(item);
+      return s >= todayISO();
+    }
+    function byStartAsc(a,b){ return (a.start||"").localeCompare(b.start||""); }
+    function byStartDesc(a,b){ return (b.start||"").localeCompare(a.start||""); }
+
+    function signupHtmlFor(event) {
+      const needsSignup = event.require_signup === true || event.signup_required === true;
+      const rsvp = (event.rsvp_link && event.rsvp_link.trim())
+        ? event.rsvp_link.trim()
+        : DEFAULT_RSVP_LINK;
+
+      if (needsSignup) {
+        return `<a class="btn" href="${rsvp}" target="_blank" rel="noopener">Anmelden</a>`;
+      }
+      return `<span class="muted">Keine Anmeldung erforderlich.</span>`;
+    }
+
+    function categoryBadge(cat) {
+      if (!cat) return "";
+      const map = {
+        "clubmeeting": "Clubmeeting",
+        "private-charity": "Private Charity",
+        "club-charity": "Club Charity"
+      };
+      const label = map[cat] || cat;
+      return `<span class="badge">${label}</span>`;
+    }
+
+    function locationText(loc) {
+      return loc ? ` · ${loc}` : "";
+    }
+
+    // ======= Render =======
+    function render() {
+      let items = rawItems.slice();
+
+      // 1) SCOPE
+      if (scope === "upcoming") {
+        items = items.filter(isUpcoming).sort(byStartAsc);
+      } else {
+        items = items.filter(i => !isUpcoming(i)).sort(byStartDesc);
+      }
+
+      // 2) Kategorie (Einfachauswahl)
+      if (selectedCat) {
+        items = items.filter(i => (i.category || "").toLowerCase() === selectedCat);
+      }
+
+      // 3) Ausgabe
+      const html = items.map(ev => {
+        const date = fmtDate(ev.start);
+        const cat  = (ev.category || "").toLowerCase();
+
+        return `
+          <div class="event">
+            <h3>${ev.title || "Ohne Titel"}</h3>
+            <div class="row muted" style="margin-bottom:6px;">
+              <span>${date}${locationText(ev.location)}</span>
+              <span class="right">${categoryBadge(cat)}</span>
+            </div>
+            ${ev.description ? `<div class="muted" style="margin:8px 0 10px;">${ev.description}</div>` : ``}
+            <div class="row">
+              ${signupHtmlFor(ev)}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      $("#list").innerHTML = html || `<div class="muted" style="padding:4px 2px 10px;">Keine Einträge gefunden.</div>`;
+      $("#counter").textContent = `${items.length} Termin${items.length===1?"":"e"}`;
+      updateUISelections();
+    }
+
+    function updateUISelections() {
+      // Tabs
+      $$("#scopeTabs .tab").forEach(t => {
+        t.classList.toggle("active", t.dataset.scope === scope);
+      });
+      // Chips (Einfachauswahl)
+      $$("#catChips .chip").forEach(c => {
+        c.classList.toggle("active", c.dataset.cat === selectedCat);
+      });
+    }
+
+    // ======= Events (UI) =======
+    function bindUI() {
+      // Tabs
+      $$("#scopeTabs .tab").forEach(t => {
+        t.addEventListener("click", () => {
+          scope = t.dataset.scope;
+          render();
+        });
+      });
+
+      // Kategorie-Chips: Einfachauswahl (erneutes Klicken = abwählen)
+      $$("#catChips .chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          const cat = chip.dataset.cat;
+          selectedCat = (selectedCat === cat) ? "" : cat;
+          render();
+        });
+      });
+    }
+
+    // ======= Start =======
+    async function boot() {
+      bindUI();
+      // „Kommende“ als Standard aktiv setzen
+      scope = "upcoming";
+      selectedCat = "";
+
+      // Cache-Busting
+      const url = DATA_URL + "?v=" + Date.now();
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        const data = await res.json();
+
+        // Erwartete Struktur: { items: [ ... ] }
+        rawItems = Array.isArray(data?.items) ? data.items : [];
+        render();
+      } catch (e) {
+        console.error("Fehler beim Laden der events.json:", e);
+        $("#list").innerHTML = `<div class="muted">Fehler beim Laden der Termine.</div>`;
+      }
     }
 
     boot();
