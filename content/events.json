@@ -9,7 +9,7 @@
       "description": "Dieser Termin ist vergangen 😅",
       "rsvp_link": "",
       "capacity": 5,
-      "require_signup": false
+      "require_signup": true
     },
     {
       "title": "👻 TEST",
@@ -20,7 +20,7 @@
       "description": "TESTTEXT Literatur umfasst alle veröffentlichten Schriften, sowohl in erfundener (\"Belletristik\") als auch in sachlicher Form (\"Sachtexte\"). Ursprünglich bedeutete \"Literatur\" Wissenschaft oder Schrifttum im Allgemeinen, wird heute aber oft enger als \"schöne Literatur\" (Dichtungen, Romane, Dramen etc.) im Gegensatz zu Sachtexten verstanden. Ein wichtiges Kriterium ist der bewusste und kunstvolle Umgang mit der Sprache.",
       "rsvp_link": "",
       "capacity": 0,
-      "require_signup": false
+      "require_signup": true
     },
     {
       "title": "Weihnachtsmarkt Roncalli",
@@ -31,7 +31,7 @@
       "description": "Gemeinsamer Besuch, Glühweinstand, Spendenaktion.",
       "rsvp_link": "https://forms.gle/DEIN-ANMELDELINK",
       "capacity": 40,
-      "require_signup": false
+      "require_signup": true
     },
     {
       "title": "Monatsmeeting Dezember",
@@ -42,7 +42,7 @@
       "description": "Jahresrückblick und Planung.",
       "rsvp_link": "",
       "capacity": 50,
-      "require_signup": false
+      "require_signup": true
     },
     {
       "title": "Test-Titel 🎄",
@@ -53,7 +53,7 @@
       "description": "",
       "rsvp_link": "",
       "capacity": 42,
-      "require_signup": false
+      "require_signup": true
     },
     {
       "title": "Zweiter Test-Titel 🍓",
