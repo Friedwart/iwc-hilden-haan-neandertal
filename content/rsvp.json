@@ -10,6 +10,17 @@
       "guests": 1,
       "note": "Ich freue mich auf den Abend!",
       "createdAt": "2025-10-28T13:14:58.056Z"
+    },
+    {
+      "id": "2025-11-11_ameldung-testen__2025-10-28T14:01:05.640Z",
+      "eventId": "2025-11-11_ameldung-testen",
+      "title": "🤓 Ameldung testen",
+      "date": "2025-11-11",
+      "name": "Susi Schön",
+      "email": "susanneschoeneberg@t-online.de",
+      "guests": 1,
+      "note": "Komme 10 Min später",
+      "createdAt": "2025-10-28T14:01:05.640Z"
     }
   ]
 }
