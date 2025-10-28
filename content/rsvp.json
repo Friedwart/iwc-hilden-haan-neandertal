@@ -32,6 +32,17 @@
       "guests": 2,
       "note": "TEST Bestätigungsmail",
       "createdAt": "2025-10-28T14:25:49.116Z"
+    },
+    {
+      "id": "2025-11-11_ameldung-testen__2025-10-28T14:41:40.872Z",
+      "eventId": "2025-11-11_ameldung-testen",
+      "title": "🤓 Ameldung testen",
+      "date": "2025-11-11",
+      "name": "Susi Schön",
+      "email": "susanneschoeneberg@t-online.de",
+      "guests": 1,
+      "note": "Komme 10 Min später",
+      "createdAt": "2025-10-28T14:41:40.875Z"
     }
   ]
 }
