@@ -1,6 +1,17 @@
 {
   "items": [
     {
+      "title": "Test ohne Datum",
+      "category": "club-charity",
+      "start": "",
+      "end": "",
+      "location": "bei Susanne S.",
+      "description": "ohne Datum",
+      "rsvp_link": "",
+      "capacity": 15,
+      "require_signup": false
+    },
+    {
       "title": "Test vergangener Termin",
       "category": "private-charity",
       "start": "2025-09-03T00:00:00",
