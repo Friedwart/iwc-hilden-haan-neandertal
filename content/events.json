@@ -34,8 +34,8 @@
       "require_signup": true
     },
     {
-      "title": "Weihnachtsmarkt Roncalli",
-      "category": "club-charity",
+      "title": "Weihnachtsmarkt Roncalli (Event)",
+      "category": "clubmeeting",
       "start": "2025-12-05T17:00:00",
       "end": "2025-12-05T20:00:00",
       "location": "Köln, Roncalliplatz",
@@ -56,7 +56,7 @@
       "require_signup": true
     },
     {
-      "title": "Test-Titel 🎄",
+      "title": "Test Club Charity BASAR🎄",
       "category": "club-charity",
       "start": "2026-02-01T00:00:00",
       "end": "",
@@ -64,17 +64,6 @@
       "description": "",
       "rsvp_link": "",
       "capacity": 42,
-      "require_signup": true
-    },
-    {
-      "title": "Zweiter Test-Titel 🍓",
-      "category": "private-charity",
-      "start": "2026-05-06T00:00:00",
-      "end": "",
-      "location": "Testort",
-      "description": "2. Testbeschreibung❤️",
-      "rsvp_link": "",
-      "capacity": 10,
       "require_signup": true
     }
   ]
