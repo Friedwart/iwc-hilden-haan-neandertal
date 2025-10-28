@@ -10,6 +10,17 @@
       "rsvp_link": "",
       "capacity": 10,
       "require_signup": true
+    },
+    {
+      "title": "Helferliste BASAR",
+      "category": "club-charity",
+      "start": "2025-11-15T00:00:00",
+      "end": "",
+      "location": "Bürgerhaus Hilden",
+      "description": "NEUE LISTE! Bitte tragt Euch (nochmal) hier ein, ob Ihr bei unserem Basar helfen könnt. Schreibt in das Feld Notizen ggf. von wann bis wann sowie Eure Präferenzen (Waffelstand, Second Hand, Kuchentheke) etc. Bei den Zeiten z.B.: ganztags, vormittags (9-12) oder nachmittags (12-ca 16.00). Für weitere Fragen steht unsere Basarbeauftragte Constanze zur Verfügung. 😍",
+      "rsvp_link": "",
+      "capacity": 40,
+      "require_signup": true
     }
   ]
 }
