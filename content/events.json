@@ -2,7 +2,7 @@
   "items": [
     {
       "title": "Vergangener Termin",
-      "category": "organisatorisches",
+      "category": "clubmeeting",
       "start": "2025-06-10T00:00:00",
       "end": "",
       "location": "Testort",
@@ -46,7 +46,7 @@
     },
     {
       "title": "Test-Titel 🎄",
-      "category": "clubmeeting",
+      "category": "club-charity",
       "start": "2026-02-01T00:00:00",
       "end": "",
       "location": "Testort",
