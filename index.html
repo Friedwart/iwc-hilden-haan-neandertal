@@ -32,7 +32,14 @@
     a{color:var(--brand);text-decoration:none}
     .wrap{max-width:980px;margin-inline:auto;padding:28px 16px 60px}
     header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
-    .logo{width:38px;height:38px;border-radius:50%;background:#dbeafe;display:inline-block}
+    .logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-block;
+  object-fit: cover;
+  background: transparent; /* Entfernt den blauen Kreis */
+}
     .brand{font-weight:700;font-size:20px;line-height:1.2}
     .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 24px}
     .tab{
@@ -100,9 +107,9 @@
 <body>
   <div class="wrap">
     <header>
-      <div class="logo" aria-hidden="true"></div>
-      <div class="brand">Inner Wheel Club Hilden–Haan–Neandertal</div>
-    </header>
+  <img class="logo" src="/assets/logo.png" alt="Inner Wheel Logo" width="38" height="38" decoding="async" />
+  <div class="brand">Inner Wheel Club Hilden–Haan–Neandertal</div>
+</header>
 
     <nav class="tabs" aria-label="Hauptnavigation">
       <a class="tab" href="./index.html">Termine</a>
@@ -416,5 +423,24 @@
     // Start
     boot();
   </script>
+  <script>
+(function(){
+  // Produktionsdomains hier eintragen
+  const PROD_HOSTS = [
+    'iwc-hilden-haan-neandertal.vercel.app',
+    // 'deine-domain.de' // später ergänzen, falls ihr eine eigene Domain nutzt
+  ];
+  const isProd = PROD_HOSTS.includes(location.hostname);
+
+  if (isProd) return; // In Produktion keine Badge
+
+  const h2 = document.querySelector('h2');
+  if (!h2) return;
+
+  const b = document.createElement('span');
+  b.className = 'env-badge';
+  b.textContent = 'DEV · Vorschau';
+  h2.appendChild(b);
+})();
 </body>
 </html>
