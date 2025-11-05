@@ -18,7 +18,14 @@
     a{color:var(--brand);text-decoration:none}
     .wrap{max-width:980px;margin-inline:auto;padding:28px 16px 60px}
     header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
-    .logo{width:38px;height:38px;border-radius:50%;background:#dbeafe;display:inline-block}
+    .logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-block;
+  object-fit: cover;
+  background: transparent; /* Entfernt den blauen Kreis */
+}
     .brand{font-weight:700;font-size:20px;line-height:1.2}
     .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 24px}
     .tab{
