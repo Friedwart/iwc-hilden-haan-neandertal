@@ -406,5 +406,24 @@
     // Start
     boot();
   </script>
+  <script>
+(function(){
+  // Produktionsdomains hier eintragen
+  const PROD_HOSTS = [
+    'iwc-hilden-haan-neandertal.vercel.app',
+    // 'deine-domain.de' // später ergänzen, falls ihr eine eigene Domain nutzt
+  ];
+  const isProd = PROD_HOSTS.includes(location.hostname);
+
+  if (isProd) return; // In Produktion keine Badge
+
+  const h2 = document.querySelector('h2');
+  if (!h2) return;
+
+  const b = document.createElement('span');
+  b.className = 'env-badge';
+  b.textContent = 'DEV · Vorschau';
+  h2.appendChild(b);
+})();
 </body>
 </html>
